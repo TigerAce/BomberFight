@@ -18,18 +18,11 @@ public abstract class GameObject implements Disposable{
 		this.x = x;
 		this.y = y;
 	}
-	public float getX() {
-		return x;
-	}
-	public void setX(float x) {
-		this.x = x;
-	}
-	public float getY() {
-		return y;
-	}
-	public void setY(float f) {
-		this.y = f;
-	}
+
+    /**
+     * To create body inside the box2d world
+     */
+    public abstract void create();
 
     /**
      * Game object update logic goes here
@@ -42,6 +35,16 @@ public abstract class GameObject implements Disposable{
      */
 	public abstract void draw();
 
-
-
+    public float getX() {
+        return x;
+    }
+    public void setX(float x) {
+        this.x = x;
+    }
+    public float getY() {
+        return y;
+    }
+    public void setY(float f) {
+        this.y = f;
+    }
 }

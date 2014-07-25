@@ -12,9 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.InputSource.SplashScreenKeyboard;
 import com.game.bomberfight.core.BomberFight;
-import com.game.bomberfight.core.InputController;
 import com.game.bomberfight.tween.SpriteAccessor;
-import com.game.bomberfight.core.BomberFight;
 
 /**
  * Created by Tong on 2014/7/20.

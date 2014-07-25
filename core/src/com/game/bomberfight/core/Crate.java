@@ -10,7 +10,12 @@ public class Crate extends Barrier implements Destructible{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+    @Override
+    public void create() {
+
+    }
+
+    @Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		

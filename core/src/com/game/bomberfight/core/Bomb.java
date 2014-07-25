@@ -21,7 +21,12 @@ public class Bomb extends Explosive{
 		
 	}
 
-	@Override
+    @Override
+    public void create() {
+
+    }
+
+    @Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		

@@ -9,7 +9,12 @@ public class Particle extends GameObject{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+    @Override
+    public void create() {
+
+    }
+
+    @Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		

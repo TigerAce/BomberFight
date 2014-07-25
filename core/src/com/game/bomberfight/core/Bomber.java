@@ -9,25 +9,23 @@ public class Bomber extends Player{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+    @Override
+    public void move() {
+
+    }
+
+    @Override
 	public void draw() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void create() {
 
-	@Override
-	public void placeBomb() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
+    @Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		

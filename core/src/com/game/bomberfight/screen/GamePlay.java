@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
-import com.game.bomberfight.core.InputController;
 
 
 public class GamePlay implements Screen {
@@ -74,14 +73,14 @@ public class GamePlay implements Screen {
         /**
          * box2d world setup
          */
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -9.81f), true);
         debugRenderer = new Box2DDebugRenderer();
 
 
         /**
          * camera setup
          */
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() /10, Gdx.graphics.getHeight() /10);
 
 
         /**
@@ -95,13 +94,26 @@ public class GamePlay implements Screen {
          *                 game objects creation                  *
          **********************************************************/
 
+        BodyDef ballDef = new BodyDef();
+        ballDef.type = BodyDef.BodyType.DynamicBody;
+        ballDef.position.set(0, 1);
+
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(.5f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 2.5f;
+        fixtureDef.friction = .25f;
+        fixtureDef.restitution = .8f;
+
+        world.createBody(ballDef).createFixture(fixtureDef);
+        circleShape.dispose();
 
         /**********************************************************
          *                 input listener                         *
          **********************************************************/
-        Gdx.input.setInputProcessor(new InputController() {
 
-        });
     }
 
     @Override
