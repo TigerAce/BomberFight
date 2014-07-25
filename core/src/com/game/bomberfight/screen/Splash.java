@@ -5,14 +5,12 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenManager;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.game.bomberfight.InputSource.SplashScreenKeyboard;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.InputController;
 import com.game.bomberfight.tween.SpriteAccessor;
@@ -55,21 +53,7 @@ public class Splash implements Screen {
         /**
          * Keyboard bindings
          */
-        Gdx.input.setInputProcessor(new InputController(){
-            @Override
-            public boolean keyUp(int keycode){
-                        /**
-                         * KeyUp bindings for splash screen state
-                         */
-                        switch (keycode) {
-                            case Input.Keys.ESCAPE:
-                                // Skip the splash screen and go into GamePlay screen
-                                ((Game)Gdx.app.getApplicationListener()).setScreen(new GamePlay());
-                                break;
-                        }
-                return true;
-            }
-        });
+        Gdx.input.setInputProcessor(new SplashScreenKeyboard());
 
         batch = new SpriteBatch();
         tweenManager = new TweenManager();
