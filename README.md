@@ -1,4 +1,4 @@
-BomberMan
+BomberFight
 ==========
 
 <h2>GAME RULES AND PLAN(incomplete draft)</h2>
