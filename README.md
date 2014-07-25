@@ -1,7 +1,7 @@
 BomberMan
 ==========
 
-<h2>BASIC GAME RULES(incomplete draft)</h2>
+<h2>GAME RULES AND PLAN(incomplete draft)</h2>
 
 
 <h3>Winning condition:</h3>
