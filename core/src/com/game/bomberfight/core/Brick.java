@@ -34,4 +34,10 @@ public class Brick extends Barrier implements Destructible{
 		
 	}
 
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
