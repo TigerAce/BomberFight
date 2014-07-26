@@ -9,5 +9,5 @@ public interface Explosible {
 	 * @param powerX  explosion power x
 	 * @param powerY  explosion power y
 	 */
-	public abstract void explode(float x, float y, float powerX, float powerY);
+	public abstract void explode(float x, float y, float powerX, float powerY, String style);
 }

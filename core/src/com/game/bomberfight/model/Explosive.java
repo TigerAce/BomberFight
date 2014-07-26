@@ -7,12 +7,14 @@ public abstract class Explosive extends GameObject implements Explosible{
 	protected float time;
 	protected float powerX;
 	protected float powerY;
+	protected String explosionStyle;
 	
-	protected Explosive(float x, float y, float time, float powerX, float powerY){
+	protected Explosive(float x, float y, float time, float powerX, float powerY, String explosionStyle){
 		super(x, y);
 		this.time = time;
 		this.powerX = powerX;
 		this.powerY = powerY;
+		this.explosionStyle = explosionStyle;
 	}
 	
 }
