@@ -1,5 +1,7 @@
 package com.game.bomberfight.interfaces;
 
+import com.game.bomberfight.model.Explosion;
+
 public interface Explosible {
 
 	/**
@@ -9,5 +11,5 @@ public interface Explosible {
 	 * @param powerX  explosion power x
 	 * @param powerY  explosion power y
 	 */
-	public abstract void explode(float x, float y, float powerX, float powerY, String style);
+	public abstract void explode(float x, float y, float powerX, float powerY, Explosion.Style style);
 }

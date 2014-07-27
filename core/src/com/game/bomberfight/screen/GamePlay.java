@@ -1,6 +1,7 @@
 package com.game.bomberfight.screen;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.Application;
@@ -16,11 +17,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
+import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
+import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
 
 
@@ -38,6 +41,11 @@ public class GamePlay implements Screen {
      * For simplicity, I just create a HashSet for it.
      */
     private HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
+    
+    /**
+     * store all explosions
+     */
+    private ArrayList<Explosion> explosions = new ArrayList<Explosion>();
 
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8;
@@ -65,12 +73,21 @@ public class GamePlay implements Screen {
             this.timeAccumulator -= this.TIMESTEP;
         }
 
+        
         /**
          * update and redraw game objects
          */
         gameObjectManager.updateAll(delta);
         gameObjectManager.drawAll();
 
+        /**
+         * render explosion
+         */
+		for(int i = 0; i < explosions.size(); i++){
+			if(explosions.get(i) != null && !explosions.get(i).isCompleted())
+				explosions.get(i).update(delta);
+			else explosions.remove(i);
+		}
         /**
          * render camera
          */
@@ -132,9 +149,16 @@ public class GamePlay implements Screen {
         Wall gameWallFrame = new Wall(0, 0, 100, 70);
         gameWallFrame.setAsRectangleFrame();
         
+        /**
+         * create a bomb
+         * 
+         */
+        Bomb bomb = new Bomb(10, 10, 3, 50, 50, Explosion.Style.ANNULAR);
+        bomb.create();
+        
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;
-        ballDef.position.set(0, 1);
+        ballDef.position.set(5, 5);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(.5f);
@@ -144,7 +168,8 @@ public class GamePlay implements Screen {
         fixtureDef.density = 2.5f;
         fixtureDef.friction = .25f;
         fixtureDef.restitution = .8f;
-
+ 
+        world.createBody(ballDef).createFixture(fixtureDef);
 
 
         /**********************************************************
@@ -201,4 +226,12 @@ public class GamePlay implements Screen {
     public void setControllableObjects(HashSet<Controllable> controllableObjects) {
         this.controllableObjects = controllableObjects;
     }
+
+	public ArrayList<Explosion> getExplosions() {
+		return explosions;
+	}
+
+	public void setExplosions(ArrayList<Explosion> explosions) {
+		this.explosions = explosions;
+	}
 }
