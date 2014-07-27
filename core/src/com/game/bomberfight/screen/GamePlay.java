@@ -10,6 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.interfaces.Controllable;
+import com.game.bomberfight.model.Player;
+
+import java.util.HashSet;
 
 
 public class GamePlay implements Screen {
@@ -21,6 +25,11 @@ public class GamePlay implements Screen {
     private CollisionListener collisionListener;
 
     private GameObjectManager gameObjectManager = new GameObjectManager();
+    /**
+     * TODO: Not sure whether we need to put this Controllable thingy into a manager?
+     * For simplicity, I just create a HashSet for it.
+     */
+    private HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
 
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8;
@@ -73,7 +82,7 @@ public class GamePlay implements Screen {
         /**
          * box2d world setup
          */
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, 0), true);
         debugRenderer = new Box2DDebugRenderer();
 
 
@@ -94,21 +103,13 @@ public class GamePlay implements Screen {
          *                 game objects creation                  *
          **********************************************************/
 
-        BodyDef ballDef = new BodyDef();
-        ballDef.type = BodyDef.BodyType.DynamicBody;
-        ballDef.position.set(0, 1);
+        /**
+         * Create player
+         */
+        Player bomber = new Player(0, 1, 1.5f);
+        bomber.create();
+        this.controllableObjects.add(bomber);
 
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(.5f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.density = 2.5f;
-        fixtureDef.friction = .25f;
-        fixtureDef.restitution = .8f;
-
-        world.createBody(ballDef).createFixture(fixtureDef);
-        circleShape.dispose();
 
         /**********************************************************
          *                 input listener                         *
@@ -139,5 +140,21 @@ public class GamePlay implements Screen {
         gameObjectManager.disposeAll();
         world.dispose();
         debugRenderer.dispose();
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public GameObjectManager getGameObjectManager() {
+        return gameObjectManager;
+    }
+
+    public void setGameObjectManager(GameObjectManager gameObjectManager) {
+        this.gameObjectManager = gameObjectManager;
     }
 }

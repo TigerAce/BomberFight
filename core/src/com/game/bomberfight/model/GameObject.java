@@ -2,11 +2,14 @@ package com.game.bomberfight.model;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
 public abstract class GameObject implements Disposable{
+
 	protected float x;
 	protected float y;
+    protected Body box2dBody;
 
 
     /**

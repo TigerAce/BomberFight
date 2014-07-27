@@ -10,11 +10,6 @@ public class Bomber extends Player{
 	}
 
     @Override
-    public void move() {
-
-    }
-
-    @Override
 	public void draw() {
 		// TODO Auto-generated method stub
 		
