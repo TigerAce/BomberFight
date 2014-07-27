@@ -83,7 +83,6 @@ public class GamePlay implements Screen {
         /**
          * render explosion
          */
-
 		for(int i = 0; i < explosions.size(); i++){
 			if(explosions.get(i) != null && !explosions.get(i).isCompleted())
 				explosions.get(i).update(delta);
@@ -159,7 +158,7 @@ public class GamePlay implements Screen {
         
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;
-        ballDef.position.set(0, 1);
+        ballDef.position.set(5, 5);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(.5f);
@@ -169,7 +168,8 @@ public class GamePlay implements Screen {
         fixtureDef.density = 2.5f;
         fixtureDef.friction = .25f;
         fixtureDef.restitution = .8f;
-
+ 
+        world.createBody(ballDef).createFixture(fixtureDef);
 
 
         /**********************************************************

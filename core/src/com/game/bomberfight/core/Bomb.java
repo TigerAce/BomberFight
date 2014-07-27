@@ -29,31 +29,30 @@ public class Bomb extends Explosive{
 	 */
 	public Bomb(float x, float y, float time, float powerX, float powerY, Explosion.Style explosionStyle) {
 		super(x, y, time, powerX, powerY, explosionStyle);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public void explode(float x, float y, float powerX, float powerY, Explosion.Style explosionStyle) {
+		
 		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		 
 		if(explosionStyle == Explosion.Style.ANNULAR){
-			AnnularExplosion e = new AnnularExplosion(x, y, 3, powerX, powerY, 1000, 64);
+			AnnularExplosion e = new AnnularExplosion(x, y, 1, powerX, powerY, 1000, 64);
 		   ((GamePlay)currentScreen).getExplosions().add(e);
 		}
 		else if(explosionStyle == Explosion.Style.CROSS){
 			
 		}
-		
-		//MyBomb.getExplosions().add(e);
-		
-		
+	
 	     ((GamePlay)currentScreen).getWorld().destroyBody(bombBody);
-	     ((GamePlay)currentScreen).getGameObjectManager().removeGameObject(this);
+	     this.dispose();
 		
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		 super.dispose();
 		
 	}
 
@@ -99,6 +98,22 @@ public class Bomb extends Explosive{
 	public void draw() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Player getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Player owner) {
+		this.owner = owner;
+	}
+
+	public Body getBombBody() {
+		return bombBody;
+	}
+
+	public void setBombBody(Body bombBody) {
+		this.bombBody = bombBody;
 	}
 
 	

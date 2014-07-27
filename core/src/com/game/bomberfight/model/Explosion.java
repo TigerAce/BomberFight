@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.physics.box2d.World;
 import com.game.bomberfight.core.Particle;
 import com.game.bomberfight.screen.GamePlay;
 
