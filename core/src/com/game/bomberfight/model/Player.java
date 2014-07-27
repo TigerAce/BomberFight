@@ -1,8 +1,5 @@
 package com.game.bomberfight.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,7 +21,6 @@ public class Player extends GameObject implements Controllable{
     protected float width = -1;
     protected float height = -1;
     protected Sprite sprite;
-    protected Map<Integer, Boolean> keyMap = new HashMap<Integer, Boolean>();
 
     /**
      * Constructor of Player
@@ -87,11 +83,6 @@ public class Player extends GameObject implements Controllable{
 
         // Add into GameObjectManager
         ((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
-        
-        keyMap.put(Input.Keys.W, false);
-        keyMap.put(Input.Keys.A, false);
-        keyMap.put(Input.Keys.S, false);
-        keyMap.put(Input.Keys.D, false);
     }
 
     @Override
@@ -106,7 +97,6 @@ public class Player extends GameObject implements Controllable{
         Vector2 impulse = velChange.scl(box2dBody.getMass());
         box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
 
-        processInput();
     }
 
     @Override
@@ -123,16 +113,12 @@ public class Player extends GameObject implements Controllable{
 
         switch (keycode) {
             case Input.Keys.W:
-            	keyMap.put(Input.Keys.W, false);
-            	return true;
             case Input.Keys.S:
-            	keyMap.put(Input.Keys.S, false);
+                movement.y = 0;
                 return true;
             case Input.Keys.A:
-            	keyMap.put(Input.Keys.A, false);
-            	return true;
             case Input.Keys.D:
-            	keyMap.put(Input.Keys.D, false);
+                movement.x = 0;
                 return true;
         }
         return false;
@@ -143,16 +129,16 @@ public class Player extends GameObject implements Controllable{
 
         switch (keycode) {
             case Input.Keys.W:
-            	keyMap.put(Input.Keys.W, true);
+                movement.y = speed;
                 return true;
             case Input.Keys.S:
-            	keyMap.put(Input.Keys.S, true);
+                movement.y = -speed;
                 return true;
             case Input.Keys.A:
-            	keyMap.put(Input.Keys.A, true);
+                movement.x = -speed;
                 return true;
             case Input.Keys.D:
-            	keyMap.put(Input.Keys.D, true);
+                movement.x = speed;
                 return true;
         }
 
@@ -187,26 +173,5 @@ public class Player extends GameObject implements Controllable{
     @Override
     public boolean doScrolled(int amount) {
         return false;
-    }
-    
-    public void processInput() {
-    	if (keyMap.get(Input.Keys.W)) {
-    		movement.y = speed;
-		}
-		if (keyMap.get(Input.Keys.A)) {
-			movement.x = -speed;
-		}
-		if (keyMap.get(Input.Keys.S)) {
-			movement.y = -speed;
-		}
-		if (keyMap.get(Input.Keys.D)) {
-			movement.x = speed;
-		}
-		if (!keyMap.get(Input.Keys.W) && !keyMap.get(Input.Keys.S)) {
-			movement.y = 0;
-		}
-		if (!keyMap.get(Input.Keys.A) && !keyMap.get(Input.Keys.D)) {
-			movement.x = 0;
-		}
     }
 }
