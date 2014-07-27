@@ -22,7 +22,7 @@ public class GamePlay implements Screen {
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
-    public OrthographicCamera camera;
+    private OrthographicCamera camera;
     private SpriteBatch batch;
     private CollisionListener collisionListener;
 
