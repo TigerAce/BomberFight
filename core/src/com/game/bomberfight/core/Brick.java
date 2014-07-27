@@ -5,8 +5,8 @@ import com.game.bomberfight.model.Barrier;
 
 public class Brick extends Barrier implements Destructible{
 
-	protected Brick(float x, float y, float size) {
-		super(x, y, size);
+	protected Brick(float x, float y, float width, float height) {
+		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
 	}
 

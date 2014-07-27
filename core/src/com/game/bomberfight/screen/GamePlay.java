@@ -8,15 +8,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
+import com.game.bomberfight.InputSource.SplashScreenKeyboard;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.core.Wall;
 
 
 public class GamePlay implements Screen {
 
-    private World world;
+    public static World world;
     private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
     private SpriteBatch batch;
     private CollisionListener collisionListener;
 
@@ -54,6 +57,11 @@ public class GamePlay implements Screen {
         gameObjectManager.updateAll(delta);
         gameObjectManager.drawAll();
 
+        /**
+         * render camera
+         */
+    	camera.update();
+    	
         //debug render
         debugRenderer.render(this.world, camera.combined);
     }
@@ -81,7 +89,7 @@ public class GamePlay implements Screen {
          * camera setup
          */
         camera = new OrthographicCamera(Gdx.graphics.getWidth() /10, Gdx.graphics.getHeight() /10);
-
+      
 
         /**
          * collision listener setup
@@ -94,6 +102,10 @@ public class GamePlay implements Screen {
          *                 game objects creation                  *
          **********************************************************/
 
+        //create wall frame
+        Wall gameWallFrame = new Wall(0, 0, 100, 70);
+        gameWallFrame.setAsRectangleFrame();
+        
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;
         ballDef.position.set(0, 1);
@@ -113,7 +125,8 @@ public class GamePlay implements Screen {
         /**********************************************************
          *                 input listener                         *
          **********************************************************/
-
+        
+        Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
     }
 
     @Override
