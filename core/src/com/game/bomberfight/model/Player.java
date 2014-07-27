@@ -2,7 +2,9 @@ package com.game.bomberfight.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -15,6 +17,7 @@ public class Player extends GameObject implements Controllable{
 	protected float x;
 	protected float y;
 	protected float speed;
+    protected Vector2 movement = new Vector2();
 
     /**
      * Constructor of Player
@@ -63,6 +66,7 @@ public class Player extends GameObject implements Controllable{
     @Override
     public void update(float delta) {
 
+        box2dBody.applyForceToCenter(movement, true);
     }
 
     @Override
@@ -81,11 +85,40 @@ public class Player extends GameObject implements Controllable{
 
     @Override
     public boolean doKeyUp(int keycode) {
+
+        switch (keycode) {
+            case Input.Keys.W:
+            case Input.Keys.S:
+                movement.y = 0;
+                box2dBody.setLinearVelocity(0, 0);
+                return true;
+            case Input.Keys.A:
+            case Input.Keys.D:
+                movement.x = 0;
+                box2dBody.setLinearVelocity(0, 0);
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean doKeyDown(int keycode) {
+
+        switch (keycode) {
+            case Input.Keys.W:
+                movement.y = speed;
+                return true;
+            case Input.Keys.S:
+                movement.y = -speed;
+                return true;
+            case Input.Keys.A:
+                movement.x = -speed;
+                return true;
+            case Input.Keys.D:
+                movement.x = speed;
+                return true;
+        }
+
         return false;
     }
 

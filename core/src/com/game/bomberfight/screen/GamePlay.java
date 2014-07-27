@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
+import com.game.bomberfight.InputSource.SplashScreenKeyboard;
+import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.interfaces.Controllable;
@@ -75,6 +78,8 @@ public class GamePlay implements Screen {
 
     @Override
     public void show() {
+        // Set the current game state to BomberFight.GAME_PLAY_STATE
+        ((BomberFight) Gdx.app.getApplicationListener()).setGameState(BomberFight.GAME_PLAY_STATE);
 
         /**********************************************************
          *                 environment setup                      *
@@ -106,7 +111,7 @@ public class GamePlay implements Screen {
         /**
          * Create player
          */
-        Player bomber = new Player(0, 1, 1.5f);
+        Player bomber = new Player(0, 1, 30.0f);
         bomber.create();
         this.controllableObjects.add(bomber);
 
@@ -114,7 +119,7 @@ public class GamePlay implements Screen {
         /**********************************************************
          *                 input listener                         *
          **********************************************************/
-
+        Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
     }
 
     @Override
@@ -156,5 +161,13 @@ public class GamePlay implements Screen {
 
     public void setGameObjectManager(GameObjectManager gameObjectManager) {
         this.gameObjectManager = gameObjectManager;
+    }
+
+    public HashSet<Controllable> getControllableObjects() {
+        return controllableObjects;
+    }
+
+    public void setControllableObjects(HashSet<Controllable> controllableObjects) {
+        this.controllableObjects = controllableObjects;
     }
 }

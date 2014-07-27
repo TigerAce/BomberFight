@@ -1,7 +1,9 @@
 package com.game.bomberfight.core;
 
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.game.bomberfight.screen.Splash;
 
 
@@ -21,6 +23,11 @@ public class BomberFight extends Game {
 
 	@Override
 	public void create () {
+        /**
+         * Set log level
+         */
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
         /**
          * A splash screen will be loaded when game starts
          * GamePlay screen will be loaded after this Splash screen, which is implemented inside Splash.show()
