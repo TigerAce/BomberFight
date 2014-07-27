@@ -1,19 +1,31 @@
 package com.game.bomberfight.model;
 
 public abstract class Barrier extends GameObject{
-	protected float size;
+	protected float width;
+	protected float height;
 	
-	protected Barrier(float x, float y, float size){
+	protected Barrier(float x, float y, float width, float height){
 		super(x, y);
-		this.size = size;
+		this.width = width;
+		this.height = height;
 	}
 
-	public float getSize() {
-		return size;
+	public float getWidth() {
+		return width;
 	}
 
-	public void setSize(float size) {
-		this.size = size;
+	public void setWidth(float width) {
+		this.width = width;
 	}
+
+	public float getHeight() {
+		return height;
+	}
+
+	public void setHeight(float height) {
+		this.height = height;
+	}
+
+	
 	
 }
