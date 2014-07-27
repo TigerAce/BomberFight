@@ -104,11 +104,6 @@ public class Player extends GameObject implements Controllable{
 
     }
 
-    @Override
-    public void dispose() {
-
-    }
-
     /***************************************
      * Controllable implementations        *
      ***************************************/

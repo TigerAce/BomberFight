@@ -16,19 +16,19 @@ public class GameObjectManager {
     private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
 
     /**
-     * Addes in game object into HashSet
+     * A hash set stores all new game objects added in this cycle
+     * These newly added object will be added into main HashSet in next frame
+     * The reason of this second HashSet exists is to avoid ConcurrentModificationException
+     * while we adding/removing and iterating through HashSet at same time.
+     */
+    private HashSet<GameObject> newGameObjects = new HashSet<GameObject>();
+
+    /**
+     * Add in game object into HashSet
      * @param object The object you want to add in
      */
     public void addGameObject(GameObject object) {
-        this.gameObjects.add(object);
-    }
-
-    /**
-     * Remove object from HashSet
-     * @param object The object you want to remove
-     */
-    public void removeGameObject(GameObject object) {
-        this.gameObjects.remove(object);
+        this.newGameObjects.add(object);
     }
 
     /**
@@ -36,10 +36,20 @@ public class GameObjectManager {
      * @param delta
      */
     public void updateAll(float delta) {
+        // Add newGameObjects to main HashSet
+        if (!this.newGameObjects.isEmpty()) {
+            this.gameObjects.addAll(this.newGameObjects);
+            this.newGameObjects.clear();
+        }
 
         Iterator<GameObject> iterator = this.gameObjects.iterator();
         while (iterator.hasNext()) {
-            iterator.next().update(delta);
+            GameObject gameObject = iterator.next();
+            gameObject.update(delta);
+            // Check if GameObject is RECYCLE
+            if (gameObject.getState() == GameObject.RECYCLE) {
+                iterator.remove();
+            }
         }
     }
 
@@ -60,6 +70,7 @@ public class GameObjectManager {
         Iterator<GameObject> iterator = this.gameObjects.iterator();
         while (iterator.hasNext()) {
             iterator.next().dispose();
+            iterator.remove();
         }
     }
 }

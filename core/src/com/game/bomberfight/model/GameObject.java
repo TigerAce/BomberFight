@@ -5,10 +5,18 @@ import com.badlogic.gdx.utils.Disposable;
 
 public abstract class GameObject implements Disposable{
 
+    /**
+     * Different state of GameObject
+     */
+    public static int RECYCLE = 0;
+    public static int ACTIVE = 1;
+
 	protected float x;
 	protected float y;
     protected Body box2dBody;
     protected String name;
+    protected int state;
+
 
 
     /**
@@ -19,6 +27,7 @@ public abstract class GameObject implements Disposable{
 	public GameObject(float x, float y){
 		this.x = x;
 		this.y = y;
+        state = ACTIVE;
 	}
 
     /**
@@ -37,19 +46,6 @@ public abstract class GameObject implements Disposable{
      */
 	public abstract void draw();
 
-    public float getX() {
-        return x;
-    }
-    public void setX(float x) {
-        this.x = x;
-    }
-    public float getY() {
-        return y;
-    }
-    public void setY(float f) {
-        this.y = f;
-    }
-
 	/**
 	 * @return the name
 	 */
@@ -63,4 +59,31 @@ public abstract class GameObject implements Disposable{
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    /**
+     * Default dispose function
+     */
+    @Override
+    public void dispose () {
+        state = RECYCLE;
+    }
+
+    public float getX() {
+        return x;
+    }
+    public void setX(float x) {
+        this.x = x;
+    }
+    public float getY() {
+        return y;
+    }
+    public void setY(float f) {
+        this.y = f;
+    }
+    public int getState() {
+        return state;
+    }
+    public void setState(int state) {
+        this.state = state;
+    }
 }
