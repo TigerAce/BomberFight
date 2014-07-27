@@ -1,21 +1,27 @@
 package com.game.bomberfight.screen;
 
 
+import java.util.HashSet;
+
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Player;
-import java.util.HashSet;
-import com.game.bomberfight.core.Wall;
 
 
 public class GamePlay implements Screen {
@@ -71,7 +77,9 @@ public class GamePlay implements Screen {
     	camera.update();
     	
         //debug render
-        debugRenderer.render(this.world, camera.combined);
+    	if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+    		debugRenderer.render(this.world, camera.combined);
+		}
     }
 
     @Override
