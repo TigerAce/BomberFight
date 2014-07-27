@@ -1,12 +1,12 @@
 package com.game.bomberfight.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.game.bomberfight.interfaces.Controllable;
@@ -18,6 +18,9 @@ public class Player extends GameObject implements Controllable{
 	protected float y;
 	protected float speed;
     protected Vector2 movement = new Vector2();
+    protected float width = -1;
+    protected float height = -1;
+    protected Sprite sprite;
 
     /**
      * Constructor of Player
@@ -28,6 +31,20 @@ public class Player extends GameObject implements Controllable{
 	public Player(float xPos, float yPos, float speed){
 		super(xPos, yPos);
 		this.speed = speed;
+	}
+	
+	/**
+	 * @param xPos
+	 * @param yPos
+	 * @param width width of player body
+	 * @param height height of player body
+	 * @param speed
+	 */
+	public Player(float xPos, float yPos, float width, float height, float speed){
+		super(xPos, yPos);
+		this.speed = speed;
+		this.width = width;
+		this.height = height;
 	}
 
     /***************************************
@@ -46,7 +63,11 @@ public class Player extends GameObject implements Controllable{
         playerDef.position.set(x, y);
 
         PolygonShape playerShape = new PolygonShape();
-        playerShape.setAsBox(.5f, .5f);
+        if (width <= 0 && height <= 0) {
+        	playerShape.setAsBox(.5f, .5f);
+		} else {
+			playerShape.setAsBox(width, height);
+		}
 
         FixtureDef playerFixtureDef = new FixtureDef();
         playerFixtureDef.shape = playerShape;
@@ -57,6 +78,7 @@ public class Player extends GameObject implements Controllable{
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         box2dBody = ((GamePlay)currentScreen).getWorld().createBody(playerDef);
         box2dBody.createFixture(playerFixtureDef);
+        box2dBody.setUserData(this);
         playerShape.dispose();
 
         // Add into GameObjectManager

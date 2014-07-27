@@ -8,12 +8,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
-
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.screen.GamePlay;
 
@@ -84,7 +83,7 @@ public class Wall extends Barrier{
 		Body wall = ((GamePlay)currentScreen).getWorld().createBody(wallDef);
 		wall.createFixture(fixtureDef);
 	
-		wall.setUserData(new UserData(name, null, null));
+		wall.setUserData(name);
 		
 		this.wallBodies.add(wall);
 		

@@ -1,7 +1,5 @@
 package com.game.bomberfight.model;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -10,6 +8,7 @@ public abstract class GameObject implements Disposable{
 	protected float x;
 	protected float y;
     protected Body box2dBody;
+    protected String name;
 
 
     /**
@@ -50,4 +49,18 @@ public abstract class GameObject implements Disposable{
     public void setY(float f) {
         this.y = f;
     }
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 }
