@@ -66,21 +66,14 @@ public class Player extends GameObject implements Controllable{
     @Override
     public void update(float delta) {
 
+        /**
+         * Don't know what's going on here?
+         * See this: http://www.iforce2d.net/b2dtut/constant-speed
+         */
         Vector2 velocity = box2dBody.getLinearVelocity();
         Vector2 velChange = movement.cpy().sub(velocity);
         Vector2 impulse = velChange.scl(box2dBody.getMass());
         box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
-
-//        float valChange = movement.x - velocity.x;
-//        float impluse = box2dBody.getMass() * valChange;
-//        box2dBody.applyLinearImpulse(new Vector2(impluse, 0.0f), box2dBody.getWorldCenter(), true);
-
-//        Gdx.app.debug("DEBUG", "getMaxx is " + box2dBody.getMass());
-        Gdx.app.debug("DEBUG", "current velocity is " + velocity.toString());
-        Gdx.app.debug("DEBUG", "velChange is " + velChange.toString());
-        Gdx.app.debug("DEBUG", "impulse is " + impulse.toString());
-//        Gdx.app.debug("DEBUG", "velChange is " + valChange);
-//        Gdx.app.debug("DEBUG", "impulse is " + impluse);
 
     }
 
