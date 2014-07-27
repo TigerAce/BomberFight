@@ -66,7 +66,22 @@ public class Player extends GameObject implements Controllable{
     @Override
     public void update(float delta) {
 
-        box2dBody.applyForceToCenter(movement, true);
+        Vector2 velocity = box2dBody.getLinearVelocity();
+        Vector2 velChange = movement.cpy().sub(velocity);
+        Vector2 impulse = velChange.scl(box2dBody.getMass());
+        box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
+
+//        float valChange = movement.x - velocity.x;
+//        float impluse = box2dBody.getMass() * valChange;
+//        box2dBody.applyLinearImpulse(new Vector2(impluse, 0.0f), box2dBody.getWorldCenter(), true);
+
+//        Gdx.app.debug("DEBUG", "getMaxx is " + box2dBody.getMass());
+        Gdx.app.debug("DEBUG", "current velocity is " + velocity.toString());
+        Gdx.app.debug("DEBUG", "velChange is " + velChange.toString());
+        Gdx.app.debug("DEBUG", "impulse is " + impulse.toString());
+//        Gdx.app.debug("DEBUG", "velChange is " + valChange);
+//        Gdx.app.debug("DEBUG", "impulse is " + impluse);
+
     }
 
     @Override
@@ -90,12 +105,10 @@ public class Player extends GameObject implements Controllable{
             case Input.Keys.W:
             case Input.Keys.S:
                 movement.y = 0;
-                box2dBody.setLinearVelocity(0, 0);
                 return true;
             case Input.Keys.A:
             case Input.Keys.D:
                 movement.x = 0;
-                box2dBody.setLinearVelocity(0, 0);
                 return true;
         }
         return false;
