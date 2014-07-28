@@ -12,8 +12,8 @@ public class Crate extends Barrier implements Destructible{
 
     @Override
     public void create() {
-    	System.out.println("branch and merge test");
-    	System.out.println("branch and merge test2");
+    
+    	
     }
 
     @Override
