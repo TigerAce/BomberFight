@@ -1,12 +1,12 @@
 package com.game.bomberfight.interfaces;
 
-public interface Destructible {
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
 
 /**
- * break object into fragments
- * @param fragCenterX       break center x
- * @param fragCenterY       break center y
- * @param fragPieces        break into pieces
+ * Destructible interface is for the game object witch have life attribute and can be destroyed by explosion.
+ * @author Yunhao Chen
+ *
  */
-	abstract void fragment(float fragCenterX, float fragCenterY, int fragPieces);
+public interface Destructible {
+	public abstract void damage(ContactImpulse impulse);
 }
