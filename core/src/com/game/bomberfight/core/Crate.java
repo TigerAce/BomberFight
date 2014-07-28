@@ -4,15 +4,17 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.game.bomberfight.interfaces.Breakable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.screen.GamePlay;
 
-public class Crate extends Barrier implements Destructible{
+public class Crate extends Barrier implements Destructible, Breakable{
 
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 	private Shape crateShape;
@@ -20,7 +22,7 @@ public class Crate extends Barrier implements Destructible{
 	
 	public Crate(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		this.life = 50;
+		this.life = 100;
 	}
 
     @Override
@@ -89,6 +91,11 @@ public class Crate extends Barrier implements Destructible{
 
 	public void setLife(float life) {
 		this.life = life;
+	}
+
+	@Override
+	public void damage(ContactImpulse impulse) {
+		this.life -= impulse.getNormalImpulses()[0];
 	}
 
 }

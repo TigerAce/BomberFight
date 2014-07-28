@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.core.BomberFight;
+import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
@@ -161,6 +162,13 @@ public class GamePlay implements Screen {
         bomb2.create();
         
      
+        /**
+         * create a brick
+         *
+         */
+        
+        Brick brick = new Brick(12, 12, 4, 4);
+        brick.create();
     	/**
 		 * create bunch of crate
 		 */

@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.screen.GamePlay;
 
