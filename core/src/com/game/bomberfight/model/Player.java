@@ -65,6 +65,8 @@ public class Player extends GameObject implements Controllable{
         BodyDef playerDef = new BodyDef();
         playerDef.type = BodyDef.BodyType.DynamicBody;
         playerDef.position.set(x, y);
+        playerDef.fixedRotation = true;
+        
 
         PolygonShape playerShape = new PolygonShape();
         if (width <= 0 && height <= 0) {
