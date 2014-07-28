@@ -159,7 +159,7 @@ public class GamePlay implements Screen {
          *
          */
         
-        Brick brick = new Brick(12, 12, 4, 4);
+        Brick brick = new Brick(12, 12, 4, 4, 300);
         brick.create();
     	/**
 		 * create bunch of crate
@@ -172,7 +172,7 @@ public class GamePlay implements Screen {
 		  
 			for(int w = 0; w < scaleSize; w++){
 				for(int h = 0; h < scaleSize; h++){
-					Crate c = new Crate(x - ((crateSize * scaleSize)/2) + crateSize/2 + (w * (crateSize + factor)) , y - ((crateSize * scaleSize)/2) + crateSize/2 + (h * (crateSize + factor)), crateSize, crateSize);
+					Crate c = new Crate(x - ((crateSize * scaleSize)/2) + crateSize/2 + (w * (crateSize + factor)) , y - ((crateSize * scaleSize)/2) + crateSize/2 + (h * (crateSize + factor)), crateSize, crateSize, 100);
 					c.create();
 				}
 			}
