@@ -101,10 +101,11 @@ public class Player extends GameObject implements Controllable{
          * Don't know what's going on here?
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
-        Vector2 velocity = box2dBody.getLinearVelocity();
-        Vector2 velChange = movement.cpy().sub(velocity);
-        Vector2 impulse = velChange.scl(box2dBody.getMass());
-        box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
+//        Vector2 velocity = box2dBody.getLinearVelocity();
+//        Vector2 velChange = movement.cpy().sub(velocity);
+//        Vector2 impulse = velChange.scl(box2dBody.getMass());
+//        box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
+        box2dBody.setLinearVelocity(movement);
 
         processInput();
     }

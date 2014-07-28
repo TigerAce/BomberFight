@@ -25,6 +25,7 @@ import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
+import com.game.bomberfight.utility.FpsDisplayer;
 
 
 public class GamePlay implements Screen {
@@ -62,6 +63,11 @@ public class GamePlay implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        /**
+         * render camera
+         */
+    	camera.update();
 
         /**
          * Handles world collision calculation
@@ -78,7 +84,10 @@ public class GamePlay implements Screen {
          * update and redraw game objects
          */
         gameObjectManager.updateAll(delta);
+        batch.begin();
         gameObjectManager.drawAll();
+        FpsDisplayer.getInstance().draw(batch, 0, Gdx.graphics.getHeight() /10);
+        batch.end();
 
         /**
          * render explosion
@@ -88,10 +97,6 @@ public class GamePlay implements Screen {
 				explosions.get(i).update(delta);
 			else explosions.remove(i);
 		}
-        /**
-         * render camera
-         */
-    	camera.update();
     	
         //debug render
     	if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
@@ -176,6 +181,8 @@ public class GamePlay implements Screen {
          *                 input listener                         *
          **********************************************************/
         Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
+        
+        batch = new SpriteBatch();
     }
 
     @Override
