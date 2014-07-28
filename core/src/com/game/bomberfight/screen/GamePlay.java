@@ -83,11 +83,11 @@ public class GamePlay implements Screen {
         /**
          * render explosion
          */
-		for(int i = 0; i < explosions.size(); i++){
-			if(explosions.get(i) != null && !explosions.get(i).isCompleted())
-				explosions.get(i).update(delta);
-			else explosions.remove(i);
+        for(int i = 0; i < explosions.size(); i++){
+			if(explosions.get(i) != null && explosions.get(i).isCompleted())
+				explosions.remove(i);
 		}
+        
         /**
          * render camera
          */
@@ -155,6 +155,9 @@ public class GamePlay implements Screen {
          */
         Bomb bomb = new Bomb(10, 10, 3, 50, 50, Explosion.Style.ANNULAR);
         bomb.create();
+        
+        Bomb bomb2 = new Bomb(7, 7, 3, 50, 50, Explosion.Style.ANNULAR);
+        bomb2.create();
         
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;

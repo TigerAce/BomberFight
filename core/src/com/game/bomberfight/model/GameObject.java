@@ -86,4 +86,12 @@ public abstract class GameObject implements Disposable{
     public void setState(int state) {
         this.state = state;
     }
+
+	public Body getBox2dBody() {
+		return box2dBody;
+	}
+
+	public void setBox2dBody(Body box2dBody) {
+		this.box2dBody = box2dBody;
+	}
 }

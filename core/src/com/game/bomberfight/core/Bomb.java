@@ -16,7 +16,7 @@ import com.game.bomberfight.screen.GamePlay;
 public class Bomb extends Explosive{
 
 	private Player owner;
-	private Body bombBody;
+	
 	
 	/**
 	 * create a bomb
@@ -45,7 +45,7 @@ public class Bomb extends Explosive{
 			
 		}
 	
-	     ((GamePlay)currentScreen).getWorld().destroyBody(bombBody);
+	     ((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 	     this.dispose();
 		
 	}
@@ -79,8 +79,8 @@ public class Bomb extends Explosive{
 		
 
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        bombBody = ((GamePlay)currentScreen).getWorld().createBody(bombDef);
-		bombBody.createFixture(bombFixtureDef);
+        box2dBody = ((GamePlay)currentScreen).getWorld().createBody(bombDef);
+		box2dBody.createFixture(bombFixtureDef);
 		//bombBody.setUserData(new MyUserData("bomb", this, null));
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
@@ -90,7 +90,7 @@ public class Bomb extends Explosive{
     @Override
 	public void update(float delta) {
 		this.time -= delta;
-		if(time <= 0) this.explode(bombBody.getPosition().x, bombBody.getPosition().y, powerX, powerY, explosionStyle);
+		if(time <= 0) this.explode(box2dBody.getPosition().x, box2dBody.getPosition().y, powerX, powerY, explosionStyle);
 		
 	}
 
@@ -108,13 +108,6 @@ public class Bomb extends Explosive{
 		this.owner = owner;
 	}
 
-	public Body getBombBody() {
-		return bombBody;
-	}
-
-	public void setBombBody(Body bombBody) {
-		this.bombBody = bombBody;
-	}
-
+	
 	
 }

@@ -1,7 +1,11 @@
 package com.game.bomberfight.core;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
 import com.game.bomberfight.model.Explosion;
+import com.game.bomberfight.screen.GamePlay;
 
 public class AnnularExplosion extends Explosion{
 
@@ -25,7 +29,10 @@ protected AnnularExplosion(float x, float y, float lifespan, float blastPowerX,
 			float angle = ((((float)i / numParticles) * 360) + randomStartAngle) * MathUtils.degreesToRadians;
 			Particle p = new Particle(x, y, angle, density, lifespan, blastPowerX, blastPowerY, this);
 			p.create();
-			particles.add(p);
+			
+			Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		    ((GamePlay)currentScreen).getGameObjectManager().addGameObject(p);
+		
 		
 		}
 		
