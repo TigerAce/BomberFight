@@ -1,6 +1,5 @@
 package com.game.bomberfight.screen;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -26,215 +25,211 @@ import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
 
-
 public class GamePlay implements Screen {
 
-    private World world;
-    private Box2DDebugRenderer debugRenderer;
-    private ExtendViewport viewport;
-    private SpriteBatch batch;
-    private CollisionListener collisionListener;
+	private World world;
+	private Box2DDebugRenderer debugRenderer;
+	private ExtendViewport viewport;
+	private SpriteBatch batch;
+	private CollisionListener collisionListener;
 
-    private GameObjectManager gameObjectManager = new GameObjectManager();
-    /**
-     * TODO: Not sure whether we need to put this Controllable thingy into a manager?
-     * For simplicity, I just create a HashSet for it.
-     */
-    private HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
-    
-    /**
-     * store all explosions
-     */
-    private ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+	private GameObjectManager gameObjectManager = new GameObjectManager();
+	/**
+	 * TODO: Not sure whether we need to put this Controllable thingy into a
+	 * manager? For simplicity, I just create a HashSet for it.
+	 */
+	private HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
 
-    private final float TIMESTEP = 1 / 60f;
-    private final int VELOCITYITERATIONS = 8;
-    private final int POSITIONITERATIONS = 3;
+	/**
+	 * store all explosions
+	 */
+	private ArrayList<Explosion> explosions = new ArrayList<Explosion>();
 
-    /**
-     * Since world.step only accept a fixed TIMESTEP, a timeAccumulator is used to
-     * smooth display in different environment with varies FPS
-     */
-    private float timeAccumulator = 0.0f;
+	private final float TIMESTEP = 1 / 60f;
+	private final int VELOCITYITERATIONS = 8;
+	private final int POSITIONITERATIONS = 3;
 
-    @Override
-    public void render(float delta) {
+	/**
+	 * Since world.step only accept a fixed TIMESTEP, a timeAccumulator is used
+	 * to smooth display in different environment with varies FPS
+	 */
+	private float timeAccumulator = 0.0f;
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        /**
-         * render camera
-         */
-        viewport.update();
+	@Override
+	public void render(float delta) {
 
-        /**
-         * Handles world collision calculation
-         */
-        this.timeAccumulator += delta;
-        while (this.timeAccumulator >= this.TIMESTEP) {
-            // Only perform collision calculation when timeAccumulator is greater than default TIMESTEP
-            world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
-            this.timeAccumulator -= this.TIMESTEP;
-        }
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        
-        /**
-         * update and redraw game objects
-         */
-        gameObjectManager.updateAll(delta);
-        batch.begin();
-        gameObjectManager.drawAll();
-        FpsDisplayer.getInstance().draw(batch, 0, Gdx.graphics.getHeight() /10);
-        batch.end();
+		/**
+		 * render camera
+		 */
+		viewport.update();
 
-        /**
-         * render explosion
-         */
-        for(int i = 0; i < explosions.size(); i++){
-			if(explosions.get(i) != null && explosions.get(i).isCompleted())
+		/**
+		 * Handles world collision calculation
+		 */
+		this.timeAccumulator += delta;
+		while (this.timeAccumulator >= this.TIMESTEP) {
+			// Only perform collision calculation when timeAccumulator is
+			// greater than default TIMESTEP
+			world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
+			this.timeAccumulator -= this.TIMESTEP;
+		}
+
+		/**
+		 * update and redraw game objects
+		 */
+		gameObjectManager.updateAll(delta);
+		batch.begin();
+		gameObjectManager.drawAll();
+		FpsDisplayer.getInstance().draw(batch, 0, Gdx.graphics.getHeight() / 10);
+		batch.end();
+
+		/**
+		 * render explosion
+		 */
+		for (int i = 0; i < explosions.size(); i++) {
+			if (explosions.get(i) != null && explosions.get(i).isCompleted())
 				explosions.remove(i);
 		}
-    	
-        //debug render
-    	if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-    		debugRenderer.render(this.world, viewport.getCamera().combined);
+
+		// debug render
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
-    }
+	}
 
-    @Override
-    public void resize(int width, int height) {
-    	viewport.update(width, height, false);
-    }
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height, false);
+	}
 
-    @Override
-    public void show() {
-        // Set the current game state to BomberFight.GAME_PLAY_STATE
-        ((BomberFight) Gdx.app.getApplicationListener()).setGameState(BomberFight.GAME_PLAY_STATE);
+	@Override
+	public void show() {
+		// Set the current game state to BomberFight.GAME_PLAY_STATE
+		((BomberFight) Gdx.app.getApplicationListener())
+				.setGameState(BomberFight.GAME_PLAY_STATE);
 
-        /**********************************************************
-         *                 environment setup                      *
-         **********************************************************/
-        /**
-         * box2d world setup
-         */
-        world = new World(new Vector2(0, 0), true);
-        debugRenderer = new Box2DDebugRenderer();
+		/**********************************************************
+		 * environment setup *
+		 **********************************************************/
+		/**
+		 * box2d world setup
+		 */
+		world = new World(new Vector2(0, 0), true);
+		debugRenderer = new Box2DDebugRenderer();
 
+		/**
+		 * camera setup
+		 */
+		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth",
+				Float.class), Config.getInstance().get("viewportHeight",
+				Float.class));
 
-        /**
-         * camera setup
-         */
-        viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
-      
+		/**
+		 * collision listener setup
+		 */
+		collisionListener = new CollisionListener();
+		world.setContactListener(collisionListener);
 
-        /**
-         * collision listener setup
-         */
-        collisionListener = new CollisionListener();
-        world.setContactListener(collisionListener);
+		/**********************************************************
+		 * game objects creation *
+		 **********************************************************/
 
+		/**
+		 * Create player
+		 */
+		Bomber bomber = new Bomber(0, 1, 10);
+		bomber.create();
+		this.controllableObjects.add(bomber);
 
-        /**********************************************************
-         *                 game objects creation                  *
-         **********************************************************/
+		/**
+		 * create wall frame
+		 */
+		Wall gameWallFrame = new Wall(0, 0, 100, 70);
+		gameWallFrame.setAsRectangleFrame();
 
+		/**
+		 * create a brick
+		 * 
+		 */
 
-        /**
-         * Create player
-         */
-        Bomber bomber = new Bomber(0, 1, 10);
-        bomber.create();
-        this.controllableObjects.add(bomber);
-
-        /**
-         * create wall frame
-         */
-        Wall gameWallFrame = new Wall(0, 0, 100, 70);
-        gameWallFrame.setAsRectangleFrame();
-        
-     
-        /**
-         * create a brick
-         *
-         */
-        
-        Brick brick = new Brick(12, 12, 4, 4);
-        brick.create();
-    	/**
+		Brick brick = new Brick(12, 12, 4, 4);
+		brick.create();
+		/**
 		 * create bunch of crate
 		 */
-		  float factor = 0f;
-		  float crateSize = 4;
-		  float scaleSize = 5;
-		  float x = -10;
-		  float y = 10;
-		  
-			for(int w = 0; w < scaleSize; w++){
-				for(int h = 0; h < scaleSize; h++){
-					Crate c = new Crate(x - ((crateSize * scaleSize)/2) + crateSize/2 + (w * (crateSize + factor)) , y - ((crateSize * scaleSize)/2) + crateSize/2 + (h * (crateSize + factor)), crateSize, crateSize);
-					c.create();
-				}
+		float factor = 0f;
+		float crateSize = 4;
+		float scaleSize = 5;
+		float x = -10;
+		float y = 10;
+
+		for (int w = 0; w < scaleSize; w++) {
+			for (int h = 0; h < scaleSize; h++) {
+				Crate c = new Crate(x - ((crateSize * scaleSize) / 2)
+						+ crateSize / 2 + (w * (crateSize + factor)), y
+						- ((crateSize * scaleSize) / 2) + crateSize / 2
+						+ (h * (crateSize + factor)), crateSize, crateSize);
+				c.create();
 			}
-		
+		}
 
+		/**********************************************************
+		 * input listener *
+		 **********************************************************/
+		Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
 
-        /**********************************************************
-         *                 input listener                         *
-         **********************************************************/
-        Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
-        
-        batch = new SpriteBatch();
-    }
+		batch = new SpriteBatch();
+	}
 
-    @Override
-    public void hide() {
-        dispose();
+	@Override
+	public void hide() {
+		dispose();
 
-    }
+	}
 
-    @Override
-    public void pause() {
+	@Override
+	public void pause() {
 
+	}
 
-    }
+	@Override
+	public void resume() {
 
-    @Override
-    public void resume() {
+	}
 
+	@Override
+	public void dispose() {
+		gameObjectManager.disposeAll();
+		world.dispose();
+		debugRenderer.dispose();
+	}
 
-    }
+	public World getWorld() {
+		return world;
+	}
 
-    @Override
-    public void dispose() {
-        gameObjectManager.disposeAll();
-        world.dispose();
-        debugRenderer.dispose();
-    }
+	public void setWorld(World world) {
+		this.world = world;
+	}
 
-    public World getWorld() {
-        return world;
-    }
+	public GameObjectManager getGameObjectManager() {
+		return gameObjectManager;
+	}
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
+	public void setGameObjectManager(GameObjectManager gameObjectManager) {
+		this.gameObjectManager = gameObjectManager;
+	}
 
-    public GameObjectManager getGameObjectManager() {
-        return gameObjectManager;
-    }
+	public HashSet<Controllable> getControllableObjects() {
+		return controllableObjects;
+	}
 
-    public void setGameObjectManager(GameObjectManager gameObjectManager) {
-        this.gameObjectManager = gameObjectManager;
-    }
-
-    public HashSet<Controllable> getControllableObjects() {
-        return controllableObjects;
-    }
-
-    public void setControllableObjects(HashSet<Controllable> controllableObjects) {
-        this.controllableObjects = controllableObjects;
-    }
+	public void setControllableObjects(HashSet<Controllable> controllableObjects) {
+		this.controllableObjects = controllableObjects;
+	}
 
 	public ArrayList<Explosion> getExplosions() {
 		return explosions;
