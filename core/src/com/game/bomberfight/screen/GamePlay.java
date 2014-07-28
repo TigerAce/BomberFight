@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.Bomb;
+import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
@@ -143,23 +144,15 @@ public class GamePlay implements Screen {
         /**
          * Create player
          */
-        Player bomber = new Player(0, 1, 30.0f);
+        Bomber bomber = new Bomber(0, 1, 10);
         bomber.create();
         this.controllableObjects.add(bomber);
 
-        //create wall frame
+        /**
+         * create wall frame
+         */
         Wall gameWallFrame = new Wall(0, 0, 100, 70);
         gameWallFrame.setAsRectangleFrame();
-        
-        /**
-         * create two bomb
-         * 
-         */
-        Bomb bomb = new Bomb(10, 10, 3, 50, 50, Explosion.Style.ANNULAR);
-        bomb.create();
-        
-        Bomb bomb2 = new Bomb(7, 7, 3, 50, 50, Explosion.Style.ANNULAR);
-        bomb2.create();
         
      
         /**
@@ -184,22 +177,7 @@ public class GamePlay implements Screen {
 					c.create();
 				}
 			}
-			
-			
-        BodyDef ballDef = new BodyDef();
-        ballDef.type = BodyDef.BodyType.DynamicBody;
-        ballDef.position.set(5, 5);
-
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(.5f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape;
-        fixtureDef.density = 2.5f;
-        fixtureDef.friction = .25f;
-        fixtureDef.restitution = .8f;
- 
-        world.createBody(ballDef).createFixture(fixtureDef);
+		
 
 
         /**********************************************************
