@@ -35,6 +35,8 @@ public class Particle extends GameObject{
 
     @Override
     public void create() {
+    	this.name = "particle";
+    	
     	FixtureDef particleFixtureDef = new FixtureDef();
 		BodyDef particleBodyDef = new BodyDef();
 		
@@ -70,6 +72,7 @@ public class Particle extends GameObject{
 		
 		box2dBody.setLinearVelocity(blastPowerX * dirVector.x,
 							 blastPowerY * dirVector.y);
+		box2dBody.setUserData(this);
     }
 
     @Override

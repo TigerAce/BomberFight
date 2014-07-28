@@ -27,7 +27,22 @@ public class CollisionListener implements ContactListener {
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 	
+		/**
+		 * particle will decrease crate and brick's life with the amount of impulse
+		 */
+		Object userDataA = contact.getFixtureA().getBody().getUserData();
+		Object userDataB = contact.getFixtureB().getBody().getUserData();
 		
+		if(userDataA != null && userDataB != null){
+			
+			if(userDataA instanceof Particle && userDataB instanceof Crate){
+				((Crate)userDataB).setLife(((Crate)userDataB).getLife() - impulse.getNormalImpulses()[0]);
+			}
+			if(userDataB instanceof Particle && userDataA instanceof Crate){
+				((Crate)userDataA).setLife(((Crate)userDataA).getLife() - impulse.getNormalImpulses()[0]);
+			}
+			
+		}
 	}
 
 }

@@ -34,7 +34,7 @@ public class Wall extends Barrier{
 	public Wall(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	
-		wallBodies = new ArrayList();
+		wallBodies = new ArrayList<Body>();
 		// TODO Auto-generated constructor stub
 	}
 

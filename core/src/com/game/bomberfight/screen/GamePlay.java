@@ -20,6 +20,7 @@ import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.CollisionListener;
+import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
@@ -150,7 +151,7 @@ public class GamePlay implements Screen {
         gameWallFrame.setAsRectangleFrame();
         
         /**
-         * create a bomb
+         * create two bomb
          * 
          */
         Bomb bomb = new Bomb(10, 10, 3, 50, 50, Explosion.Style.ANNULAR);
@@ -159,6 +160,24 @@ public class GamePlay implements Screen {
         Bomb bomb2 = new Bomb(7, 7, 3, 50, 50, Explosion.Style.ANNULAR);
         bomb2.create();
         
+     
+    	/**
+		 * create bunch of crate
+		 */
+		  float factor = 0f;
+		  float crateSize = 4;
+		  float scaleSize = 5;
+		  float x = -10;
+		  float y = 10;
+		  
+			for(int w = 0; w < scaleSize; w++){
+				for(int h = 0; h < scaleSize; h++){
+					Crate c = new Crate(x - ((crateSize * scaleSize)/2) + crateSize/2 + (w * (crateSize + factor)) , y - ((crateSize * scaleSize)/2) + crateSize/2 + (h * (crateSize + factor)), crateSize, crateSize);
+					c.create();
+				}
+			}
+			
+			
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;
         ballDef.position.set(5, 5);

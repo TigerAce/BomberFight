@@ -29,7 +29,7 @@ public class Brick extends Barrier implements Destructible{
 	}
 
 	@Override
-	public void fragment(float fragCenterX, float fragCenterY, int fragPieces) {
+	public void toFragments(float fragCenterX, float fragCenterY, int fragPieces) {
 		// TODO Auto-generated method stub
 		
 	}
