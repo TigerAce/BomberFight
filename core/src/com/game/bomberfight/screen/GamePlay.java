@@ -8,7 +8,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.core.BomberFight;
@@ -25,6 +25,7 @@ import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
+import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
 
 
@@ -32,7 +33,7 @@ public class GamePlay implements Screen {
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera camera;
+    private ExtendViewport viewport;
     private SpriteBatch batch;
     private CollisionListener collisionListener;
 
@@ -67,7 +68,7 @@ public class GamePlay implements Screen {
         /**
          * render camera
          */
-    	camera.update();
+    	viewport.update();
 
         /**
          * Handles world collision calculation
@@ -100,14 +101,13 @@ public class GamePlay implements Screen {
     	
         //debug render
     	if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-    		debugRenderer.render(this.world, camera.combined);
+    		debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 10;
-        camera.viewportHeight = height / 10;
+        viewport.update(width, height, false);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class GamePlay implements Screen {
         /**
          * camera setup
          */
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() /10, Gdx.graphics.getHeight() /10);
+        viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
       
 
         /**
