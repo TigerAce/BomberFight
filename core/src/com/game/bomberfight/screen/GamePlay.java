@@ -24,6 +24,7 @@ import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.core.ResourcesManager;
 import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
@@ -39,6 +40,7 @@ public class GamePlay implements Screen {
 	private CollisionListener collisionListener;
 	private RayHandler rayHandler;
 
+	private ResourcesManager resourcesManager = new ResourcesManager();
 	private GameObjectManager gameObjectManager = new GameObjectManager();
 	/**
 	 * TODO: Not sure whether we need to put this Controllable thingy into a
@@ -147,6 +149,12 @@ public class GamePlay implements Screen {
 		collisionListener = new CollisionListener();
 		world.setContactListener(collisionListener);
 
+		/**
+		 * load resources
+		 */
+		resourcesManager.loadTexture("img/texture/crate4.jpg", "crate");
+		resourcesManager.loadTexture("img/texture/brick3.jpg", "brick");
+
 		/**********************************************************
 		 * game objects creation *
 		 **********************************************************/
@@ -203,6 +211,7 @@ public class GamePlay implements Screen {
 				0.5f, 1f), 50, 0, 0);
 		p.attachToBody(bomber.getBox2dBody(), 0, 0);
 		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
+		// Light.setContactFilter((short)0, (short)-1, (short)0);
 
 		/**********************************************************
 		 * input listener *
@@ -231,6 +240,7 @@ public class GamePlay implements Screen {
 	@Override
 	public void dispose() {
 		rayHandler.dispose();
+		resourcesManager.disposeAll();
 		gameObjectManager.disposeAll();
 		world.dispose();
 		debugRenderer.dispose();
@@ -266,5 +276,13 @@ public class GamePlay implements Screen {
 
 	public void setExplosions(ArrayList<Explosion> explosions) {
 		this.explosions = explosions;
+	}
+
+	public ResourcesManager getResourcesManager() {
+		return resourcesManager;
+	}
+
+	public void setResourcesManager(ResourcesManager resourcesManager) {
+		this.resourcesManager = resourcesManager;
 	}
 }

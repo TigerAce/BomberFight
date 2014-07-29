@@ -54,17 +54,13 @@ public class Particle extends GameObject{
 		particleFixtureDef.shape = shape;
 		
 		particleBodyDef.type = BodyType.DynamicBody;
-		
-		
 		particleBodyDef.position.x = x;
 		particleBodyDef.position.y = y;
-		
 		particleBodyDef.fixedRotation = true;
-		
 		particleBodyDef.bullet = true;
-		
 		particleBodyDef.linearDamping = 3.5f;
 		
+	
 		
 	    box2dBody= ((GamePlay)currentScreen).getWorld().createBody(particleBodyDef);
 		
