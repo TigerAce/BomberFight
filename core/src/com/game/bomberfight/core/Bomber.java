@@ -1,9 +1,5 @@
 package com.game.bomberfight.core;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.Explosion;
@@ -40,30 +36,19 @@ public class Bomber extends Player{
 	}
 
 	/* (non-Javadoc)
-	 * @see com.game.bomberfight.model.Player#processInput()
+	 * @see com.game.bomberfight.model.Player#doKeyDown(int)
 	 */
 	@Override
-	public void processInput() {
+	public boolean doKeyDown(int keycode) {
 		// TODO Auto-generated method stub
-		super.processInput();
-		Iterator<Entry<Integer, Boolean>> iter = keyMap.entrySet().iterator();
-		while (iter.hasNext()) {
-			@SuppressWarnings("rawtypes")
-			Map.Entry entry = (Map.Entry) iter.next();
-		    int key = (Integer) entry.getKey();
-		    boolean value = (Boolean) entry.getValue();
-		    switch (key) {
-			case Input.Keys.SPACE:
-				if (value) {
-					Bomb bomb = new Bomb(box2dBody.getPosition().x, box2dBody.getPosition().y,3, 50, 50, Explosion.Style.ANNULAR);
-	            	bomb.create();
-				}
-				break;
-
-			default:
-				break;
-			}
-		} 
+		super.doKeyDown(keycode);
+		switch (keycode) {
+		case Input.Keys.SPACE:
+			Bomb bomb = new Bomb(box2dBody.getPosition().x, box2dBody.getPosition().y,3, 50, 50, Explosion.Style.ANNULAR);
+        	bomb.create();
+			return true;
+		}
+		return false;
 	}
 
 }

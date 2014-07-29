@@ -107,10 +107,6 @@ public class Player extends GameObject implements Controllable, Destructible{
          * Don't know what's going on here?
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
-//        Vector2 velocity = box2dBody.getLinearVelocity();
-//        Vector2 velChange = movement.cpy().sub(velocity);
-//        Vector2 impulse = velChange.scl(box2dBody.getMass());
-//        box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
     	if(this.life <= 0){
     		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
@@ -178,6 +174,10 @@ public class Player extends GameObject implements Controllable, Destructible{
         return false;
     }
 
+	/**
+	 * This function process input continuously based on status, different
+	 * from doKeyDown and doKeyUp which only get executed once
+	 */
 	public void processInput() {
 		Iterator<Entry<Integer, Boolean>> iter = keyMap.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -223,30 +223,6 @@ public class Player extends GameObject implements Controllable, Destructible{
 				break;
 			}
 		}
-//		while (!keyMap.isEmpty()) {
-//			if (keyMap.get(Input.Keys.W) && keyMap.get(Input.Keys.W) != null) {
-//				movement.y = speed;
-//				keyMap.remove(Input.Keys.W);
-//			}
-//			if (keyMap.get(Input.Keys.A) && keyMap.get(Input.Keys.A) != null) {
-//				movement.x = -speed;
-//				keyMap.remove(Input.Keys.A);
-//			}
-//			if (keyMap.get(Input.Keys.S) && keyMap.get(Input.Keys.S) != null) {
-//				movement.y = -speed;
-//				keyMap.remove(Input.Keys.S);
-//			}
-//			if (keyMap.get(Input.Keys.D) && keyMap.get(Input.Keys.D) != null) {
-//				movement.x = speed;
-//				keyMap.remove(Input.Keys.D);
-//			}
-//		}
-//		if (!keyMap.get(Input.Keys.W) && !keyMap.get(Input.Keys.S)) {
-//			movement.y = 0;
-//		}
-//		if (!keyMap.get(Input.Keys.A) && !keyMap.get(Input.Keys.D)) {
-//			movement.x = 0;
-//		}
 	}
 
 	@Override
