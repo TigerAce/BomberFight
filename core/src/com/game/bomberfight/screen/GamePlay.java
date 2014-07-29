@@ -4,9 +4,13 @@ package com.game.bomberfight.screen;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import box2dLight.ConeLight;
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +38,8 @@ public class GamePlay implements Screen {
     private ExtendViewport viewport;
     private SpriteBatch batch;
     private CollisionListener collisionListener;
-
+    private RayHandler rayHandler;
+    
     private GameObjectManager gameObjectManager = new GameObjectManager();
     /**
      * TODO: Not sure whether we need to put this Controllable thingy into a manager?
@@ -67,6 +72,13 @@ public class GamePlay implements Screen {
          * render camera
          */
         viewport.update();
+        
+        /**
+		 * render lights
+		 */
+			rayHandler.setCombinedMatrix(viewport.getCamera().combined);
+			rayHandler.updateAndRender();
+			
 
         /**
          * Handles world collision calculation
@@ -135,7 +147,16 @@ public class GamePlay implements Screen {
         collisionListener = new CollisionListener();
         world.setContactListener(collisionListener);
 
+        /**
+		   * lights environment setup
+		   */
+        rayHandler = new RayHandler(world);
+		new ConeLight(rayHandler, 1000, new Color(1,1,1,1), 130, -49.9f, -34.9f, 45, 45);
+		new ConeLight(rayHandler, 1000, new Color(1,1,1,1), 130, 49.9f, 34.9f, 225, 45);
+	    rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.4f);
 
+	    
+	    
         /**********************************************************
          *                 game objects creation                  *
          **********************************************************/
