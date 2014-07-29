@@ -20,9 +20,9 @@ public class Brick extends Barrier implements Destructible, Breakable{
 	private Shape brickShape;
 	private float life;
 	
-	public Brick(float x, float y, float width, float height) {
+	public Brick(float x, float y, float width, float height, float life) {
 		super(x, y, width, height);
-		this.life = 300;
+		this.life = life;
 	}
 
 	@Override

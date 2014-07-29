@@ -3,9 +3,14 @@ package com.game.bomberfight.screen;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import box2dLight.ConeLight;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +37,7 @@ public class GamePlay implements Screen {
 	private ExtendViewport viewport;
 	private SpriteBatch batch;
 	private CollisionListener collisionListener;
+	private RayHandler rayHandler;
 
 	private GameObjectManager gameObjectManager = new GameObjectManager();
 	/**
@@ -81,9 +87,11 @@ public class GamePlay implements Screen {
 		 * update and redraw game objects
 		 */
 		gameObjectManager.updateAll(delta);
+		batch.setProjectionMatrix(viewport.getCamera().combined);
 		batch.begin();
-		gameObjectManager.drawAll();
-		FpsDisplayer.getInstance().draw(batch, 0, Gdx.graphics.getHeight() / 10);
+		gameObjectManager.drawAll(batch);
+		FpsDisplayer.getInstance()
+				.draw(batch, 0, Gdx.graphics.getHeight() / 10);
 		batch.end();
 
 		/**
@@ -93,6 +101,12 @@ public class GamePlay implements Screen {
 			if (explosions.get(i) != null && explosions.get(i).isCompleted())
 				explosions.remove(i);
 		}
+
+		/**
+		 * render light
+		 */
+		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
+		rayHandler.updateAndRender();
 
 		// debug render
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
@@ -140,7 +154,7 @@ public class GamePlay implements Screen {
 		/**
 		 * Create player
 		 */
-		Bomber bomber = new Bomber(0, 1, 10);
+		Bomber bomber = new Bomber(0, 1, 10, 500);
 		bomber.create();
 		this.controllableObjects.add(bomber);
 
@@ -155,7 +169,7 @@ public class GamePlay implements Screen {
 		 * 
 		 */
 
-		Brick brick = new Brick(12, 12, 4, 4);
+		Brick brick = new Brick(12, 12, 4, 4, 300);
 		brick.create();
 		/**
 		 * create bunch of crate
@@ -171,10 +185,24 @@ public class GamePlay implements Screen {
 				Crate c = new Crate(x - ((crateSize * scaleSize) / 2)
 						+ crateSize / 2 + (w * (crateSize + factor)), y
 						- ((crateSize * scaleSize) / 2) + crateSize / 2
-						+ (h * (crateSize + factor)), crateSize, crateSize);
+						+ (h * (crateSize + factor)), crateSize, crateSize, 100);
 				c.create();
 			}
 		}
+
+		/**********************************************************
+		 * lights setup *
+		 **********************************************************/
+
+		rayHandler = new RayHandler(world);
+		new ConeLight(rayHandler, 1000, new Color(1f, 0.1f, 0.1f, 1f), 70,
+				-49.9f, -34.9f, 45, 45);
+		new ConeLight(rayHandler, 1000, new Color(0.1f, 0.5f, 1f, 1f), 70,
+				49.9f, 34.9f, 225, 45);
+		PointLight p = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
+				0.5f, 1f), 50, 0, 0);
+		p.attachToBody(bomber.getBox2dBody(), 0, 0);
+		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
 
 		/**********************************************************
 		 * input listener *
@@ -202,6 +230,7 @@ public class GamePlay implements Screen {
 
 	@Override
 	public void dispose() {
+		rayHandler.dispose();
 		gameObjectManager.disposeAll();
 		world.dispose();
 		debugRenderer.dispose();
