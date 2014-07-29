@@ -176,7 +176,7 @@ public class GamePlay implements Screen {
 		/**
 		 * Create player
 		 */
-		Bomber bomber = new Bomber(0, 1, 10, 50);
+		Bomber bomber = new Bomber(0, 1, 10, 50, 2, 3);
 		bomber.create();
 		this.controllableObjects.add(bomber);
 

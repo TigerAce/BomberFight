@@ -80,9 +80,9 @@ public class Player extends GameObject implements Controllable, Destructible{
 
         shape = new PolygonShape();
         if (width <= 0 && height <= 0) {
-        	((PolygonShape) shape).setAsBox(.5f, .5f);
+        	((PolygonShape) shape).setAsBox(1, 1);
 		} else {
-			((PolygonShape) shape).setAsBox(width, height);
+			((PolygonShape) shape).setAsBox(width / 2, height / 2);
 		}
 
         FixtureDef playerFixtureDef = new FixtureDef();
