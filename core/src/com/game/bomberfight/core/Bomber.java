@@ -1,6 +1,7 @@
 package com.game.bomberfight.core;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
 
@@ -37,9 +38,9 @@ public class Bomber extends Player{
 	    }
 
     @Override
-	public void draw() {
+	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-		super.draw();
+		super.draw(batch);
 	}
 
     @Override

@@ -83,8 +83,9 @@ public class GamePlay implements Screen {
          * update and redraw game objects
          */
         gameObjectManager.updateAll(delta);
+        batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
-        gameObjectManager.drawAll();
+        gameObjectManager.drawAll(batch);
         FpsDisplayer.getInstance().draw(batch, 0, Gdx.graphics.getHeight() /10);
         batch.end();
 

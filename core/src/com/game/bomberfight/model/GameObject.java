@@ -1,5 +1,7 @@
 package com.game.bomberfight.model;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -14,6 +16,7 @@ public abstract class GameObject implements Disposable{
 	protected float x;
 	protected float y;
     protected Body box2dBody;
+    protected Sprite sprite;
     protected String name;
     protected int state;
 
@@ -44,7 +47,7 @@ public abstract class GameObject implements Disposable{
     /**
      * Game object drawing logic goes here
      */
-	public abstract void draw();
+	public abstract void draw(SpriteBatch batch);
 
 	/**
 	 * @return the name
