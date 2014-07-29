@@ -3,12 +3,13 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.screen.GamePlay;
@@ -22,6 +23,7 @@ public class Particle extends GameObject{
 	private Explosion parent;
 	private Vector2 dirVector;
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+	private ParticleEffect effect;
 	
 	public Particle(float x, float y, float angle, float density, float lifespan, float blastPowerX, float blastPowerY, Explosion parent) {
 		super(x, y);
@@ -32,6 +34,9 @@ public class Particle extends GameObject{
 		this.blastPowerY = blastPowerY;
 		this.parent = parent;
 	
+		effect = new ParticleEffect();
+		effect.load(Gdx.files.internal("particle/flame.p"), Gdx.files.internal("particle"));
+		effect.start();
 	}
 
     @Override
@@ -84,12 +89,14 @@ public class Particle extends GameObject{
 		this.x = this.box2dBody.getPosition().x ;
 		this.y = this.box2dBody.getPosition().y ;
 		
+		effect.setPosition(this.x, this.y);
+		effect.update(delta);
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-		
+		effect.draw(batch);
 	}
 
 	@Override
@@ -97,6 +104,7 @@ public class Particle extends GameObject{
 		parent.setParticleCounter(parent.getParticleCounter() - 1);
 		((GamePlay)currentScreen).getWorld().destroyBody(this.box2dBody);
 		super.dispose();
+		effect.dispose();
 		
 	}
 
