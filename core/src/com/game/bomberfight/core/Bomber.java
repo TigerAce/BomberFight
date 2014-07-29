@@ -123,7 +123,39 @@ public class Bomber extends Player{
 		switch (keycode) {
 		case Input.Keys.SPACE:
 			if(placeBomb){
-				Bomb bomb = new Bomb(box2dBody.getPosition().x, box2dBody.getPosition().y,3, 50, 50, Explosion.Style.ANNULAR);
+				float bombCoordX = box2dBody.getPosition().x;
+				float bombCoordY = box2dBody.getPosition().y;
+				switch(direction){
+				case left:
+					bombCoordX -= width / 2;
+					break;
+				case right:
+					bombCoordX += width / 2;
+					break;
+				case down:
+					bombCoordY -= height / 2;
+					break;
+				case up:
+					bombCoordY += height / 2;
+					break;
+				case left_up:
+					bombCoordX -= width / 2;
+					bombCoordY += height / 2;
+					break;
+				case left_down:
+					bombCoordX -= width / 2;
+					bombCoordY -= height / 2;
+					break;
+				case right_up:
+					bombCoordX += width / 2;
+					bombCoordY += height / 2;
+					break;
+				case right_down:
+					bombCoordX += width / 2;
+					bombCoordY -= height / 2;
+					break;
+				}
+				Bomb bomb = new Bomb(bombCoordX, bombCoordY,3, 50, 50, Explosion.Style.ANNULAR);
 				bomb.create();
 				bombPlacementCounter--;
 				if(bombPlacementCounter <= 0){
