@@ -1,5 +1,9 @@
 package com.game.bomberfight.core;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.Explosion;
@@ -11,31 +15,6 @@ public class Bomber extends Player{
 		super(xPos, yPos, speed, life);
 		// TODO Auto-generated constructor stub
 	}
-	
-	 @Override
-     public boolean doKeyDown(int keycode) {
-
-	        switch (keycode) {
-	            case Input.Keys.W:
-	            	keyMap.put(Input.Keys.W, true);
-	                return true;
-	            case Input.Keys.S:
-	            	keyMap.put(Input.Keys.S, true);
-	                return true;
-	            case Input.Keys.A:
-	            	keyMap.put(Input.Keys.A, true);
-	                return true;
-	            case Input.Keys.D:
-	            	keyMap.put(Input.Keys.D, true);
-	                return true;
-	            case Input.Keys.SPACE:
-	            	Bomb bomb = new Bomb(box2dBody.getPosition().x, box2dBody.getPosition().y,3, 50, 50, Explosion.Style.ANNULAR);
-	            	bomb.create();
-	            	return true;
-	        }
-
-	        return false;
-	    }
 
     @Override
 	public void draw(SpriteBatch batch) {
@@ -58,6 +37,33 @@ public class Bomber extends Player{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		super.dispose();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.game.bomberfight.model.Player#processInput()
+	 */
+	@Override
+	public void processInput() {
+		// TODO Auto-generated method stub
+		super.processInput();
+		Iterator<Entry<Integer, Boolean>> iter = keyMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			@SuppressWarnings("rawtypes")
+			Map.Entry entry = (Map.Entry) iter.next();
+		    int key = (Integer) entry.getKey();
+		    boolean value = (Boolean) entry.getValue();
+		    switch (key) {
+			case Input.Keys.SPACE:
+				if (value) {
+					Bomb bomb = new Bomb(box2dBody.getPosition().x, box2dBody.getPosition().y,3, 50, 50, Explosion.Style.ANNULAR);
+	            	bomb.create();
+				}
+				break;
+
+			default:
+				break;
+			}
+		} 
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.game.bomberfight.model;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -30,7 +32,7 @@ public class Player extends GameObject implements Controllable, Destructible{
     protected float width = -1;
     protected float height = -1;
     protected Sprite sprite;
-    protected Map<Integer, Boolean> keyMap = new HashMap<Integer, Boolean>();
+    protected Map<Integer, Boolean> keyMap = new LinkedHashMap<Integer, Boolean>();
     
 
     /**
@@ -96,11 +98,6 @@ public class Player extends GameObject implements Controllable, Destructible{
 
         // Add into GameObjectManager
         ((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
-        
-        keyMap.put(Input.Keys.W, false);
-        keyMap.put(Input.Keys.A, false);
-        keyMap.put(Input.Keys.S, false);
-        keyMap.put(Input.Keys.D, false);
     }
 
     @Override
@@ -141,43 +138,14 @@ public class Player extends GameObject implements Controllable, Destructible{
 
 	@Override
 	public boolean doKeyUp(int keycode) {
-
-		switch (keycode) {
-		case Input.Keys.W:
-			keyMap.put(Input.Keys.W, false);
-			return true;
-		case Input.Keys.S:
-			keyMap.put(Input.Keys.S, false);
-			return true;
-		case Input.Keys.A:
-			keyMap.put(Input.Keys.A, false);
-			return true;
-		case Input.Keys.D:
-			keyMap.put(Input.Keys.D, false);
-			return true;
-		}
-		return false;
+		keyMap.put(keycode, false);
+		return true;
 	}
 
     @Override
     public boolean doKeyDown(int keycode) {
-
-        switch (keycode) {
-            case Input.Keys.W:
-            	keyMap.put(Input.Keys.W, true);
-                return true;
-            case Input.Keys.S:
-            	keyMap.put(Input.Keys.S, true);
-                return true;
-            case Input.Keys.A:
-            	keyMap.put(Input.Keys.A, true);
-                return true;
-            case Input.Keys.D:
-            	keyMap.put(Input.Keys.D, true);
-                return true;
-        }
-
-        return false;
+        keyMap.put(keycode, true);
+        return true;
     }
 
     @Override
@@ -211,24 +179,74 @@ public class Player extends GameObject implements Controllable, Destructible{
     }
 
 	public void processInput() {
-		if (keyMap.get(Input.Keys.W)) {
-			movement.y = speed;
+		Iterator<Entry<Integer, Boolean>> iter = keyMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			@SuppressWarnings("rawtypes")
+			Map.Entry entry = (Map.Entry) iter.next();
+		    int key = (Integer) entry.getKey();
+		    boolean value = (Boolean) entry.getValue();
+		    switch (key) {
+			case Input.Keys.W:
+				if (value) {
+					movement.y = speed;
+				} else {
+					movement.y = 0;
+					iter.remove();
+				}
+				break;
+			case Input.Keys.A:
+				if (value) {
+					movement.x = -speed;
+				} else {
+					movement.x = 0;
+					iter.remove();
+				}
+				break;
+			case Input.Keys.S:
+				if (value) {
+					movement.y = -speed;
+				} else {
+					movement.y = 0;
+					iter.remove();
+				}
+				break;
+			case Input.Keys.D:
+				if (value) {
+					movement.x = speed;
+				} else {
+					movement.x = 0;
+					iter.remove();
+				}
+				break;
+
+			default:
+				break;
+			}
 		}
-		if (keyMap.get(Input.Keys.A)) {
-			movement.x = -speed;
-		}
-		if (keyMap.get(Input.Keys.S)) {
-			movement.y = -speed;
-		}
-		if (keyMap.get(Input.Keys.D)) {
-			movement.x = speed;
-		}
-		if (!keyMap.get(Input.Keys.W) && !keyMap.get(Input.Keys.S)) {
-			movement.y = 0;
-		}
-		if (!keyMap.get(Input.Keys.A) && !keyMap.get(Input.Keys.D)) {
-			movement.x = 0;
-		}
+//		while (!keyMap.isEmpty()) {
+//			if (keyMap.get(Input.Keys.W) && keyMap.get(Input.Keys.W) != null) {
+//				movement.y = speed;
+//				keyMap.remove(Input.Keys.W);
+//			}
+//			if (keyMap.get(Input.Keys.A) && keyMap.get(Input.Keys.A) != null) {
+//				movement.x = -speed;
+//				keyMap.remove(Input.Keys.A);
+//			}
+//			if (keyMap.get(Input.Keys.S) && keyMap.get(Input.Keys.S) != null) {
+//				movement.y = -speed;
+//				keyMap.remove(Input.Keys.S);
+//			}
+//			if (keyMap.get(Input.Keys.D) && keyMap.get(Input.Keys.D) != null) {
+//				movement.x = speed;
+//				keyMap.remove(Input.Keys.D);
+//			}
+//		}
+//		if (!keyMap.get(Input.Keys.W) && !keyMap.get(Input.Keys.S)) {
+//			movement.y = 0;
+//		}
+//		if (!keyMap.get(Input.Keys.A) && !keyMap.get(Input.Keys.D)) {
+//			movement.x = 0;
+//		}
 	}
 
 	@Override
