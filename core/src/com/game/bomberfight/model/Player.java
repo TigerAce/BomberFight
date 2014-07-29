@@ -9,8 +9,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -33,6 +38,13 @@ public class Player extends GameObject implements Controllable, Destructible{
     protected float height = -1;
     protected Sprite sprite;
     protected Map<Integer, Boolean> keyMap = new LinkedHashMap<Integer, Boolean>();
+    protected Direction direction = Direction.up;
+    protected Animation animation = null;
+    protected float animTime;
+    
+    public enum Direction {
+    	left, right, down, up, left_up, left_down, right_up, right_down
+    }
     
 
     /**
@@ -54,11 +66,12 @@ public class Player extends GameObject implements Controllable, Destructible{
 	 * @param height height of player body
 	 * @param speed
 	 */
-	public Player(float xPos, float yPos, float width, float height, float speed){
+	public Player(float xPos, float yPos, float width, float height, float speed, float life){
 		super(xPos, yPos);
 		this.speed = speed;
 		this.width = width;
 		this.height = height;
+		this.life = life;
 	}
 
     /***************************************
@@ -98,6 +111,10 @@ public class Player extends GameObject implements Controllable, Destructible{
 
         // Add into GameObjectManager
         ((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
+        
+        sprite = new Sprite();
+        sprite.setSize(width * 2, height * 2);
+		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
     }
 
     @Override
@@ -114,12 +131,21 @@ public class Player extends GameObject implements Controllable, Destructible{
     	}else{
     		box2dBody.setLinearVelocity(movement);
     		processInput();
+    		if (this.movement.x != 0 || this.movement.y != 0) {
+        		animTime += delta;
+    		}
+        	updateDirection();
     	}
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-
+    	if (animation != null) {
+			sprite.setRegion(animation.getKeyFrame(animTime));
+			sprite.setPosition(box2dBody.getPosition().x - sprite.getWidth()/2, box2dBody.getPosition().y - sprite.getHeight()/2);
+			sprite.setRotation(box2dBody.getAngle() * MathUtils.radiansToDegrees);
+			sprite.draw(batch);
+		}
     }
     
     @Override
@@ -228,5 +254,66 @@ public class Player extends GameObject implements Controllable, Destructible{
 	@Override
 	public void damage(ContactImpulse impulse) {
 		this.life -= impulse.getNormalImpulses()[0];
+	}
+
+	/**
+	 * @return the animation
+	 */
+	public Animation getAnimation() {
+		return animation;
+	}
+
+	/**
+	 * @param animation the animation to set
+	 */
+	public void setAnimation(Texture texture, int col, int row) {
+        TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth()/col, texture.getHeight()/row);
+        TextureRegion[] walkFrames = new TextureRegion[col * row];
+        int index = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        animation = new Animation(0.25f, walkFrames);
+        animation.setPlayMode(PlayMode.LOOP);
+        animTime = 0f;
+	}
+	
+	public void updateDirection() {
+		float angle = box2dBody.getAngle() * MathUtils.radiansToDegrees;
+		if (movement.x > 0) {
+			direction = Direction.right;
+			angle = -90;
+		}
+		if (movement.x < 0) {
+			direction = Direction.left;
+			angle = 90;
+		}
+		if (movement.y > 0) {
+			direction = Direction.up;
+			angle = 0;
+		}
+		if (movement.y < 0) {
+			direction = Direction.down;
+			angle = 180;
+		}
+		if (movement.x > 0 && movement.y > 0) {
+			direction = Direction.right_up;
+			angle = -45;
+		}
+		if (movement.x < 0 && movement.y > 0) {
+			direction = Direction.left_up;
+			angle = 45;
+		}
+		if (movement.x > 0 && movement.y < 0) {
+			direction = Direction.right_down;
+			angle = -135;
+		}
+		if (movement.x < 0 && movement.y < 0) {
+			direction = Direction.left_down;
+			angle = 135;
+		}
+		box2dBody.setTransform(box2dBody.getPosition(), angle * MathUtils.degreesToRadians);
 	}
 }

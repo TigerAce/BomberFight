@@ -11,6 +11,10 @@ public class Bomber extends Player{
 		super(xPos, yPos, speed, life);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Bomber(float xPos, float yPos, float width, float height, float speed, float life){
+		super(xPos, yPos, width, height, speed, life);
+	}
 
     @Override
 	public void draw(SpriteBatch batch) {

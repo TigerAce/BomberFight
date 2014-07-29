@@ -29,7 +29,6 @@ import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.utility.Config;
-import com.game.bomberfight.utility.FpsDisplayer;
 
 public class GamePlay implements Screen {
 
@@ -72,7 +71,7 @@ public class GamePlay implements Screen {
 		/**
 		 * render camera
 		 */
-		viewport.update();
+		viewport.getCamera().update();
 
 		/**
 		 * Handles world collision calculation
@@ -92,8 +91,7 @@ public class GamePlay implements Screen {
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		batch.begin();
 		gameObjectManager.drawAll(batch);
-		FpsDisplayer.getInstance()
-				.draw(batch, 0, Gdx.graphics.getHeight() / 10);
+		//FpsDisplayer.getInstance().draw(batch, 0, 0);
 		batch.end();
 
 		/**
@@ -154,6 +152,7 @@ public class GamePlay implements Screen {
 		 */
 		resourcesManager.loadTexture("img/texture/crate4.jpg", "crate");
 		resourcesManager.loadTexture("img/texture/brick3.jpg", "brick");
+		resourcesManager.loadTexture("img/animation/soldier.png", "bomberAnimation");
 
 		/**********************************************************
 		 * game objects creation *
@@ -162,8 +161,9 @@ public class GamePlay implements Screen {
 		/**
 		 * Create player
 		 */
-		Bomber bomber = new Bomber(0, 1, 10, 500);
+		Bomber bomber = new Bomber(0, 1, 2, 2, 10, 500);
 		bomber.create();
+		bomber.setAnimation(resourcesManager.getTexture("bomberAnimation"), 3, 1);
 		this.controllableObjects.add(bomber);
 
 		/**
