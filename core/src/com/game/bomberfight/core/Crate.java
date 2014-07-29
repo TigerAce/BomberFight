@@ -3,6 +3,10 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -54,6 +58,10 @@ public class Crate extends Barrier implements Destructible, Breakable{
 		box2dBody.setAngularDamping(0.9f);
 		box2dBody.setUserData(this);
 		
+		sprite = new Sprite(new Texture(Gdx.files.internal("img/texture/crate4.jpg")));
+		sprite.setSize(width, height);
+		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
     	
     }
@@ -67,8 +75,12 @@ public class Crate extends Barrier implements Destructible, Breakable{
 	}
 
 	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
+	public void draw(SpriteBatch batch) {
+		if( sprite != null){
+			sprite.setPosition(box2dBody.getPosition().x - sprite.getWidth()/2, box2dBody.getPosition().y - sprite.getHeight()/2);
+			sprite.setRotation(box2dBody.getAngle() * MathUtils.radiansToDegrees);
+			sprite.draw(batch);
+		}
 		
 	}
 

@@ -8,23 +8,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.interfaces.Controllable;
+import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.screen.GamePlay;
 
-public class Player extends GameObject implements Controllable{
+public class Player extends GameObject implements Controllable, Destructible{
 
 	protected float x;
 	protected float y;
 	protected float speed;
+	protected float life;
+	protected Shape shape;
     protected Vector2 movement = new Vector2();
     protected float width = -1;
     protected float height = -1;
     protected Sprite sprite;
     protected Map<Integer, Boolean> keyMap = new HashMap<Integer, Boolean>();
+    
 
     /**
      * Constructor of Player
@@ -32,9 +39,10 @@ public class Player extends GameObject implements Controllable{
      * @param yPos y position
      * @param speed moving speed
      */
-	public Player(float xPos, float yPos, float speed){
+	public Player(float xPos, float yPos, float speed, float life){
 		super(xPos, yPos);
 		this.speed = speed;
+		this.life = life;
 	}
 	
 	/**
@@ -68,15 +76,15 @@ public class Player extends GameObject implements Controllable{
         playerDef.fixedRotation = true;
         
 
-        PolygonShape playerShape = new PolygonShape();
+        shape = new PolygonShape();
         if (width <= 0 && height <= 0) {
-        	playerShape.setAsBox(.5f, .5f);
+        	((PolygonShape) shape).setAsBox(.5f, .5f);
 		} else {
-			playerShape.setAsBox(width, height);
+			((PolygonShape) shape).setAsBox(width, height);
 		}
 
         FixtureDef playerFixtureDef = new FixtureDef();
-        playerFixtureDef.shape = playerShape;
+        playerFixtureDef.shape = shape;
         playerFixtureDef.density = 2f;
         playerFixtureDef.friction = .25f;
         playerFixtureDef.restitution = 0f;
@@ -85,7 +93,6 @@ public class Player extends GameObject implements Controllable{
         box2dBody = ((GamePlay)currentScreen).getWorld().createBody(playerDef);
         box2dBody.createFixture(playerFixtureDef);
         box2dBody.setUserData(this);
-        playerShape.dispose();
 
         // Add into GameObjectManager
         ((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
@@ -107,14 +114,25 @@ public class Player extends GameObject implements Controllable{
 //        Vector2 velChange = movement.cpy().sub(velocity);
 //        Vector2 impulse = velChange.scl(box2dBody.getMass());
 //        box2dBody.applyLinearImpulse(impulse,box2dBody.getWorldCenter(), true);
-        box2dBody.setLinearVelocity(movement);
-
-        processInput();
+    	if(this.life <= 0){
+    		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+    		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+    		 dispose();
+    	}else{
+    		box2dBody.setLinearVelocity(movement);
+    		processInput();
+    	}
     }
 
     @Override
-    public void draw() {
+    public void draw(SpriteBatch batch) {
 
+    }
+    
+    @Override
+    public void dispose(){
+    	this.shape.dispose();
+    	super.dispose();
     }
 
     /***************************************
@@ -211,5 +229,10 @@ public class Player extends GameObject implements Controllable{
 		if (!keyMap.get(Input.Keys.A) && !keyMap.get(Input.Keys.D)) {
 			movement.x = 0;
 		}
+	}
+
+	@Override
+	public void damage(ContactImpulse impulse) {
+		this.life -= impulse.getNormalImpulses()[0];
 	}
 }

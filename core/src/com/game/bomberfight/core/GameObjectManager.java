@@ -1,5 +1,6 @@
 package com.game.bomberfight.core;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.GameObject;
 
 import java.util.HashSet;
@@ -56,10 +57,10 @@ public class GameObjectManager {
     /**
      * Draw all sprites
      */
-    public void drawAll() {
+    public void drawAll(SpriteBatch batch) {
         Iterator<GameObject> iterator = this.gameObjects.iterator();
         while (iterator.hasNext()) {
-            iterator.next().draw();
+            iterator.next().draw(batch);
         }
     }
 
