@@ -7,8 +7,8 @@ import com.game.bomberfight.model.Player;
 
 public class Bomber extends Player{
 
-	public Bomber(float xPos, float yPos, float speed) {
-		super(xPos, yPos, speed);
+	public Bomber(float xPos, float yPos, float speed, float life) {
+		super(xPos, yPos, speed, life);
 		// TODO Auto-generated constructor stub
 	}
 	

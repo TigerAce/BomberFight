@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import box2dLight.ConeLight;
+import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
@@ -73,13 +74,7 @@ public class GamePlay implements Screen {
          */
         viewport.update();
         
-        /**
-		 * render lights
-		 */
-			rayHandler.setCombinedMatrix(viewport.getCamera().combined);
-			rayHandler.updateAndRender();
-			
-
+     
         /**
          * Handles world collision calculation
          */
@@ -109,6 +104,13 @@ public class GamePlay implements Screen {
 				explosions.remove(i);
 		}
     	
+        /**
+         * render light
+         */
+     	rayHandler.setCombinedMatrix(viewport.getCamera().combined);
+     	rayHandler.updateAndRender();
+     			
+
         //debug render
     	if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
     		debugRenderer.render(this.world, viewport.getCamera().combined);
@@ -147,15 +149,7 @@ public class GamePlay implements Screen {
         collisionListener = new CollisionListener();
         world.setContactListener(collisionListener);
 
-        /**
-		   * lights environment setup
-		   */
-        rayHandler = new RayHandler(world);
-		new ConeLight(rayHandler, 1000, new Color(1,1,1,1), 130, -49.9f, -34.9f, 45, 45);
-		new ConeLight(rayHandler, 1000, new Color(1,1,1,1), 130, 49.9f, 34.9f, 225, 45);
-	    rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.4f);
-
-	    
+     
 	    
         /**********************************************************
          *                 game objects creation                  *
@@ -165,7 +159,7 @@ public class GamePlay implements Screen {
         /**
          * Create player
          */
-        Bomber bomber = new Bomber(0, 1, 10);
+        Bomber bomber = new Bomber(0, 1, 10, 500);
         bomber.create();
         this.controllableObjects.add(bomber);
 
@@ -200,7 +194,18 @@ public class GamePlay implements Screen {
 			}
 		
 
+	   /**********************************************************
+	    *               lights setup                             *
+	    **********************************************************/
 
+	    rayHandler = new RayHandler(world);
+	    new ConeLight(rayHandler, 1000, new Color(1f,0.1f,0.1f,1f), 70, -49.9f, -34.9f, 45, 45);
+	    new ConeLight(rayHandler, 1000, new Color(0.1f,0.5f,1f,1f), 70, 49.9f, 34.9f, 225, 45);	    
+	    PointLight p = new PointLight(rayHandler, 1000, new Color(0.1f,0.5f,0.5f,1f), 50,0,0);
+	    p.attachToBody(bomber.getBox2dBody(),0, 0);
+		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
+		    
+		    
         /**********************************************************
          *                 input listener                         *
          **********************************************************/
@@ -229,6 +234,7 @@ public class GamePlay implements Screen {
 
     @Override
     public void dispose() {
+    	rayHandler.dispose();
         gameObjectManager.disposeAll();
         world.dispose();
         debugRenderer.dispose();
