@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import box2dLight.ConeLight;
+import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
@@ -161,7 +162,7 @@ public class GamePlay implements Screen {
 		/**
 		 * Create player
 		 */
-		Bomber bomber = new Bomber(0, 1, 2, 2, 10, 500);
+		Bomber bomber = new Bomber(0, 1, 4, 4,10, 100, 2, 3);
 		bomber.create();
 		bomber.setAnimation(resourcesManager.getTexture("bomberAnimation"), 3, 1);
 		this.controllableObjects.add(bomber);
@@ -211,7 +212,8 @@ public class GamePlay implements Screen {
 				0.5f, 1f), 50, 0, 0);
 		p.attachToBody(bomber.getBox2dBody(), 0, 0);
 		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
-		// Light.setContactFilter((short)0, (short)-1, (short)0);
+		
+		Light.setContactFilter((short)0, (short)-1, (short)0);
 
 		/**********************************************************
 		 * input listener *
