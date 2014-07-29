@@ -25,6 +25,7 @@ protected AnnularExplosion(float x, float y, float lifespan, float blastPowerX,
 		
 		float density = (float) (totalDensity / numParticles);
 		float randomStartAngle =  ((float)Math.random() * 90);
+		
 		for(int i = 0; i < numParticles; i++){
 			float angle = ((((float)i / numParticles) * 360) + randomStartAngle) * MathUtils.degreesToRadians;
 			Particle p = new Particle(x, y, angle, density, lifespan, blastPowerX, blastPowerY, this);

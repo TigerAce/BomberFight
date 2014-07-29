@@ -206,14 +206,18 @@ public class GamePlay implements Screen {
 		rayHandler = new RayHandler(world);
 		new ConeLight(rayHandler, 1000, new Color(1f, 0.1f, 0.1f, 1f), 70,
 				-49.9f, -34.9f, 45, 45);
+		
 		new ConeLight(rayHandler, 1000, new Color(0.1f, 0.5f, 1f, 1f), 70,
 				49.9f, 34.9f, 225, 45);
+		
 		PointLight p = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
 				0.5f, 1f), 50, 0, 0);
+		
 		p.attachToBody(bomber.getBox2dBody(), 0, 0);
+		
 		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
 		
-		Light.setContactFilter((short)0, (short)-1, (short)0);
+		Light.setContactFilter((short)1, (short)-1, (short)1);
 
 		/**********************************************************
 		 * input listener *
