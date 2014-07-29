@@ -59,7 +59,7 @@ public class Brick extends Barrier implements Destructible, Breakable{
 		box2dBody.setUserData(this);
 		
 		//sprite
-		sprite = new Sprite(new Texture(Gdx.files.internal("img/texture/brick3.jpg")));
+		sprite = new Sprite(((GamePlay)currentScreen).getResourcesManager().getTexture("brick"));
 		sprite.setSize(width, height);
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		
