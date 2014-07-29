@@ -12,6 +12,7 @@ public class FpsDisplayer {
 	protected FpsDisplayer() {
 		// TODO Auto-generated constructor stub
 		font = new BitmapFont();
+		font.setScale(0.09f, 0.1f);
 	}
 	
 	public static FpsDisplayer getInstance() {

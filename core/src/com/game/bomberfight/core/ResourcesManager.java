@@ -1,10 +1,7 @@
 package com.game.bomberfight.core;
 
 import java.util.HashMap;
-
-
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;

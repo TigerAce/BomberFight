@@ -68,7 +68,7 @@ public class Bomb extends Explosive{
 		
 		//shape
 		CircleShape bombShape = new CircleShape();
-		bombShape.setRadius(.50f);
+		bombShape.setRadius(1f);
 		
 		//fixture
 		bombFixtureDef.density = 2.5f;
