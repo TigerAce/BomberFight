@@ -107,7 +107,8 @@ public class Player extends GameObject implements Controllable, Destructible{
          * Don't know what's going on here?
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
-    	if(this.life <= 0){
+    	if(life <= 0){
+    		System.out.println(box2dBody);
     		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
     		 dispose();
@@ -124,7 +125,7 @@ public class Player extends GameObject implements Controllable, Destructible{
     
     @Override
     public void dispose(){
-    	this.shape.dispose();
+    	shape.dispose();
     	super.dispose();
     }
 
