@@ -13,7 +13,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -43,6 +48,9 @@ public class GamePlay implements Screen {
 
 	private ResourcesManager resourcesManager = new ResourcesManager();
 	private GameObjectManager gameObjectManager = new GameObjectManager();
+	
+
+	
 	/**
 	 * TODO: Not sure whether we need to put this Controllable thingy into a
 	 * manager? For simplicity, I just create a HashSet for it.
@@ -85,7 +93,8 @@ public class GamePlay implements Screen {
 			world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 			this.timeAccumulator -= this.TIMESTEP;
 		}
-
+		
+	
 		/**
 		 * update and redraw game objects
 		 */
@@ -94,7 +103,7 @@ public class GamePlay implements Screen {
 		batch.begin();
 		gameObjectManager.drawAll(batch);
 		FpsDisplayer.getInstance()
-				.draw(batch, 0, Gdx.graphics.getHeight() / 10);
+				.draw(batch, -45, 30);
 		batch.end();
 
 		/**
@@ -113,7 +122,7 @@ public class GamePlay implements Screen {
 
 		// debug render
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-		//	debugRenderer.render(this.world, viewport.getCamera().combined);
+			debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
 	}
 
@@ -143,6 +152,7 @@ public class GamePlay implements Screen {
 		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth",
 				Float.class), Config.getInstance().get("viewportHeight",
 				Float.class));
+		
 
 		/**
 		 * collision listener setup
@@ -156,6 +166,9 @@ public class GamePlay implements Screen {
 		resourcesManager.loadTexture("img/texture/crate4.jpg", "crate");
 		resourcesManager.loadTexture("img/texture/brick3.jpg", "brick");
 
+
+	
+		
 		/**********************************************************
 		 * game objects creation *
 		 **********************************************************/
@@ -204,10 +217,14 @@ public class GamePlay implements Screen {
 		 **********************************************************/
 
 		rayHandler = new RayHandler(world);
+		
+		new PointLight(rayHandler, 1000, new Color(MathUtils.random(), MathUtils.random(),
+				MathUtils.random(), 1f), 10, -43, 30);
 		new ConeLight(rayHandler, 1000, new Color(1f, 0.1f, 0.1f, 1f), 70,
 				-49.9f, -34.9f, 45, 45);
 		new ConeLight(rayHandler, 1000, new Color(0.1f, 0.5f, 1f, 1f), 70,
 				49.9f, 34.9f, 225, 45);
+		
 		PointLight p = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
 				0.5f, 1f), 50, 0, 0);
 		p.attachToBody(bomber.getBox2dBody(), 0, 0);
