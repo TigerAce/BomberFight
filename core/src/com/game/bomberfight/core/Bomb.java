@@ -3,7 +3,13 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -16,6 +22,9 @@ import com.game.bomberfight.screen.GamePlay;
 public class Bomb extends Explosive{
 
 	private Player owner;
+	private float radius;
+	protected Animation animation = null;
+	protected float animTime;
 	
 	
 	/**
@@ -29,7 +38,7 @@ public class Bomb extends Explosive{
 	 */
 	public Bomb(float x, float y, float time, float powerX, float powerY, Explosion.Style explosionStyle) {
 		super(x, y, time, powerX, powerY, explosionStyle);
-		
+		radius = 1.f;
 	}
 
 	@Override
@@ -69,7 +78,7 @@ public class Bomb extends Explosive{
 		
 		//shape
 		CircleShape bombShape = new CircleShape();
-		bombShape.setRadius(1f);
+		bombShape.setRadius(radius);
 		
 		//fixture
 		bombFixtureDef.density = 2.5f;
@@ -84,6 +93,11 @@ public class Bomb extends Explosive{
 		box2dBody.createFixture(bombFixtureDef);
 		//bombBody.setUserData(new MyUserData("bomb", this, null));
 		
+		//sprite
+		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/bomb.png", Texture.class));
+		sprite.setSize(radius * 2, radius * 2);
+		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
 		
     }
@@ -92,13 +106,20 @@ public class Bomb extends Explosive{
 	public void update(float delta) {
 		this.time -= delta;
 		if(time <= 0) this.explode(box2dBody.getPosition().x, box2dBody.getPosition().y, powerX, powerY, explosionStyle);
-		
+		animTime += delta;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-		
+		if( sprite != null){
+			if (animation != null) {
+				sprite.setRegion(animation.getKeyFrame(animTime));
+			}
+			sprite.setPosition(box2dBody.getPosition().x - sprite.getWidth()/2, box2dBody.getPosition().y - sprite.getHeight()/2);
+			sprite.setRotation(box2dBody.getAngle() * MathUtils.radiansToDegrees);
+			sprite.draw(batch);
+		}
 	}
 
 	public Player getOwner() {
@@ -109,6 +130,21 @@ public class Bomb extends Explosive{
 		this.owner = owner;
 	}
 
-	
+	/**
+	 * @param animation the animation to set
+	 */
+	public void setAnimation(Texture texture, int col, int row) {
+        TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth()/col, texture.getHeight()/row);
+        TextureRegion[] walkFrames = new TextureRegion[col * row];
+        int index = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        animation = new Animation(0.25f, walkFrames);
+        animation.setPlayMode(PlayMode.LOOP);
+        animTime = 0f;
+	}
 	
 }
