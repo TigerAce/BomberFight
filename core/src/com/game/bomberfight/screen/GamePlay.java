@@ -30,6 +30,7 @@ import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
@@ -185,6 +186,7 @@ public class GamePlay implements Screen {
 		Wall gameWallFrame = new Wall(0, 0, 100, 70);
 		gameWallFrame.setAsRectangleFrame();
 
+		
 		/**
 		 * create a brick
 		 * 
@@ -210,6 +212,12 @@ public class GamePlay implements Screen {
 				c.create();
 			}
 		}
+		/**
+		 * create an item change explosion style
+		 */
+		Item item = new Item(10, -10);
+		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
+		item.create();
 
 		/**********************************************************
 		 * lights setup *

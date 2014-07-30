@@ -2,10 +2,11 @@ package com.game.bomberfight.core;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.game.bomberfight.interfaces.Picker;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
 
-public class Bomber extends Player{
+public class Bomber extends Player implements Picker{
 
 
  	private int bombPlacementCounter;
@@ -155,6 +156,12 @@ public class Bomber extends Player{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void pickUp(Item item) {
+		this.attr.merge(item.getAttr());
+		item.setPicked(true);
 	}
 
 

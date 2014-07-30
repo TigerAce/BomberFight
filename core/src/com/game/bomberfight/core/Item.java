@@ -3,7 +3,6 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -18,11 +17,19 @@ public class Item extends GameObject{
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 	private PlayerGameAttributes attr;
 	private Shape itemShape;
+	private boolean picked = false;
+	
+	public Item(float x, float y, PlayerGameAttributes attr) {
+		super(x, y);
+		this.attr = attr;
+	}
 	
 	public Item(float x, float y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		attr = new PlayerGameAttributes();
 	}
+
+
 
 	@Override
 	public void create() {
@@ -63,7 +70,10 @@ public class Item extends GameObject{
 
 	@Override
 	public void update(float delta) {
-		// TODO Auto-generated method stub
+		if(picked){
+			((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+			this.dispose();
+		}
 		
 	}
 
@@ -77,6 +87,22 @@ public class Item extends GameObject{
 	public void dispose(){
 		itemShape.dispose();
 		super.dispose();
+	}
+	
+	public PlayerGameAttributes getAttr() {
+		return attr;
+	}
+
+	public void setAttr(PlayerGameAttributes attr) {
+		this.attr = attr;
+	}
+
+	public boolean isPicked() {
+		return picked;
+	}
+
+	public void setPicked(boolean picked) {
+		this.picked = picked;
 	}
  
 }

@@ -46,6 +46,20 @@ public class PlayerGameAttributes {
 	}
 	
 	
+	/**
+	 * merge two attributes
+	 * @param attr
+	 */
+	public void merge(PlayerGameAttributes attr){
+		this.setLife(this.getLife() + attr.getLife());
+		this.setSpeed(this.getSpeed() + attr.getSpeed());
+		this.setNumBombPerRound(this.getNumBombPerRound() + attr.getNumBombPerRound());
+		this.setRoundInterval(this.getRoundInterval() + attr.getRoundInterval());
+		this.setPowerX(this.getPowerX() + attr.getPowerX());
+		this.setPowerY(this.getPowerY() + attr.getPowerY());
+		this.setExplosionStyle(attr.getExplosionStyle());
+	}
+	
 	public float getLife() {
 		return life;
 	}
