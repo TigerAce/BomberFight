@@ -31,3 +31,13 @@ BomberFight
   3. add extra 1 bomb which can be placed at a time (or minus)
   4. increase explosion power (or decrease)
   5. .......
+
+<h3>Other Funny Elements to be Added in to the Bomber Woow:</h3>
+
+* Enhanced Map
+  1. every map will be different and with different layout
+  2. crates on the map can be easily destroyed by bomb and drop some loots
+  3. loots include effects such as increase number of bomb player can place at simutaneously, increase the power of explosion or the speed of player etc.
+  4. stones on the map can be destroyed but may need many bombs and which currently can not drop any good stuffs, the purpose of a stone is to let bomber find strategic place to kill their rival and hide themself. 
+  5. each cell of map will have some special effects such as decrease the speed if that cell is sand or mud, or let your bomb void...
+  6. some items can be collected and saved into the inventory of player and been power up with some means, then later they can use them in the fight against other players. 
