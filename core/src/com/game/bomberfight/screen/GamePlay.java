@@ -175,6 +175,7 @@ public class GamePlay implements Screen {
 		
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
+		assetManager.load("audio/timer/timer1.mp3", Sound.class);
 		
 		while (!assetManager.update()) {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");

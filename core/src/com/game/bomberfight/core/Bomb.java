@@ -23,10 +23,11 @@ import com.game.bomberfight.screen.GamePlay;
 public class Bomb extends Explosive{
 
 	private Player owner;
+	private Sound timerSound;
 	private float radius;
 	protected Animation animation = null;
 	protected float animTime;
-	
+	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 	
 	/**
 	 * create a bomb
@@ -40,17 +41,21 @@ public class Bomb extends Explosive{
 	public Bomb(float x, float y, float time, float powerX, float powerY, Explosion.Style explosionStyle) {
 		super(x, y, time, powerX, powerY, explosionStyle);
 		radius = 1.f;
+		this.timerSound = ((GamePlay) currentScreen).getAssetManager().get("audio/timer/timer1.mp3", Sound.class);
+		timerSound.play();
 	}
 
 	@Override
 	public void explode(float x, float y, float powerX, float powerY, Explosion.Style explosionStyle) {
-		
-		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		/**
+		 * stop timer sound
+		 */
+		timerSound.stop();
 		 /**
 		  * play explosion sound
 		  */
-		 Sound sound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
-		 sound.play();
+		 Sound explosionSound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
+		 explosionSound.play();
 		 
 		 /**
 		  * create explosion
