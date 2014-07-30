@@ -22,16 +22,18 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.screen.GamePlay;
 
 public class Player extends GameObject implements Controllable, Destructible{
 
+	
 	protected float x;
 	protected float y;
-	protected float speed;
-	protected float life;
+	protected PlayerGameAttributes attr;
+
 	protected Shape shape;
     protected Vector2 movement = new Vector2();
     protected float width = -1;
@@ -55,8 +57,9 @@ public class Player extends GameObject implements Controllable, Destructible{
      */
 	public Player(float xPos, float yPos, float speed, float life){
 		super(xPos, yPos);
-		this.speed = speed;
-		this.life = life;
+		attr = new PlayerGameAttributes();
+		attr.setSpeed(speed);
+		attr.setLife(life);
 	}
 	
 	/**
@@ -68,10 +71,13 @@ public class Player extends GameObject implements Controllable, Destructible{
 	 */
 	public Player(float xPos, float yPos, float width, float height, float speed, float life){
 		super(xPos, yPos);
-		this.speed = speed;
+		attr = new PlayerGameAttributes();
+		attr.setSpeed(speed);
+		attr.setLife(life);
+		
 		this.width = width;
 		this.height = height;
-		this.life = life;
+	
 	}
 
     /***************************************
@@ -124,7 +130,7 @@ public class Player extends GameObject implements Controllable, Destructible{
          * Don't know what's going on here?
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
-    	if(life <= 0){
+    	if(attr.getLife() <= 0){
     		System.out.println(box2dBody);
     		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
@@ -215,7 +221,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 		    switch (key) {
 			case Input.Keys.W:
 				if (value) {
-					movement.y = speed;
+					movement.y = attr.getSpeed();
 				} else {
 					movement.y = 0;
 					iter.remove();
@@ -223,7 +229,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 				break;
 			case Input.Keys.A:
 				if (value) {
-					movement.x = -speed;
+					movement.x = -attr.getSpeed();
 				} else {
 					movement.x = 0;
 					iter.remove();
@@ -231,7 +237,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 				break;
 			case Input.Keys.S:
 				if (value) {
-					movement.y = -speed;
+					movement.y = -attr.getSpeed();
 				} else {
 					movement.y = 0;
 					iter.remove();
@@ -239,7 +245,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 				break;
 			case Input.Keys.D:
 				if (value) {
-					movement.x = speed;
+					movement.x = attr.getSpeed();
 				} else {
 					movement.x = 0;
 					iter.remove();
@@ -254,7 +260,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 
 	@Override
 	public void damage(ContactImpulse impulse) {
-		this.life -= impulse.getNormalImpulses()[0];
+		attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
 	}
 
 	/**
@@ -316,5 +322,13 @@ public class Player extends GameObject implements Controllable, Destructible{
 			angle = 135;
 		}
 		box2dBody.setTransform(box2dBody.getPosition(), angle * MathUtils.degreesToRadians);
+	}
+
+	public PlayerGameAttributes getAttr() {
+		return attr;
+	}
+
+	public void setAttr(PlayerGameAttributes attr) {
+		this.attr = attr;
 	}
 }
