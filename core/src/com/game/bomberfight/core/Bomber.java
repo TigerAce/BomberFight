@@ -7,13 +7,12 @@ import com.game.bomberfight.model.Player;
 
 public class Bomber extends Player{
 
-	private int numBombPerRound; //the number of bomb can be placed in one round
+
  	private int bombPlacementCounter;
  	private boolean placeBomb;  //the flag indicate whether the bomb can be placed
- 	private float roundInterval; //time will be delay between two rounds
  	private float timeCounter;        //time counter;
  	
- 	private Explosion.Style style = Explosion.Style.CROSS;
+
  	
  	/**
  	 * with default 1 bomb per round and 3 sec wait between rounds
@@ -26,11 +25,12 @@ public class Bomber extends Player{
   	public Bomber(float xPos, float yPos, float speed, float life) {
   		super(xPos, yPos, speed, life);
   		
- 		roundInterval = 3;
- 		numBombPerRound = 1;
+  		this.attr.setNumBombPerRound(1);
+  		this.attr.setRoundInterval(3);
+  		attr.setExplosionStyle(Explosion.Style.CROSS);
  		
- 		timeCounter = roundInterval;
- 		bombPlacementCounter = numBombPerRound;
+ 		timeCounter = attr.getRoundInterval();
+ 		bombPlacementCounter = attr.getNumBombPerRound();
  		placeBomb = true;
  		
  		
@@ -39,51 +39,37 @@ public class Bomber extends Player{
 
 	public Bomber(float xPos, float yPos, float width, float height, float speed, float life){
 		super(xPos, yPos, width, height, speed, life);
- 		roundInterval = 3;
- 		numBombPerRound = 1;
+		this.attr.setNumBombPerRound(1);
+  		this.attr.setRoundInterval(3);
+  		attr.setExplosionStyle(Explosion.Style.CROSS);
  		
- 		timeCounter = roundInterval;
- 		bombPlacementCounter = numBombPerRound;
+  		timeCounter = attr.getRoundInterval();
+ 		bombPlacementCounter = attr.getNumBombPerRound();
  		placeBomb = true;
 	}
 	
 	public Bomber(float xPos, float yPos, float speed, float life, int numBombPerRound, float roundInterval) {
 		super(xPos, yPos, speed, life);
-		this.numBombPerRound = numBombPerRound;
-		this.roundInterval = roundInterval;
-
-		timeCounter = roundInterval;
-		bombPlacementCounter = numBombPerRound;
-		placeBomb = true;
+		this.attr.setNumBombPerRound(numBombPerRound);
+  		this.attr.setRoundInterval(roundInterval);
+  		attr.setExplosionStyle(Explosion.Style.CROSS);
+	
+  		timeCounter = attr.getRoundInterval();
+ 		bombPlacementCounter = attr.getNumBombPerRound();
+ 		placeBomb = true;
 	}
 	
 	public Bomber(float xPos, float yPos, float width, float height, float speed, float life,  int numBombPerRound, float roundInterval){
 		super(xPos, yPos, width, height, speed, life);
-		this.numBombPerRound = numBombPerRound;
-		this.roundInterval = roundInterval;
+		this.attr.setNumBombPerRound(numBombPerRound);
+  		this.attr.setRoundInterval(roundInterval);
+  		attr.setExplosionStyle(Explosion.Style.CROSS);
 
-		timeCounter = roundInterval;
-		bombPlacementCounter = numBombPerRound;
-		placeBomb = true;
+  		timeCounter = attr.getRoundInterval();
+ 		bombPlacementCounter = attr.getNumBombPerRound();
+ 		placeBomb = true;
 	}
 	
-
-
-    public int getNumBombPerRound() {
-		return numBombPerRound;
-	}
-
-	public void setNumBombPerRound(int numBombPerRound) {
-		this.numBombPerRound = numBombPerRound;
-	}
-
-	public float getRoundInterval() {
-		return roundInterval;
-	}
-
-	public void setRoundInterval(float roundInterval) {
-		this.roundInterval = roundInterval;
-	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -104,8 +90,8 @@ public class Bomber extends Player{
 			timeCounter -= delta;
 			if(timeCounter <= 0){
 				placeBomb = true;
-				timeCounter = roundInterval;
-				bombPlacementCounter = numBombPerRound;
+				timeCounter = attr.getRoundInterval();
+				bombPlacementCounter = attr.getNumBombPerRound();
 			}
 		}
 
@@ -159,7 +145,7 @@ public class Bomber extends Player{
 					bombCoordY -= height / 2;
 					break;
 				}
-				Bomb bomb = new Bomb(bombCoordX, bombCoordY,3, 50, 50, style);
+				Bomb bomb = new Bomb(bombCoordX, bombCoordY,3, 50, 50, attr.getExplosionStyle());
 				bomb.create();
 				bombPlacementCounter--;
 				if(bombPlacementCounter <= 0){
