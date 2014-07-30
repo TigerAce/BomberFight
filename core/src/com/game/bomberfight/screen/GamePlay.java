@@ -202,7 +202,7 @@ public class GamePlay implements Screen {
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
 		
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		assetManager.load("data/map/grassmud.tmx", TiledMap.class);
+		assetManager.load("img/tmx/ground2.tmx", TiledMap.class);
 		
 		while (!assetManager.update()) {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
@@ -301,7 +301,7 @@ public class GamePlay implements Screen {
 		p1.attachToBody(bomber.getBox2dBody(), 0, 0);
 		p2.attachToBody(bomber1.getBox2dBody(), 0, 0);
 		
-		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
+		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f,0.7f);
 		
 		Light.setContactFilter((short)1, (short)-1, (short)1);
 
@@ -315,7 +315,7 @@ public class GamePlay implements Screen {
 		/*
 		 * Initialize tile map and tiledMapRenderer and set the unitscale
 		 */
-		tiledMap = assetManager.get("data/map/grassmud.tmx");
+		tiledMap = assetManager.get("img/tmx/ground2.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1.f/8.f);
 	}
 
