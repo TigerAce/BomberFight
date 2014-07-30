@@ -259,10 +259,14 @@ public class GamePlay implements Screen {
 		new ConeLight(rayHandler, 1000, new Color(0.1f, 0.5f, 1f, 1f), 70,
 				49.9f, 34.9f, 225, 45);
 		
-		PointLight p = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
+		PointLight p1 = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
 				0.5f, 1f), 50, 0, 0);
 		
-		p.attachToBody(bomber.getBox2dBody(), 0, 0);
+		PointLight p2 = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
+				0.5f, 1f), 50, 0, 0);
+		
+		p1.attachToBody(bomber.getBox2dBody(), 0, 0);
+		p2.attachToBody(bomber1.getBox2dBody(), 0, 0);
 		
 		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
 		
