@@ -7,17 +7,17 @@ public class PlayerGameAttributes {
 	/**
 	 * basic attributes
 	 */
-	private float life;
-	private float speed;
+	private float life; //life of player
+	private float speed; //speed of player
 	
 	/**
-	 * bomb attributes
+	 * bomb  and explosion attributes
 	 */
-	private int numBombPerRound;
-	private float roundInterval;
-	private float powerX;
-	private float powerY;
-	private Explosion.Style explosionStyle;
+	private int numBombPerRound; //number of bomb player can put in one round
+	private float roundInterval; //time delay between two rounds
+	private float powerX; //power x of explosion
+	private float powerY; //power y of explosion
+	private Explosion.Style explosionStyle; //style of explosion
 	
 	
 	
@@ -45,6 +45,17 @@ public class PlayerGameAttributes {
 		this.explosionStyle = explosionStyle;
 	}
 	
+	public PlayerGameAttributes(PlayerGameAttributes attr){
+		this.life = attr.life;
+		this.speed = attr.speed;
+		this.numBombPerRound = attr.numBombPerRound;
+		this.roundInterval = attr.roundInterval;
+		this.powerX = attr.powerX;
+		this.powerY = attr.powerY;
+		this.explosionStyle = attr.explosionStyle;
+	
+	}
+	
 	
 	/**
 	 * merge two attributes
@@ -57,6 +68,7 @@ public class PlayerGameAttributes {
 		this.setRoundInterval(this.getRoundInterval() + attr.getRoundInterval());
 		this.setPowerX(this.getPowerX() + attr.getPowerX());
 		this.setPowerY(this.getPowerY() + attr.getPowerY());
+		if(attr.getExplosionStyle() != null)
 		this.setExplosionStyle(attr.getExplosionStyle());
 	}
 	

@@ -30,6 +30,15 @@ public class Item extends GameObject{
 	}
 
 
+	public Item(){
+		super();
+		attr = new PlayerGameAttributes();
+	}
+	
+	public Item(Item item){
+		super();
+		this.attr = new PlayerGameAttributes(item.getAttr());
+	}
 
 	@Override
 	public void create() {

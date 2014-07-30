@@ -22,6 +22,11 @@ public abstract class GameObject implements Disposable{
 
 
 
+    public GameObject(){
+    	x = 0;
+    	y = 0;
+    	state = ACTIVE;
+    }
     /**
      * Constructor of game object
      * @param x x position

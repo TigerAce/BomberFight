@@ -59,6 +59,11 @@ public class GamePlay implements Screen {
 	 * store all explosions
 	 */
 	private ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+	
+	/**
+	 * item list
+	 */
+	private ArrayList<Item> itemList = new ArrayList<Item>();
 
 	private final float TIMESTEP = 1 / 60f;
 	private final int VELOCITYITERATIONS = 8;
@@ -176,7 +181,9 @@ public class GamePlay implements Screen {
 		/**
 		 * Create a bomber
 		 */
+
 		Bomber bomber = new Bomber(-45, -30, 4, 4,10, 100, 2, 3);
+
 		bomber.create();
 		bomber.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
 		this.controllableObjects.add(bomber);
@@ -221,11 +228,23 @@ public class GamePlay implements Screen {
 			}
 		}
 		/**
-		 * create an item change explosion style
+		 * create items 
 		 */
-		Item item = new Item(10, -10);
+		//change explosion style to annular
+		Item item = new Item();
 		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
-		item.create();
+		itemList.add(item);
+		
+		//add 1 to number of bomb can be placed in one round
+		item = new Item();
+		item.getAttr().setNumBombPerRound(1);
+		itemList.add(item);
+		
+		//add blast power
+		item = new Item();
+		item.getAttr().setPowerX(500f);
+		itemList.add(item);
+		
 
 		/**********************************************************
 		 * lights setup *
@@ -273,6 +292,7 @@ public class GamePlay implements Screen {
 
 	@Override
 	public void dispose() {
+
 		rayHandler.dispose();
 		assetManager.dispose();
 		gameObjectManager.disposeAll();
@@ -324,5 +344,13 @@ public class GamePlay implements Screen {
 	 */
 	public void setAssetManager(AssetManager assetManager) {
 		this.assetManager = assetManager;
+	}
+
+	public ArrayList<Item> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(ArrayList<Item> itemList) {
+		this.itemList = itemList;
 	}
 }
