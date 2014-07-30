@@ -59,9 +59,11 @@ public class GameObjectManager {
      */
     public void drawAll(SpriteBatch batch) {
         Iterator<GameObject> iterator = this.gameObjects.iterator();
+        batch.begin();
         while (iterator.hasNext()) {
             iterator.next().draw(batch);
         }
+        batch.end();
     }
 
     /**

@@ -30,6 +30,7 @@ import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.utility.Config;
+import com.game.bomberfight.utility.FpsDisplayer;
 
 public class GamePlay implements Screen {
 
@@ -73,6 +74,7 @@ public class GamePlay implements Screen {
 		 * render camera
 		 */
 		viewport.getCamera().update();
+		batch.setProjectionMatrix(viewport.getCamera().combined);
 
 		/**
 		 * Handles world collision calculation
@@ -89,11 +91,7 @@ public class GamePlay implements Screen {
 		 * update and redraw game objects
 		 */
 		gameObjectManager.updateAll(delta);
-		batch.setProjectionMatrix(viewport.getCamera().combined);
-		batch.begin();
 		gameObjectManager.drawAll(batch);
-		//FpsDisplayer.getInstance().draw(batch, 0, 0);
-		batch.end();
 
 		/**
 		 * render explosion
@@ -113,11 +111,14 @@ public class GamePlay implements Screen {
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
 			debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
+		
+		FpsDisplayer.getInstance().draw(batch, 0, 0);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height, false);
+		FpsDisplayer.getInstance().update(width, height);
 	}
 
 	@Override
