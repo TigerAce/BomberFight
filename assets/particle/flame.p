@@ -75,13 +75,15 @@ timeline1: 1.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: 2.0
-highMax: 5.0
+highMin: 1.0
+highMax: 2.0
 relative: false
-scalingCount: 1
+scalingCount: 2
 scaling0: 1.0
-timelineCount: 1
+scaling1: 1.0
+timelineCount: 2
 timeline0: 0.0
+timeline1: 1.0
 - Angle - 
 active: true
 lowMin: 0.0
