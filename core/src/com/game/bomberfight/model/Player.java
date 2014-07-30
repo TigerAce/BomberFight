@@ -1,13 +1,10 @@
 package com.game.bomberfight.model;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -28,10 +25,7 @@ import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.screen.GamePlay;
 
 public class Player extends GameObject implements Controllable, Destructible{
-
 	
-	protected float x;
-	protected float y;
 	protected PlayerGameAttributes attr;
 
 	protected Shape shape;
@@ -137,7 +131,6 @@ public class Player extends GameObject implements Controllable, Destructible{
     		 dispose();
     	}else{
     		box2dBody.setLinearVelocity(movement);
-    		processInput();
     		if (this.movement.x != 0 || this.movement.y != 0) {
         		animTime += delta;
     		}
@@ -206,57 +199,6 @@ public class Player extends GameObject implements Controllable, Destructible{
     public boolean doScrolled(int amount) {
         return false;
     }
-
-	/**
-	 * This function process input continuously based on status, different
-	 * from doKeyDown and doKeyUp which only get executed once
-	 */
-	public void processInput() {
-		Iterator<Entry<Integer, Boolean>> iter = keyMap.entrySet().iterator();
-		while (iter.hasNext()) {
-			@SuppressWarnings("rawtypes")
-			Map.Entry entry = (Map.Entry) iter.next();
-		    int key = (Integer) entry.getKey();
-		    boolean value = (Boolean) entry.getValue();
-		    switch (key) {
-			case Input.Keys.W:
-				if (value) {
-					movement.y = attr.getSpeed();
-				} else {
-					movement.y = 0;
-					iter.remove();
-				}
-				break;
-			case Input.Keys.A:
-				if (value) {
-					movement.x = -attr.getSpeed();
-				} else {
-					movement.x = 0;
-					iter.remove();
-				}
-				break;
-			case Input.Keys.S:
-				if (value) {
-					movement.y = -attr.getSpeed();
-				} else {
-					movement.y = 0;
-					iter.remove();
-				}
-				break;
-			case Input.Keys.D:
-				if (value) {
-					movement.x = attr.getSpeed();
-				} else {
-					movement.x = 0;
-					iter.remove();
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	}
 
 	@Override
 	public void damage(ContactImpulse impulse) {
@@ -330,5 +272,40 @@ public class Player extends GameObject implements Controllable, Destructible{
 
 	public void setAttr(PlayerGameAttributes attr) {
 		this.attr = attr;
+	}
+
+	/**
+	 * @return the movement
+	 */
+	public Vector2 getMovement() {
+		return movement;
+	}
+
+	/**
+	 * @return the keyMap
+	 */
+	public Map<Integer, Boolean> getKeyMap() {
+		return keyMap;
+	}
+
+	/**
+	 * @return the direction
+	 */
+	public Direction getDirection() {
+		return direction;
+	}
+
+	/**
+	 * @return the width
+	 */
+	public float getWidth() {
+		return width;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public float getHeight() {
+		return height;
 	}
 }

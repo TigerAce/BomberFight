@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.BomberFight;
@@ -175,10 +176,17 @@ public class GamePlay implements Screen {
 		/**
 		 * Create a bomber
 		 */
-		Bomber bomber = new Bomber(0, 1, 4, 4,10, 100, 2, 3);
+		Bomber bomber = new Bomber(-45, -30, 4, 4,10, 100, 2, 3);
 		bomber.create();
 		bomber.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
 		this.controllableObjects.add(bomber);
+		bomber.setBomberController(new BomberController(true));
+		
+		Bomber bomber1 = new Bomber(45, 30, 4, 4,10, 100, 2, 3);
+		bomber1.create();
+		bomber1.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
+		this.controllableObjects.add(bomber1);
+		bomber1.setBomberController(new BomberController(false));
 
 		/**
 		 * create wall frame
