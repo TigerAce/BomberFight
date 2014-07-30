@@ -244,6 +244,7 @@ public class GamePlay implements Screen {
 		//add blast power
 		item = new Item();
 		item.getAttr().setPowerX(500f);
+		item.getAttr().setPowerY(500f);
 		itemList.add(item);
 		
 
