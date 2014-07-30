@@ -160,7 +160,7 @@ public class GamePlay implements Screen {
 		 **********************************************************/
 
 		/**
-		 * Create player
+		 * Create a bomber
 		 */
 		Bomber bomber = new Bomber(0, 1, 4, 4,10, 100, 2, 3);
 		bomber.create();

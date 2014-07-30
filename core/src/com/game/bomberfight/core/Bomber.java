@@ -13,6 +13,8 @@ public class Bomber extends Player{
  	private float roundInterval; //time will be delay between two rounds
  	private float timeCounter;        //time counter;
  	
+ 	private Explosion.Style style = Explosion.Style.CROSS;
+ 	
  	/**
  	 * with default 1 bomb per round and 3 sec wait between rounds
  	 * @param xPos x position of bomber
@@ -30,6 +32,8 @@ public class Bomber extends Player{
  		timeCounter = roundInterval;
  		bombPlacementCounter = numBombPerRound;
  		placeBomb = true;
+ 		
+ 		
  	
   	}
 
@@ -155,7 +159,7 @@ public class Bomber extends Player{
 					bombCoordY -= height / 2;
 					break;
 				}
-				Bomb bomb = new Bomb(bombCoordX, bombCoordY,3, 50, 50, Explosion.Style.ANNULAR);
+				Bomb bomb = new Bomb(bombCoordX, bombCoordY,3, 50, 50, style);
 				bomb.create();
 				bombPlacementCounter--;
 				if(bombPlacementCounter <= 0){

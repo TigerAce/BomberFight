@@ -30,7 +30,6 @@ protected AnnularExplosion(float x, float y, float lifespan, float blastPowerX,
 			float angle = ((((float)i / numParticles) * 360) + randomStartAngle) * MathUtils.degreesToRadians;
 			Particle p = new Particle(x, y, angle, density, lifespan, blastPowerX, blastPowerY, this);
 			p.create();
-			
 			Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 		    ((GamePlay)currentScreen).getGameObjectManager().addGameObject(p);
 		

@@ -42,7 +42,8 @@ public class Bomb extends Explosive{
 		   ((GamePlay)currentScreen).getExplosions().add(e);
 		}
 		else if(explosionStyle == Explosion.Style.CROSS){
-			
+			CrossExplosion e = new CrossExplosion(x, y, 1, powerX, powerY, 1000, 64);
+			((GamePlay)currentScreen).getExplosions().add(e);
 		}
 	
 	     ((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
