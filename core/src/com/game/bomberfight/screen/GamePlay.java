@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -171,6 +172,10 @@ public class GamePlay implements Screen {
 		assetManager.load("img/animation/soldier.png", Texture.class, textureParameter);
 		assetManager.load("particle/flame.p", ParticleEffect.class);
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
+		
+		// load audio
+		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
+		
 		while (!assetManager.update()) {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
 		}

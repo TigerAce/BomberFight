@@ -3,6 +3,7 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -45,7 +46,15 @@ public class Bomb extends Explosive{
 	public void explode(float x, float y, float powerX, float powerY, Explosion.Style explosionStyle) {
 		
 		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		 /**
+		  * play explosion sound
+		  */
+		 Sound sound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
+		 sound.play();
 		 
+		 /**
+		  * create explosion
+		  */
 		if(explosionStyle == Explosion.Style.ANNULAR){
 			AnnularExplosion e = new AnnularExplosion(x, y, 1, powerX, powerY, 1000, 64);
 		   ((GamePlay)currentScreen).getExplosions().add(e);
