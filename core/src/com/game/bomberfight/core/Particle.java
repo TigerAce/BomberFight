@@ -34,8 +34,7 @@ public class Particle extends GameObject{
 		this.blastPowerY = blastPowerY;
 		this.parent = parent;
 	
-		effect = new ParticleEffect();
-		effect.load(Gdx.files.internal("particle/flame.p"), Gdx.files.internal("particle"));
+		effect = new ParticleEffect(((GamePlay)currentScreen).getAssetManager().get("particle/flame.p", ParticleEffect.class));
 		effect.start();
 	}
 

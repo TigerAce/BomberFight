@@ -3,6 +3,7 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -58,7 +59,7 @@ public class Brick extends Barrier implements Destructible, Breakable{
 		box2dBody.setUserData(this);
 		
 		//sprite
-		sprite = new Sprite(((GamePlay)currentScreen).getResourcesManager().getTexture("brick"));
+		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/brick3.jpg", Texture.class));
 		sprite.setSize(width, height);
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		

@@ -58,7 +58,7 @@ public class Crate extends Barrier implements Destructible, Breakable{
 		box2dBody.setAngularDamping(0.9f);
 		box2dBody.setUserData(this);
 		
-		sprite = new Sprite(((GamePlay)currentScreen).getResourcesManager().getTexture("crate"));
+		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/crate4.jpg", Texture.class));
 		sprite.setSize(width, height);
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		

@@ -11,8 +11,13 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -25,7 +30,6 @@ import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
-import com.game.bomberfight.core.ResourcesManager;
 import com.game.bomberfight.core.Wall;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
@@ -41,7 +45,7 @@ public class GamePlay implements Screen {
 	private CollisionListener collisionListener;
 	private RayHandler rayHandler;
 
-	private ResourcesManager resourcesManager = new ResourcesManager();
+	private AssetManager assetManager = new AssetManager();
 	private GameObjectManager gameObjectManager = new GameObjectManager();
 	/**
 	 * TODO: Not sure whether we need to put this Controllable thingy into a
@@ -152,9 +156,16 @@ public class GamePlay implements Screen {
 		/**
 		 * load resources
 		 */
-		resourcesManager.loadTexture("img/texture/crate4.jpg", "crate");
-		resourcesManager.loadTexture("img/texture/brick3.jpg", "brick");
-		resourcesManager.loadTexture("img/animation/soldier.png", "bomberAnimation");
+		TextureParameter textureParameter = new TextureParameter();
+		textureParameter.minFilter = TextureFilter.Linear;
+		textureParameter.magFilter = TextureFilter.Linear;
+		assetManager.load("img/texture/crate4.jpg", Texture.class, textureParameter);
+		assetManager.load("img/texture/brick3.jpg", Texture.class, textureParameter);
+		assetManager.load("img/animation/soldier.png", Texture.class, textureParameter);
+		assetManager.load("particle/flame.p", ParticleEffect.class);
+		while (!assetManager.update()) {
+			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
+		}
 
 		/**********************************************************
 		 * game objects creation *
@@ -165,7 +176,7 @@ public class GamePlay implements Screen {
 		 */
 		Bomber bomber = new Bomber(0, 1, 4, 4,10, 100, 2, 3);
 		bomber.create();
-		bomber.setAnimation(resourcesManager.getTexture("bomberAnimation"), 3, 1);
+		bomber.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
 		this.controllableObjects.add(bomber);
 
 		/**
@@ -247,7 +258,7 @@ public class GamePlay implements Screen {
 	@Override
 	public void dispose() {
 		rayHandler.dispose();
-		resourcesManager.disposeAll();
+		assetManager.dispose();
 		gameObjectManager.disposeAll();
 		world.dispose();
 		debugRenderer.dispose();
@@ -285,11 +296,17 @@ public class GamePlay implements Screen {
 		this.explosions = explosions;
 	}
 
-	public ResourcesManager getResourcesManager() {
-		return resourcesManager;
+	/**
+	 * @return the assetManager
+	 */
+	public AssetManager getAssetManager() {
+		return assetManager;
 	}
 
-	public void setResourcesManager(ResourcesManager resourcesManager) {
-		this.resourcesManager = resourcesManager;
+	/**
+	 * @param assetManager the assetManager to set
+	 */
+	public void setAssetManager(AssetManager assetManager) {
+		this.assetManager = assetManager;
 	}
 }
