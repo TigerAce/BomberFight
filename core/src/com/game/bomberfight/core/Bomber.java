@@ -1,10 +1,14 @@
 package com.game.bomberfight.core;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.interfaces.Picker;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
+import com.game.bomberfight.screen.GamePlay;
 
 public class Bomber extends Player implements Picker{
 
@@ -90,6 +94,8 @@ public class Bomber extends Player implements Picker{
     @Override
     public void create() {
     	super.create();
+    	Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+    	((GamePlay)currentScreen).getControllableObjects().add(this);
     }
 
     @Override

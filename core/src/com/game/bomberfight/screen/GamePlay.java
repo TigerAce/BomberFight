@@ -3,9 +3,6 @@ package com.game.bomberfight.screen;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import box2dLight.ConeLight;
-import box2dLight.Light;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
@@ -15,7 +12,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -23,22 +19,16 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
-import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.BomberFight;
-import com.game.bomberfight.core.Brick;
 import com.game.bomberfight.core.CollisionListener;
-import com.game.bomberfight.core.Crate;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.core.Item;
-import com.game.bomberfight.core.Wall;
+import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.utility.Config;
@@ -81,16 +71,11 @@ public class GamePlay implements Screen {
 	 */
 	private float timeAccumulator = 0.0f;
 	
-	/**
-	 * tiledMap is used to load tiled map
-	 * tiledMapRenderer is used to render tile map
-	 * mat is used to transform tile map
+	/*
+	 * tileMapManager load tile map first and create objects(include players) on the map
+	 * then update and render it
 	 */
-	private TiledMap tiledMap;
-	private OrthogonalTiledMapRenderer tiledMapRenderer;
-	private Matrix4 mat = new Matrix4();
-	int[] backgroundLayers = { 0, 1 };
-	int[] foregroundLayers = { 2 };
+	private TileMapManager tileMapManager;
 
 	@Override
 	public void render(float delta) {
@@ -104,8 +89,7 @@ public class GamePlay implements Screen {
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
-		tiledMapRenderer.setView(mat, 0, 0, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
-		tiledMapRenderer.render(backgroundLayers);
+		tileMapManager.renderBackground();
 
 		/**
 		 * Handles world collision calculation
@@ -124,7 +108,7 @@ public class GamePlay implements Screen {
 		gameObjectManager.updateAll(delta);
 		gameObjectManager.drawAll(batch);
 		
-		tiledMapRenderer.render(foregroundLayers);
+		tileMapManager.renderForeground();
 
 		/**
 		 * render explosion
@@ -142,7 +126,7 @@ public class GamePlay implements Screen {
 
 		// debug render
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-			debugRenderer.render(this.world, viewport.getCamera().combined);
+			//debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
 		
 		FpsDisplayer.getInstance().draw(batch, 0, 0);
@@ -152,9 +136,7 @@ public class GamePlay implements Screen {
 	public void resize(int width, int height) {
 		viewport.update(width, height, false);
 		FpsDisplayer.getInstance().update(width, height);
-		mat.setToOrtho2D(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-		mat = viewport.getCamera().combined.cpy();
-		mat.translate(-viewport.getMinWorldWidth() / 2, -viewport.getMinWorldHeight() / 2, 0);
+		tileMapManager.update(viewport.getCamera().combined, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
 	}
 
 	@Override
@@ -208,102 +190,8 @@ public class GamePlay implements Screen {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
 		}
 
-		/**********************************************************
-		 * game objects creation *
-		 **********************************************************/
-
-		/**
-		 * Create a bomber
-		 */
-
-		Bomber bomber = new Bomber(-45, -30, 4, 4,10, 100, 2, 3);
-
-		bomber.create();
-		bomber.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
-		this.controllableObjects.add(bomber);
-		bomber.setBomberController(new BomberController(true));
-		
-		Bomber bomber1 = new Bomber(45, 30, 4, 4,10, 100, 2, 3);
-		bomber1.create();
-		bomber1.setAnimation(assetManager.get("img/animation/soldier.png", Texture.class), 3, 1);
-		this.controllableObjects.add(bomber1);
-		bomber1.setBomberController(new BomberController(false));
-
-		/**
-		 * create wall frame
-		 */
-		Wall gameWallFrame = new Wall(0, 0, 100, 70);
-		gameWallFrame.setAsRectangleFrame();
-
-		
-		/**
-		 * create a brick
-		 * 
-		 */
-
-		Brick brick = new Brick(12, 12, 4, 4, 300);
-		brick.create();
-		/**
-		 * create bunch of crate
-		 */
-		float factor = 0f;
-		float crateSize = 4;
-		float scaleSize = 5;
-		float x = -10;
-		float y = 10;
-
-		for (int w = 0; w < scaleSize; w++) {
-			for (int h = 0; h < scaleSize; h++) {
-				Crate c = new Crate(x - ((crateSize * scaleSize) / 2)
-						+ crateSize / 2 + (w * (crateSize + factor)), y
-						- ((crateSize * scaleSize) / 2) + crateSize / 2
-						+ (h * (crateSize + factor)), crateSize, crateSize, 100);
-				c.create();
-			}
-		}
-		/**
-		 * create items 
-		 */
-		//change explosion style to annular
-		Item item = new Item();
-		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
-		itemList.add(item);
-		
-		//add 1 to number of bomb can be placed in one round
-		item = new Item();
-		item.getAttr().setNumBombPerRound(1);
-		itemList.add(item);
-		
-		//add blast power
-		item = new Item();
-		item.getAttr().setPowerX(500f);
-		item.getAttr().setPowerY(500f);
-		itemList.add(item);
-		
-
-		/**********************************************************
-		 * lights setup *
-		 **********************************************************/
-
 		rayHandler = new RayHandler(world);
-		new ConeLight(rayHandler, 1000, new Color(1f, 0.1f, 0.1f, 1f), 70,
-				-49.9f, -34.9f, 45, 45);
 		
-		new ConeLight(rayHandler, 1000, new Color(0.1f, 0.5f, 1f, 1f), 70,
-				49.9f, 34.9f, 225, 45);
-		
-		PointLight p1 = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
-				0.5f, 1f), 50, 0, 0);
-		
-		PointLight p2 = new PointLight(rayHandler, 1000, new Color(0.1f, 0.5f,
-				0.5f, 1f), 50, 0, 0);
-		
-		p1.attachToBody(bomber.getBox2dBody(), 0, 0);
-		p2.attachToBody(bomber1.getBox2dBody(), 0, 0);
-		
-		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f,0.7f);
-		
-		Light.setContactFilter((short)1, (short)-1, (short)1);
 
 		/**********************************************************
 		 * input listener *
@@ -312,11 +200,8 @@ public class GamePlay implements Screen {
 
 		batch = new SpriteBatch();
 		
-		/*
-		 * Initialize tile map and tiledMapRenderer and set the unitscale
-		 */
-		tiledMap = assetManager.get("img/tmx/ground2.tmx");
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1.f/8.f);
+		//create tile map manager
+		tileMapManager = new TileMapManager(this);
 	}
 
 	@Override
@@ -343,6 +228,7 @@ public class GamePlay implements Screen {
 		gameObjectManager.disposeAll();
 		world.dispose();
 		debugRenderer.dispose();
+		tileMapManager.dispose();
 	}
 
 	public World getWorld() {
@@ -397,5 +283,12 @@ public class GamePlay implements Screen {
 
 	public void setItemList(ArrayList<Item> itemList) {
 		this.itemList = itemList;
+	}
+
+	/**
+	 * @return the rayHandler
+	 */
+	public RayHandler getRayHandler() {
+		return rayHandler;
 	}
 }

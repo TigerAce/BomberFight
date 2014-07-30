@@ -74,7 +74,7 @@ public class Item extends GameObject{
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);*/
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
-		
+		((GamePlay)currentScreen).getItemList().add(this);
 	}
 
 	@Override
