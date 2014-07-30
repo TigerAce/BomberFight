@@ -89,6 +89,8 @@ public class GamePlay implements Screen {
 	private TiledMap tiledMap;
 	private OrthogonalTiledMapRenderer tiledMapRenderer;
 	private Matrix4 mat = new Matrix4();
+	int[] backgroundLayers = { 0, 1 };
+	int[] foregroundLayers = { 2 };
 
 	@Override
 	public void render(float delta) {
@@ -103,7 +105,7 @@ public class GamePlay implements Screen {
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
 		tiledMapRenderer.setView(mat, 0, 0, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
-		tiledMapRenderer.render();
+		tiledMapRenderer.render(backgroundLayers);
 
 		/**
 		 * Handles world collision calculation
@@ -121,6 +123,8 @@ public class GamePlay implements Screen {
 		 */
 		gameObjectManager.updateAll(delta);
 		gameObjectManager.drawAll(batch);
+		
+		tiledMapRenderer.render(foregroundLayers);
 
 		/**
 		 * render explosion
