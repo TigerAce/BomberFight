@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,6 +21,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -75,6 +80,15 @@ public class GamePlay implements Screen {
 	 * to smooth display in different environment with varies FPS
 	 */
 	private float timeAccumulator = 0.0f;
+	
+	/**
+	 * tiledMap is used to load tiled map
+	 * tiledMapRenderer is used to render tile map
+	 * mat is used to transform tile map
+	 */
+	private TiledMap tiledMap;
+	private OrthogonalTiledMapRenderer tiledMapRenderer;
+	private Matrix4 mat = new Matrix4();
 
 	@Override
 	public void render(float delta) {
@@ -87,6 +101,9 @@ public class GamePlay implements Screen {
 		 */
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
+		
+		tiledMapRenderer.setView(mat, 0, 0, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
+		tiledMapRenderer.render();
 
 		/**
 		 * Handles world collision calculation
@@ -131,6 +148,9 @@ public class GamePlay implements Screen {
 	public void resize(int width, int height) {
 		viewport.update(width, height, false);
 		FpsDisplayer.getInstance().update(width, height);
+		mat.setToOrtho2D(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+		mat = viewport.getCamera().combined.cpy();
+		mat.translate(-viewport.getMinWorldWidth() / 2, -viewport.getMinWorldHeight() / 2, 0);
 	}
 
 	@Override
@@ -176,6 +196,9 @@ public class GamePlay implements Screen {
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
+		
+		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+		assetManager.load("data/map/grassmud.tmx", TiledMap.class);
 		
 		while (!assetManager.update()) {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
@@ -284,6 +307,12 @@ public class GamePlay implements Screen {
 		Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
 
 		batch = new SpriteBatch();
+		
+		/*
+		 * Initialize tile map and tiledMapRenderer and set the unitscale
+		 */
+		tiledMap = assetManager.get("data/map/grassmud.tmx");
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1.f/8.f);
 	}
 
 	@Override
