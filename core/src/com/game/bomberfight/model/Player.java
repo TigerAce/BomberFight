@@ -3,8 +3,10 @@ package com.game.bomberfight.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -161,6 +163,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 	@Override
 	public boolean doKeyUp(int keycode) {
 		keyMap.put(keycode, false);
+	
 		return true;
 	}
 

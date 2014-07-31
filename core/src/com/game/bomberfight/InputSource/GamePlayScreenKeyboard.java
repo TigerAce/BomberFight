@@ -1,11 +1,14 @@
 package com.game.bomberfight.InputSource;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.screen.GamePlay;
+
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -29,6 +32,16 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+    	
+		if(keycode == Input.Keys.F){
+			System.out.println("f");
+		//switch debug view
+		if(Gdx.app.getLogLevel() == Application.LOG_DEBUG)
+		Gdx.app.setLogLevel(Application.LOG_NONE);
+		else Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		}
+
+		
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
 

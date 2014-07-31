@@ -50,15 +50,18 @@ public class TileMapManager {
 		//change explosion style to annular
 		Item item = new Item();
 		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
-		
+	
 		//add 1 to number of bomb can be placed in one round
 		item = new Item();
 		item.getAttr().setNumBombPerRound(1);
+	
 		
 		//add blast power
 		item = new Item();
 		item.getAttr().setPowerX(500f);
 		item.getAttr().setPowerY(500f);
+	
+		
 		
 		//create light
 		new ConeLight(gamePlay.getRayHandler(), 1000, new Color(1f, 0.1f, 0.1f, 1f), 70,

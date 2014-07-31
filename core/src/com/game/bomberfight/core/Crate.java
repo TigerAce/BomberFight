@@ -71,18 +71,20 @@ public class Crate extends Barrier implements Destructible, Breakable{
     @Override
 	public void update(float delta) {
     	if(this.life <= 0){	
+  
     		//give 1/10 possibility to generate an random item in item list
-    		Random r = new Random();
-    		int rand = r.nextInt(10);
-    		if(rand == 5){
-    			rand = r.nextInt(((GamePlay)currentScreen).getItemList().size());
+    		if(((GamePlay)currentScreen).getItemList().size() != 0){
+    			Random r = new Random();
+    			int rand = r.nextInt(10);
+    			if(rand == 5){
+    				rand = r.nextInt(((GamePlay)currentScreen).getItemList().size());
     			
-    			Item i = new Item(((GamePlay)currentScreen).getItemList().get(rand));
-    			i.setX(box2dBody.getPosition().x);
-    			i.setY(box2dBody.getPosition().y);
-    			i.create();
+    				Item i = new Item(((GamePlay)currentScreen).getItemList().get(rand));
+    				i.setX(box2dBody.getPosition().x);
+    				i.setY(box2dBody.getPosition().y);
+    				i.create();
+    			}
     		}
-    		
     		//Destroy crate
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			dispose();
