@@ -17,25 +17,30 @@ public class Item extends GameObject{
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 	private PlayerGameAttributes attr;
 	private Shape itemShape;
+	private float affectTime;  //-1 indicates forever affect time
+	private int dropProbability; //probability interval
 	private boolean picked = false;
+	private boolean discard = false;
 	
-	public Item(float x, float y, PlayerGameAttributes attr) {
+	public Item(float x, float y, PlayerGameAttributes attr, float affectTime, int dropProbability) {
 		super(x, y);
 		this.attr = attr;
+		this.affectTime = affectTime;
+		this.dropProbability = dropProbability;
 		((GamePlay)currentScreen).getItemList().add(this);
 	}
 	
 	public Item(float x, float y) {
-		this(x, y, new PlayerGameAttributes());
+		this(x, y, new PlayerGameAttributes(), -1, 10);
 	}
 
 
 	public Item(){
-		this(0, 0, new PlayerGameAttributes());
+		this(0, 0, new PlayerGameAttributes(), -1, 10);
 	}
 	
 	public Item(Item item){
-		this(0, 0, new PlayerGameAttributes(item.getAttr()));
+		this(0, 0, new PlayerGameAttributes(item.getAttr()), item.affectTime, item.dropProbability);
 	}
 
 	@Override
@@ -78,7 +83,10 @@ public class Item extends GameObject{
 	public void update(float delta) {
 		if(picked){
 			((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
-			this.dispose();
+			picked = false;
+		}
+		if(discard){
+			dispose();
 		}
 		
 	}
@@ -109,6 +117,30 @@ public class Item extends GameObject{
 
 	public void setPicked(boolean picked) {
 		this.picked = picked;
+	}
+
+	public float getAffectTime() {
+		return affectTime;
+	}
+
+	public void setAffectTime(float affectTime) {
+		this.affectTime = affectTime;
+	}
+
+	public int getDropProbability() {
+		return dropProbability;
+	}
+
+	public void setDropProbability(int dropProbability) {
+		this.dropProbability = dropProbability;
+	}
+
+	public boolean isDiscard() {
+		return discard;
+	}
+
+	public void setDiscard(boolean discard) {
+		this.discard = discard;
 	}
  
 }

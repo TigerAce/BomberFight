@@ -112,7 +112,7 @@ public class BomberController {
 								break;
 							}
 							Bomb bomb = new Bomb(bombCoordX, bombCoordY, 3, bomber.getAttr().getPowerX(),
-									bomber.getAttr().getPowerY(), bomber.getAttr().getExplosionStyle());
+									bomber.getAttr().getPowerY(), bomber.getAttr().getCurrStyle());
 							bomb.create();
 							bomber.setBombPlacementCounter(bomber
 									.getBombPlacementCounter() - 1);
@@ -199,7 +199,7 @@ public class BomberController {
 								break;
 							}
 							Bomb bomb = new Bomb(bombCoordX, bombCoordY, 3, 50,
-									50, bomber.getAttr().getExplosionStyle());
+									50, bomber.getAttr().getCurrStyle());
 							bomb.create();
 							bomber.setBombPlacementCounter(bomber
 									.getBombPlacementCounter() - 1);

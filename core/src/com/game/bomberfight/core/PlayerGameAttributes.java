@@ -17,7 +17,8 @@ public class PlayerGameAttributes {
 	private float roundInterval; //time delay between two rounds
 	private float powerX; //power x of explosion
 	private float powerY; //power y of explosion
-	private Explosion.Style explosionStyle; //style of explosion
+	private Explosion.Style originStyle; //original style of explosion
+	private Explosion.Style currStyle; //current style of explosion
 	
 	
 	
@@ -28,7 +29,8 @@ public class PlayerGameAttributes {
 		this.roundInterval = 0;
 		this.powerX = 0;
 		this.powerY = 0;
-		this.explosionStyle = null;
+		this.originStyle = null;
+		this.currStyle = null;
 	}
 	
 	
@@ -42,7 +44,8 @@ public class PlayerGameAttributes {
 		this.roundInterval = roundInterval;
 		this.powerX = powerX;
 		this.powerY = powerY;
-		this.explosionStyle = explosionStyle;
+		this.currStyle = explosionStyle;
+		this.originStyle = currStyle;
 	}
 	
 	public PlayerGameAttributes(PlayerGameAttributes attr){
@@ -52,24 +55,35 @@ public class PlayerGameAttributes {
 		this.roundInterval = attr.roundInterval;
 		this.powerX = attr.powerX;
 		this.powerY = attr.powerY;
-		this.explosionStyle = attr.explosionStyle;
+		this.originStyle = attr.currStyle;
+		this.currStyle = attr.originStyle;
 	
 	}
 	
 	
 	/**
-	 * merge two attributes
+	 * add given attributes
 	 * @param attr
 	 */
-	public void merge(PlayerGameAttributes attr){
+	public void add(PlayerGameAttributes attr){
 		this.setLife(this.getLife() + attr.getLife());
 		this.setSpeed(this.getSpeed() + attr.getSpeed());
 		this.setNumBombPerRound(this.getNumBombPerRound() + attr.getNumBombPerRound());
 		this.setRoundInterval(this.getRoundInterval() + attr.getRoundInterval());
 		this.setPowerX(this.getPowerX() + attr.getPowerX());
 		this.setPowerY(this.getPowerY() + attr.getPowerY());
-		if(attr.getExplosionStyle() != null)
-		this.setExplosionStyle(attr.getExplosionStyle());
+		if(attr.getCurrStyle() != null)
+		this.setCurrStyle(attr.getCurrStyle());
+	}
+	
+	public void minus(PlayerGameAttributes attr){
+		this.setLife(this.getLife() - attr.getLife());
+		this.setSpeed(this.getSpeed() - attr.getSpeed());
+		this.setNumBombPerRound(this.getNumBombPerRound() - attr.getNumBombPerRound());
+		this.setRoundInterval(this.getRoundInterval() - attr.getRoundInterval());
+		this.setPowerX(this.getPowerX() - attr.getPowerX());
+		this.setPowerY(this.getPowerY() - attr.getPowerY());
+		this.setCurrStyle(this.originStyle);
 	}
 	
 	public float getLife() {
@@ -108,12 +122,26 @@ public class PlayerGameAttributes {
 	public void setPowerY(float powerY) {
 		this.powerY = powerY;
 	}
-	public Explosion.Style getExplosionStyle() {
-		return explosionStyle;
+
+	public Explosion.Style getOriginStyle() {
+		return originStyle;
 	}
-	public void setExplosionStyle(Explosion.Style explosionStyle) {
-		this.explosionStyle = explosionStyle;
+
+
+	public void setOriginStyle(Explosion.Style originStyle) {
+		this.originStyle = originStyle;
 	}
+
+
+	public Explosion.Style getCurrStyle() {
+		return currStyle;
+	}
+
+
+	public void setCurrStyle(Explosion.Style currStyle) {
+		this.currStyle = currStyle;
+	}
+
 	
 	
 }

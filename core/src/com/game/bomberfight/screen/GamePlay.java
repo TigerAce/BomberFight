@@ -210,7 +210,7 @@ public class GamePlay implements Screen {
 		// create items
 		// change explosion style to annular
 		Item item = new Item();
-		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
+		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
 
 		// add 1 to number of bomb can be placed in one round
 		item = new Item();
@@ -218,6 +218,8 @@ public class GamePlay implements Screen {
 
 		// add blast power
 		item = new Item();
+		item.setAffectTime(10);
+		item.setDropProbability(100);
 		item.getAttr().setPowerX(500f);
 		item.getAttr().setPowerY(500f);
 	}

@@ -51,6 +51,7 @@ public class TileMapManager {
 		Wall gameWallFrame = new Wall(0, 0, Float.parseFloat((String) mapProperties.get("world_width")), Float.parseFloat((String) mapProperties.get("world_height")));
 		gameWallFrame.setAsRectangleFrame();
 		
+
 		// create all objects
 		MapLayer objectLayer = tiledMap.getLayers().get("object_layer_1");
 		MapObjects mapObjects = objectLayer.getObjects();

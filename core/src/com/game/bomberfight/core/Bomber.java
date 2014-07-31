@@ -1,5 +1,7 @@
 package com.game.bomberfight.core;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,7 +19,7 @@ public class Bomber extends Player implements Picker{
  	private boolean placeBomb;  //the flag indicate whether the bomb can be placed
  	private float timeCounter;        //time counter;
  	private BomberController bomberController = null;
- 	
+ 	private ArrayList<Item> inventory;  //store items for player
 
  	
  	/**
@@ -29,42 +31,26 @@ public class Bomber extends Player implements Picker{
  	 */
  	
   	public Bomber(float xPos, float yPos, float speed, float life) {
-  		super(xPos, yPos, speed, life);
-  		
-  		this.attr.setNumBombPerRound(1);
-  		this.attr.setRoundInterval(3);
-  		attr.setPowerX(50);
-  		attr.setPowerY(50);
-  		attr.setExplosionStyle(Explosion.Style.CROSS);
- 		
- 		timeCounter = attr.getRoundInterval();
- 		bombPlacementCounter = attr.getNumBombPerRound();
- 		placeBomb = true;
- 		
- 		
- 	
+  		this(xPos, yPos, speed, life, 1, 3);
+  	
   	}
 
 	public Bomber(float xPos, float yPos, float width, float height, float speed, float life){
-		super(xPos, yPos, width, height, speed, life);
-		this.attr.setNumBombPerRound(1);
-  		this.attr.setRoundInterval(3);
-  		attr.setPowerX(50);
-  		attr.setPowerY(50);
-  		attr.setExplosionStyle(Explosion.Style.CROSS);
- 		
-  		timeCounter = attr.getRoundInterval();
- 		bombPlacementCounter = attr.getNumBombPerRound();
- 		placeBomb = true;
+		this(xPos, yPos, width, height, speed, life, 1, 3);
+	
 	}
 	
 	public Bomber(float xPos, float yPos, float speed, float life, int numBombPerRound, float roundInterval) {
 		super(xPos, yPos, speed, life);
+	
+		inventory = new ArrayList<Item>();
+		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
   		attr.setPowerX(50);
   		attr.setPowerY(50);
-  		attr.setExplosionStyle(Explosion.Style.CROSS);
+  		attr.setOriginStyle(Explosion.Style.CROSS);
+  		attr.setCurrStyle(Explosion.Style.CROSS);
 	
   		timeCounter = attr.getRoundInterval();
  		bombPlacementCounter = attr.getNumBombPerRound();
@@ -73,11 +59,15 @@ public class Bomber extends Player implements Picker{
 	
 	public Bomber(float xPos, float yPos, float width, float height, float speed, float life,  int numBombPerRound, float roundInterval){
 		super(xPos, yPos, width, height, speed, life);
+		
+		inventory = new ArrayList<Item>();
+		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
   		attr.setPowerX(50);
   		attr.setPowerY(50);
-  		attr.setExplosionStyle(Explosion.Style.CROSS);
+  		attr.setOriginStyle(Explosion.Style.CROSS);
+  		attr.setCurrStyle(Explosion.Style.CROSS);
 
   		timeCounter = attr.getRoundInterval();
  		bombPlacementCounter = attr.getNumBombPerRound();
@@ -102,6 +92,25 @@ public class Bomber extends Player implements Picker{
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		super.update(delta);
+	
+		//check item affect time
+		for(int i = 0; i < inventory.size(); i++){
+			
+				inventory.get(i).setAffectTime(inventory.get(i).getAffectTime() - delta);
+				//if affect time up
+				if(inventory.get(i).getAffectTime() <= 0){
+					
+					//discard item effect from player
+					this.attr.minus(inventory.get(i).getAttr());
+					
+					//remove from inventory
+					Item item = inventory.remove(i);
+					//Destroy item
+					item.setDiscard(true);
+				}
+		}
+		
+		//check if can place bomb
 		if(!placeBomb){
 			timeCounter -= delta;
 			if(timeCounter <= 0){
@@ -110,10 +119,15 @@ public class Bomber extends Player implements Picker{
 				bombPlacementCounter = attr.getNumBombPerRound();
 			}
 		}
+		
 		if (bomberController != null) {
 			bomberController.processInput();
 		}
+		
+		
+		
 	}
+
 
 	@Override
 	public void dispose() {
@@ -123,7 +137,15 @@ public class Bomber extends Player implements Picker{
 
 	@Override
 	public void pickUp(Item item) {
-		this.attr.merge(item.getAttr());
+		//if affect time is not forever, add to inventory
+		if(item.getAffectTime() >= 0){
+			inventory.add(item);
+		}
+		
+		//add the effects to player
+		this.attr.add(item.getAttr());
+		
+		//set pickup to true
 		item.setPicked(true);
 	}
 

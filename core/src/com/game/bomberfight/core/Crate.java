@@ -1,5 +1,6 @@
 package com.game.bomberfight.core;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
@@ -17,10 +18,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.interfaces.Breakable;
 import com.game.bomberfight.interfaces.Destructible;
+import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.screen.GamePlay;
 
-public class Crate extends Barrier implements Destructible, Breakable{
+public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 	private Shape crateShape;
@@ -71,20 +73,7 @@ public class Crate extends Barrier implements Destructible, Breakable{
     @Override
 	public void update(float delta) {
     	if(this.life <= 0){	
-  
-    		//give 1/10 possibility to generate an random item in item list
-    		if(((GamePlay)currentScreen).getItemList().size() != 0){
-    			Random r = new Random();
-    			int rand = r.nextInt(10);
-    			if(rand == 5){
-    				rand = r.nextInt(((GamePlay)currentScreen).getItemList().size());
-    			
-    				Item i = new Item(((GamePlay)currentScreen).getItemList().get(rand));
-    				i.setX(box2dBody.getPosition().x);
-    				i.setY(box2dBody.getPosition().y);
-    				i.create();
-    			}
-    		}
+    		this.dropItem();
     		//Destroy crate
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			dispose();
@@ -125,6 +114,39 @@ public class Crate extends Barrier implements Destructible, Breakable{
 	@Override
 	public void damage(ContactImpulse impulse) {
 		this.life -= impulse.getNormalImpulses()[0];
+	}
+
+	@Override
+	public void dropItem() {
+		//give 1/10 possibility to generate an random item in item list
+		ArrayList<Item> items = ((GamePlay)currentScreen).getItemList();
+		if(items.size() != 0){
+			Random r = new Random();
+			int rand = r.nextInt(10);
+			if(rand == 1){
+				int totalDropProbabilityInterval = 0;
+				//add on probability intervals from item list
+				for(Item item : items){
+					totalDropProbabilityInterval += item.getDropProbability();
+				}
+				
+				rand = r.nextInt(totalDropProbabilityInterval);
+				
+				//pick item if the random number is in its interval and create item
+				int counter = 0;
+				for(Item i : items){
+					int prob = i.getDropProbability();
+					if(rand >= counter && rand < counter + prob){
+						Item tmp = new Item(i);
+	    				tmp.setX(box2dBody.getPosition().x);
+	    				tmp.setY(box2dBody.getPosition().y);
+	    				tmp.create();
+	    				break;
+					}else counter += prob;
+				}
+				
+			}
+		}
 	}
 
 }
