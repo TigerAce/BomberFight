@@ -20,13 +20,10 @@ public class CollisionListener implements ContactListener {
 		
 			if(userDataA instanceof Picker && userDataB instanceof Item){
 				((Picker)userDataA).pickUp((Item)userDataB);
-			}
-			
-			if(userDataB instanceof Picker && userDataA instanceof Item){
+			}else if(userDataB instanceof Picker && userDataA instanceof Item){
 				((Picker)userDataB).pickUp((Item)userDataA);
 			}
-			
-			
+		
 		}
 	}
 
@@ -37,7 +34,18 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
+		Object userDataA = contact.getFixtureA().getBody().getUserData();
+		Object userDataB = contact.getFixtureB().getBody().getUserData();
 		
+		if(userDataA != null && userDataB != null){
+		
+			if(userDataA instanceof Bomb && userDataB instanceof Item){
+				contact.setEnabled(false);
+			}else if(userDataB instanceof Bomb && userDataA instanceof Item){
+				contact.setEnabled(false);
+			}
+		
+		}
 	}
 
 	@Override
@@ -53,9 +61,7 @@ public class CollisionListener implements ContactListener {
 		
 			if(userDataA instanceof Particle && userDataB instanceof Destructible){
 				((Destructible)userDataB).damage(impulse);;
-			}
-			
-			if(userDataB instanceof Particle && userDataA instanceof Destructible){
+			}else if(userDataB instanceof Particle && userDataA instanceof Destructible){
 				((Destructible)userDataA).damage(impulse);
 			}
 			

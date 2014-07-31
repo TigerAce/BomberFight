@@ -97,7 +97,7 @@ public class Bomb extends Explosive{
 		//fixture
 		bombFixtureDef.density = 2.5f;
 		bombFixtureDef.friction = .25f;
-		bombFixtureDef.restitution = .75f;
+		bombFixtureDef.restitution = .4f;
 		
 		bombFixtureDef.shape = bombShape;
 		
@@ -105,7 +105,7 @@ public class Bomb extends Explosive{
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         box2dBody = ((GamePlay)currentScreen).getWorld().createBody(bombDef);
 		box2dBody.createFixture(bombFixtureDef);
-		//bombBody.setUserData(new MyUserData("bomb", this, null));
+		box2dBody.setUserData(this);
 		
 		//sprite
 		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/bomb.png", Texture.class));
