@@ -23,8 +23,7 @@ public abstract class GameObject implements Disposable{
 
 
     public GameObject(){
-    	x = 0;
-    	y = 0;
+    	this(0, 0);
     	state = ACTIVE;
     }
     /**

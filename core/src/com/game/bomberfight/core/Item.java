@@ -22,22 +22,20 @@ public class Item extends GameObject{
 	public Item(float x, float y, PlayerGameAttributes attr) {
 		super(x, y);
 		this.attr = attr;
+		((GamePlay)currentScreen).getItemList().add(this);
 	}
 	
 	public Item(float x, float y) {
-		super(x, y);
-		attr = new PlayerGameAttributes();
+		this(x, y, new PlayerGameAttributes());
 	}
 
 
 	public Item(){
-		super();
-		attr = new PlayerGameAttributes();
+		this(0, 0, new PlayerGameAttributes());
 	}
 	
 	public Item(Item item){
-		super();
-		this.attr = new PlayerGameAttributes(item.getAttr());
+		this(0, 0, new PlayerGameAttributes(item.getAttr()));
 	}
 
 	@Override
@@ -74,7 +72,6 @@ public class Item extends GameObject{
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);*/
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
-		((GamePlay)currentScreen).getItemList().add(this);
 	}
 
 	@Override
