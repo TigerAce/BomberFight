@@ -46,7 +46,7 @@ public class Brick extends Barrier implements Destructible, Breakable{
 		
 		//fixture
 		
-		brickFixtureDef.density = 30.0f;
+		brickFixtureDef.density = 300.0f;
 		brickFixtureDef.friction = 0.6f;
 		brickFixtureDef.restitution = 0;
 		brickFixtureDef.shape = brickShape;
@@ -54,8 +54,8 @@ public class Brick extends Barrier implements Destructible, Breakable{
 		
 		box2dBody = ((GamePlay)currentScreen).getWorld().createBody(brickDef);
 		box2dBody.createFixture(brickFixtureDef);
-		box2dBody.setLinearDamping(1.0f);
-		box2dBody.setAngularDamping(1.0f);
+		box2dBody.setLinearDamping(3.0f);
+		box2dBody.setAngularDamping(2.0f);
 		box2dBody.setUserData(this);
 		
 		//sprite
