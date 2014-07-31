@@ -27,7 +27,7 @@ public class Item extends GameObject{
 		this.attr = attr;
 		this.affectTime = affectTime;
 		this.dropProbability = dropProbability;
-		((GamePlay)currentScreen).getItemList().add(this);
+		
 	}
 	
 	public Item(float x, float y) {

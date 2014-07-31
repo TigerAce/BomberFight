@@ -211,17 +211,18 @@ public class GamePlay implements Screen {
 		// change explosion style to annular
 		Item item = new Item();
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
-
+		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
 		item = new Item();
 		item.getAttr().setNumBombPerRound(1);
-
+		this.itemList.add(item);
 		// add blast power
 		item = new Item();
 		item.setAffectTime(10);
-		item.setDropProbability(100);
+		item.setDropProbability(1000);
 		item.getAttr().setPowerX(500f);
 		item.getAttr().setPowerY(500f);
+		this.itemList.add(item);
 	}
 
 	@Override
