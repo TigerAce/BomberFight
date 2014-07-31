@@ -43,4 +43,4 @@ BomberFight
   6. some items can be collected and saved into the inventory of player and been power up with some means, then later they can use them in the fight against other players. 
 
 <h3>Tutorial on How to use Map Editor<h3>
-[MapEditor](Use of Map Editor)
+[MapEditor](https://github.com/TigerAce/BomberFight/wiki/Use%20of%20Map%20Editor)
