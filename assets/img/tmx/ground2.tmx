@@ -46,7 +46,7 @@
     <property name="speed" value="10"/>
    </properties>
   </object>
-  <object name="light" type="light" x="768" y="32">
+  <object name="light" type="light" x="33" y="544">
    <properties>
     <property name="color" value="1 0.1 0.1 1"/>
     <property name="conedegree" value="45"/>
@@ -57,7 +57,7 @@
    </properties>
    <polyline points="0,0 -32,32"/>
   </object>
-  <object name="light" type="light" x="64" y="512">
+  <object name="light" type="light" x="767" y="48">
    <properties>
     <property name="color" value="0.1 0.5 1 1"/>
     <property name="conedegree" value="45"/>
@@ -289,7 +289,7 @@
     <property name="hitpoint" value="300"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="0" y="544" width="32" height="32">
+  <object name="Brick" type="Brick" x="-1" y="544" width="32" height="32">
    <properties>
     <property name="hitpoint" value="300"/>
    </properties>
@@ -324,7 +324,7 @@
     <property name="hitpoint" value="300"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="768" y="32" width="32" height="32">
+  <object name="Brick" type="Brick" x="768" y="33" width="32" height="32">
    <properties>
     <property name="hitpoint" value="300"/>
    </properties>
