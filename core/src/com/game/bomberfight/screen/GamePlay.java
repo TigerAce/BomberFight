@@ -180,7 +180,7 @@ public class GamePlay implements Screen {
 		assetManager.load("particle/flame.p", ParticleEffect.class);
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
-		
+		assetManager.load("img/texture/item2.png", Texture.class, textureParameter);
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
@@ -211,6 +211,7 @@ public class GamePlay implements Screen {
 		// create items
 		// change explosion style to annular
 		Item item = new Item();
+		item.setName("ANNULAR");
 		item.setAffectTime(10);
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
 		this.itemList.add(item);

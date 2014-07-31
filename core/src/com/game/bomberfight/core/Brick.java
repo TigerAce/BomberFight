@@ -135,8 +135,10 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 						if(i.getName() == "POWER_UP"){
 							tmp.setSprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/item1.png", Texture.class));
 						}
-						
-	    				tmp.setX(box2dBody.getPosition().x);
+						if(i.getName() == "ANNULAR")
+							tmp.setSprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/item2.png", Texture.class));
+	    				
+						tmp.setX(box2dBody.getPosition().x);
 	    				tmp.setY(box2dBody.getPosition().y);
 	    				tmp.create();
 	    				break;
