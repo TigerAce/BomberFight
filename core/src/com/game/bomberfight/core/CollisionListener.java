@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.Picker;
-import com.game.bomberfight.model.Player;
 
 
 
@@ -42,9 +41,25 @@ public class CollisionListener implements ContactListener {
 		
 			if(userDataA instanceof Bomb && userDataB instanceof Item){
 				contact.setEnabled(false);
-			}else if(userDataB instanceof Bomb && userDataA instanceof Item){
+			}
+			else if(userDataB instanceof Bomb && userDataA instanceof Item){
 				contact.setEnabled(false);
 			}
+			
+			
+			else if(userDataA instanceof Bomb && userDataB instanceof Particle){
+				((Bomb)userDataA).setTime(0);
+			}else if(userDataB instanceof Bomb && userDataA instanceof Particle){
+				((Bomb)userDataB).setTime(0);
+			}
+			
+
+			else if(userDataA instanceof Item && userDataB instanceof Particle){
+				contact.setEnabled(false);
+			}else if(userDataB instanceof Item && userDataA instanceof Particle){
+				contact.setEnabled(false);
+			}
+			
 		
 		}
 	}

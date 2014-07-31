@@ -41,7 +41,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 		BodyDef brickDef = new BodyDef();
 	
 		
-		brickDef.type = BodyType.KinematicBody;
+		brickDef.type = BodyType.DynamicBody;
 		brickDef.position.set(x, y);
 		
 		//shape

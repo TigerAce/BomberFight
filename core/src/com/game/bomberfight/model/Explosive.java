@@ -16,5 +16,13 @@ public abstract class Explosive extends GameObject implements Explosible{
 		this.powerY = powerY;
 		this.explosionStyle = explosionStyle;
 	}
+
+	public float getTime() {
+		return time;
+	}
+
+	public void setTime(float time) {
+		this.time = time;
+	}
 	
 }
