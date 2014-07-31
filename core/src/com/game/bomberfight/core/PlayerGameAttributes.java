@@ -56,7 +56,7 @@ public class PlayerGameAttributes {
 		this.powerX = attr.powerX;
 		this.powerY = attr.powerY;
 		this.originStyle = attr.currStyle;
-		this.currStyle = attr.originStyle;
+		this.currStyle = this.originStyle;
 	
 	}
 	

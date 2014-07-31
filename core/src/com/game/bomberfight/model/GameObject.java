@@ -101,4 +101,5 @@ public abstract class GameObject implements Disposable{
 	public void setBox2dBody(Body box2dBody) {
 		this.box2dBody = box2dBody;
 	}
+
 }

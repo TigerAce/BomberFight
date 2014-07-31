@@ -179,6 +179,7 @@ public class GamePlay implements Screen {
 		assetManager.load("img/animation/soldier.png", Texture.class, textureParameter);
 		assetManager.load("particle/flame.p", ParticleEffect.class);
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
+		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
 		
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
@@ -210,6 +211,7 @@ public class GamePlay implements Screen {
 		// create items
 		// change explosion style to annular
 		Item item = new Item();
+		item.setAffectTime(10);
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
 		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
@@ -218,10 +220,9 @@ public class GamePlay implements Screen {
 		this.itemList.add(item);
 		// add blast power
 		item = new Item();
-		item.setAffectTime(10);
-		item.setDropProbability(1000);
-		item.getAttr().setPowerX(500f);
-		item.getAttr().setPowerY(500f);
+		item.setName("POWER_UP");
+		item.getAttr().setPowerX(10f);
+		item.getAttr().setPowerY(10f);
 		this.itemList.add(item);
 	}
 
