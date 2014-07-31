@@ -179,6 +179,7 @@ public class GamePlay implements Screen {
 		assetManager.load("img/animation/soldier.png", Texture.class, textureParameter);
 		assetManager.load("particle/flame.p", ParticleEffect.class);
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
+		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
 		
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
@@ -218,6 +219,7 @@ public class GamePlay implements Screen {
 		this.itemList.add(item);
 		// add blast power
 		item = new Item();
+		item.setName("POWER_UP");
 		item.setAffectTime(10);
 		item.setDropProbability(1000);
 		item.getAttr().setPowerX(500f);

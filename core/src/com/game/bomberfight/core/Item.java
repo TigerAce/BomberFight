@@ -3,7 +3,10 @@ package com.game.bomberfight.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -56,7 +59,7 @@ public class Item extends GameObject{
 		
 		//shape
 		itemShape = new PolygonShape();
-		((PolygonShape) itemShape).setAsBox(0.5f, 0.5f);
+		((PolygonShape) itemShape).setAsBox(2f, 2f);
 		
 		//fixture
 		
@@ -71,18 +74,25 @@ public class Item extends GameObject{
 		box2dBody.setLinearDamping(0.7f);
 		box2dBody.setAngularDamping(0.9f);
 		box2dBody.setUserData(this);
-		
-	/*	sprite = new Sprite(((GamePlay)currentScreen).getResourcesManager().getTexture("crate"));
-		sprite.setSize(width, height);
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);*/
+
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
 	}
 
+	
+
+	public void setSprite(Texture t){
+		sprite = new Sprite(t);
+		sprite.setSize(4, 4);
+		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+	}
 	@Override
 	public void update(float delta) {
 		if(picked){
 			((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+			if(sprite != null){
+				sprite = null;
+			}
 			picked = false;
 		}
 		if(discard){
@@ -93,7 +103,13 @@ public class Item extends GameObject{
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		// TODO Auto-generated method stub
+		
+		if( sprite != null){
+			System.out.println("d");
+			sprite.setPosition(box2dBody.getPosition().x - sprite.getWidth()/2, box2dBody.getPosition().y - sprite.getHeight()/2);
+			sprite.setRotation(box2dBody.getAngle() * MathUtils.radiansToDegrees);
+			sprite.draw(batch);
+		}
 		
 	}
 	

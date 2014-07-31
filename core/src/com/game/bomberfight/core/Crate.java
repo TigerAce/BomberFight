@@ -92,6 +92,8 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
 	@Override
 	public void dispose() {
+		//if(sprite != null)
+		//	sprite.getTexture().dispose();
 		crateShape.dispose();
 		super.dispose();
 		
@@ -138,6 +140,11 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 					int prob = i.getDropProbability();
 					if(rand >= counter && rand < counter + prob){
 						Item tmp = new Item(i);
+						
+						if(i.getName() == "POWER_UP"){
+							tmp.setSprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/item1.png", Texture.class));
+						}
+						
 	    				tmp.setX(box2dBody.getPosition().x);
 	    				tmp.setY(box2dBody.getPosition().y);
 	    				tmp.create();
