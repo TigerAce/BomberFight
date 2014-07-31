@@ -52,13 +52,12 @@ public class CollisionListener implements ContactListener {
 		if(userDataA != null && userDataB != null){
 		
 			if(userDataA instanceof Particle && userDataB instanceof Destructible){
-				((Destructible)userDataB).damage(impulse);;
+				((Destructible)userDataB).damage(impulse);
 			}
 			
 			if(userDataB instanceof Particle && userDataA instanceof Destructible){
 				((Destructible)userDataA).damage(impulse);
 			}
-			
 			
 		}
 	}

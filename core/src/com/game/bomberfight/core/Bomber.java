@@ -185,5 +185,51 @@ public class Bomber extends Player implements Picker{
 		this.placeBomb = placeBomb;
 	}
 
+	public void placeBomb() {
+		if (this.isPlaceBomb()) {
+			float bombCoordX = this.getBox2dBody()
+					.getPosition().x;
+			float bombCoordY = this.getBox2dBody()
+					.getPosition().y;
+			switch (this.getDirection()) {
+			case left:
+				bombCoordX -= this.getWidth() / 2;
+				break;
+			case right:
+				bombCoordX += this.getWidth() / 2;
+				break;
+			case down:
+				bombCoordY -= this.getHeight() / 2;
+				break;
+			case up:
+				bombCoordY += this.getHeight() / 2;
+				break;
+			case left_up:
+				bombCoordX -= this.getWidth() / 2;
+				bombCoordY += this.getHeight() / 2;
+				break;
+			case left_down:
+				bombCoordX -= this.getWidth() / 2;
+				bombCoordY -= this.getHeight() / 2;
+				break;
+			case right_up:
+				bombCoordX += this.getWidth() / 2;
+				bombCoordY += this.getHeight() / 2;
+				break;
+			case right_down:
+				bombCoordX += this.getWidth() / 2;
+				bombCoordY -= this.getHeight() / 2;
+				break;
+			}
+			Bomb bomb = new Bomb(bombCoordX, bombCoordY, 3, this.getAttr().getPowerX(),
+					this.getAttr().getPowerY(), this.getAttr().getCurrStyle());
+			bomb.create();
+			this.setBombPlacementCounter(this
+					.getBombPlacementCounter() - 1);
+			if (this.getBombPlacementCounter() <= 0) {
+				this.setPlaceBomb(false);
+			}
+		}
+	}
 
 }

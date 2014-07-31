@@ -55,7 +55,7 @@ public class Bomb extends Explosive{
 		  * play explosion sound
 		  */
 		 Sound explosionSound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
-		 explosionSound.play();
+		 explosionSound.play(0.1f);
 		 
 		 /**
 		  * create explosion

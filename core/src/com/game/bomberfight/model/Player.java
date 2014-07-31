@@ -3,10 +3,8 @@ package com.game.bomberfight.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -102,7 +100,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 
         FixtureDef playerFixtureDef = new FixtureDef();
         playerFixtureDef.shape = shape;
-        playerFixtureDef.density = 2f;
+        playerFixtureDef.density = 0.0001f;
         playerFixtureDef.friction = .25f;
         playerFixtureDef.restitution = 0f;
 
@@ -132,7 +130,8 @@ public class Player extends GameObject implements Controllable, Destructible{
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
     		 dispose();
     	}else{
-    		box2dBody.setLinearVelocity(movement);
+    		//box2dBody.setLinearVelocity(movement);
+    		forceToVelocity();
     		if (this.movement.x != 0 || this.movement.y != 0) {
         		animTime += delta;
     		}
@@ -310,5 +309,38 @@ public class Player extends GameObject implements Controllable, Destructible{
 	 */
 	public float getHeight() {
 		return height;
+	}
+	
+	public void moveUp() {
+		this.movement.y = this.attr.getSpeed();
+	}
+	
+	public void moveDown() {
+		this.movement.y = -this.attr.getSpeed();
+	}
+	
+	public void stopVerticalMove() {
+		this.movement.y = 0;
+	}
+	
+	public void moveLeft() {
+		this.movement.x = -this.attr.getSpeed();
+	}
+	
+	public void moveRight() {
+		this.movement.x = this.attr.getSpeed();
+	}
+	
+	public void stopHorizontalMove() {
+		this.movement.x = 0;
+	}
+	
+	public void forceToVelocity() {
+		Vector2 vel = box2dBody.getLinearVelocity();
+		float velChangex = movement.x - vel.x;
+		float velChangey = movement.y - vel.y;
+	    float impulsex = box2dBody.getMass() * velChangex;
+	    float impulsey = box2dBody.getMass() * velChangey;
+	    box2dBody.applyLinearImpulse(impulsex, impulsey, box2dBody.getWorldCenter().x, box2dBody.getWorldCenter().y, true);
 	}
 }
