@@ -124,7 +124,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		ArrayList<Item> items = ((GamePlay)currentScreen).getItemList();
 		if(items.size() != 0){
 			Random r = new Random();
-			int rand = r.nextInt(10);
+			int rand = r.nextInt(5);
 			if(rand == 1){
 				int totalDropProbabilityInterval = 0;
 				//add on probability intervals from item list

@@ -47,8 +47,8 @@ public class Bomber extends Player implements Picker{
 		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
-  		attr.setPowerX(50);
-  		attr.setPowerY(50);
+  		attr.setPowerX(20);
+  		attr.setPowerY(20);
   		attr.setOriginStyle(Explosion.Style.CROSS);
   		attr.setCurrStyle(Explosion.Style.CROSS);
 	
@@ -64,8 +64,8 @@ public class Bomber extends Player implements Picker{
 		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
-  		attr.setPowerX(50);
-  		attr.setPowerY(50);
+  		attr.setPowerX(20);
+  		attr.setPowerY(20);
   		attr.setOriginStyle(Explosion.Style.CROSS);
   		attr.setCurrStyle(Explosion.Style.CROSS);
 

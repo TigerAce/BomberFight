@@ -211,6 +211,7 @@ public class GamePlay implements Screen {
 		// create items
 		// change explosion style to annular
 		Item item = new Item();
+		item.setAffectTime(10);
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
 		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
@@ -220,10 +221,8 @@ public class GamePlay implements Screen {
 		// add blast power
 		item = new Item();
 		item.setName("POWER_UP");
-		item.setAffectTime(10);
-		item.setDropProbability(1000);
-		item.getAttr().setPowerX(500f);
-		item.getAttr().setPowerY(500f);
+		item.getAttr().setPowerX(10f);
+		item.getAttr().setPowerY(10f);
 		this.itemList.add(item);
 	}
 

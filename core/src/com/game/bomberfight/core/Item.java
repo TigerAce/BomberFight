@@ -105,7 +105,6 @@ public class Item extends GameObject{
 	public void draw(SpriteBatch batch) {
 		
 		if( sprite != null){
-			System.out.println("d");
 			sprite.setPosition(box2dBody.getPosition().x - sprite.getWidth()/2, box2dBody.getPosition().y - sprite.getHeight()/2);
 			sprite.setRotation(box2dBody.getAngle() * MathUtils.radiansToDegrees);
 			sprite.draw(batch);

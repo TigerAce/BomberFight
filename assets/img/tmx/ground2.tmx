@@ -32,7 +32,7 @@
    <properties>
     <property name="controller" value="wasdspace"/>
     <property name="hitpoint" value="100"/>
-    <property name="numBombPerRound" value="2"/>
+    <property name="numBombPerRound" value="1"/>
     <property name="roundInterval" value="3"/>
     <property name="speed" value="10"/>
    </properties>
@@ -41,7 +41,7 @@
    <properties>
     <property name="controller" value="upleftdownrightctrl"/>
     <property name="hitpoint" value="100"/>
-    <property name="numBombPerRound" value="2"/>
+    <property name="numBombPerRound" value="1"/>
     <property name="roundInterval" value="3"/>
     <property name="speed" value="10"/>
    </properties>
