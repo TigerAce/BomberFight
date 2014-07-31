@@ -3,6 +3,7 @@ package com.game.bomberfight.screen;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import box2dLight.Light;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
@@ -190,7 +191,9 @@ public class GamePlay implements Screen {
 			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
 		}
 
+		// create ray handler
 		rayHandler = new RayHandler(world);
+		Light.setContactFilter((short)1, (short)-1, (short)1);
 		
 
 		/**********************************************************
@@ -198,10 +201,25 @@ public class GamePlay implements Screen {
 		 **********************************************************/
 		Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
 
+		// create spritebatch
 		batch = new SpriteBatch();
 		
 		//create tile map manager
 		tileMapManager = new TileMapManager(this);
+		
+		// create items
+		// change explosion style to annular
+		Item item = new Item();
+		item.getAttr().setExplosionStyle(Explosion.Style.ANNULAR);
+
+		// add 1 to number of bomb can be placed in one round
+		item = new Item();
+		item.getAttr().setNumBombPerRound(1);
+
+		// add blast power
+		item = new Item();
+		item.getAttr().setPowerX(500f);
+		item.getAttr().setPowerY(500f);
 	}
 
 	@Override
