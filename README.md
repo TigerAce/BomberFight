@@ -41,3 +41,6 @@ BomberFight
   4. stones on the map can be destroyed but may need many bombs and which currently can not drop any good stuffs, the purpose of a stone is to let bomber find strategic place to kill their rival and hide themself. 
   5. each cell of map will have some special effects such as decrease the speed if that cell is sand or mud, or let your bomb void...
   6. some items can be collected and saved into the inventory of player and been power up with some means, then later they can use them in the fight against other players. 
+
+<h3>Tutorial on How to use Map Editor<h3>
+[MapEditor](https://github.com/TigerAce/BomberFight/wiki/Use%20of%20Map%20Editor)
