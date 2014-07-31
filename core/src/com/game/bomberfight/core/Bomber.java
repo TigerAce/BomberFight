@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.interfaces.Picker;
@@ -20,6 +21,7 @@ public class Bomber extends Player implements Picker{
  	private float timeCounter;        //time counter;
  	private BomberController bomberController = null;
  	private ArrayList<Item> inventory;  //store items for player
+
 
  	
  	/**
@@ -75,6 +77,7 @@ public class Bomber extends Player implements Picker{
 	}
 	
 
+	
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
@@ -123,6 +126,7 @@ public class Bomber extends Player implements Picker{
 		if (bomberController != null) {
 			bomberController.processInput();
 		}
+		
 		
 		
 		

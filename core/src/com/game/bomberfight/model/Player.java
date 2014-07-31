@@ -38,6 +38,7 @@ public class Player extends GameObject implements Controllable, Destructible{
     protected Animation animation = null;
     protected float animTime;
     
+  
     public enum Direction {
     	left, right, down, up, left_up, left_down, right_up, right_down
     }
@@ -100,7 +101,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 
         FixtureDef playerFixtureDef = new FixtureDef();
         playerFixtureDef.shape = shape;
-        playerFixtureDef.density = 0.0001f;
+        playerFixtureDef.density = 2f;
         playerFixtureDef.friction = .25f;
         playerFixtureDef.restitution = 0f;
 
@@ -312,10 +313,12 @@ public class Player extends GameObject implements Controllable, Destructible{
 	}
 	
 	public void moveUp() {
+	
 		this.movement.y = this.attr.getSpeed();
 	}
 	
 	public void moveDown() {
+		
 		this.movement.y = -this.attr.getSpeed();
 	}
 	
@@ -324,10 +327,12 @@ public class Player extends GameObject implements Controllable, Destructible{
 	}
 	
 	public void moveLeft() {
+		
 		this.movement.x = -this.attr.getSpeed();
 	}
 	
 	public void moveRight() {
+		
 		this.movement.x = this.attr.getSpeed();
 	}
 	

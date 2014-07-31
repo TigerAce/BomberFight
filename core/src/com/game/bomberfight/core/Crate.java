@@ -41,7 +41,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		BodyDef crateDef = new BodyDef();
 		// default crate
 		
-		crateDef.type = BodyType.DynamicBody;
+		crateDef.type = BodyType.KinematicBody;
 		crateDef.position.set(x, y);
 		
 		//shape
