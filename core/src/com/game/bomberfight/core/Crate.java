@@ -50,7 +50,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		
 		//fixture
 		
-		crateFixtureDef.density = 100.0f;
+		crateFixtureDef.density = 400.0f;
 		crateFixtureDef.friction = 0.6f;
 		crateFixtureDef.restitution = 0;
 		crateFixtureDef.shape = crateShape;
@@ -58,8 +58,8 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		
 		box2dBody = ((GamePlay)currentScreen).getWorld().createBody(crateDef);
 		box2dBody.createFixture(crateFixtureDef);
-		box2dBody.setLinearDamping(2f);
-		box2dBody.setAngularDamping(1f);
+		box2dBody.setLinearDamping(4f);
+		box2dBody.setAngularDamping(2f);
 		box2dBody.setUserData(this);
 		
 		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/crate4.jpg", Texture.class));
