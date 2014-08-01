@@ -6,11 +6,10 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.Input;
 import com.game.bomberfight.core.Bomber;
-import com.game.bomberfight.model.GameObject;
+import com.game.bomberfight.model.Controller;
 
-public class BomberController {
+public class BomberController extends Controller {
 	
-	public GameObject owner;
 	public boolean isPrimary = true;
 
 	public BomberController(boolean isPrimary) {
@@ -23,7 +22,7 @@ public class BomberController {
 	 * This function process input continuously based on status, different
 	 * from doKeyDown and doKeyUp which only get executed once
 	 */
-	public void processInput() {
+	public void update() {
 		if (owner == null) {
 			return;
 		}

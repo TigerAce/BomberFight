@@ -63,8 +63,8 @@ public class GamePlay implements Screen {
 	private ArrayList<Item> itemList = new ArrayList<Item>();
 
 	private final float TIMESTEP = 1 / 60f;
-	private final int VELOCITYITERATIONS = 8;
-	private final int POSITIONITERATIONS = 3;
+	private final int VELOCITYITERATIONS = 3;
+	private final int POSITIONITERATIONS = 2;
 
 	/**
 	 * Since world.step only accept a fixed TIMESTEP, a timeAccumulator is used
@@ -77,6 +77,8 @@ public class GamePlay implements Screen {
 	 * then update and render it
 	 */
 	private TileMapManager tileMapManager;
+	
+	private long timeNow = 0;
 
 	@Override
 	public void render(float delta) {
@@ -87,10 +89,22 @@ public class GamePlay implements Screen {
 		/**
 		 * render camera
 		 */
+		timeNow = System.currentTimeMillis();
+		
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "camera update + batch setProjectionMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
+		
 		tileMapManager.renderBackground();
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "tileMapManager renderBackground: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
 
 		/**
 		 * Handles world collision calculation
@@ -102,14 +116,35 @@ public class GamePlay implements Screen {
 			world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 			this.timeAccumulator -= this.TIMESTEP;
 		}
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "accumulate and world step: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
 
 		/**
 		 * update and redraw game objects
 		 */
 		gameObjectManager.updateAll(delta);
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "gameObjectManager updateAll: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
+		
 		gameObjectManager.drawAll(batch);
 		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "gameObjectManager drawAll: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
+		
 		tileMapManager.renderForeground();
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "tileMapManager renderForeground: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
 
 		/**
 		 * render explosion
@@ -118,19 +153,48 @@ public class GamePlay implements Screen {
 			if (explosions.get(i) != null && explosions.get(i).isCompleted())
 				explosions.remove(i);
 		}
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "render explosion: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
 
 		/**
 		 * render light
 		 */
 		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
-		rayHandler.updateAndRender();
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "rayHandler setCombinedMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			rayHandler.updateAndRender();
+		}
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "rayHandler updateAndRender: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
 
 		// debug render
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
 			debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
 		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "debugRenderer render: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+		}
+		
 		FpsDisplayer.getInstance().draw(batch, 0, 0);
+		
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.log("Efficiency test", "FpsDisplayer draw: " + (System.currentTimeMillis() - timeNow) + "ms");
+			timeNow = System.currentTimeMillis();
+			Gdx.app.log("Efficiency test", "\n\n");
+		}
 	}
 
 	@Override

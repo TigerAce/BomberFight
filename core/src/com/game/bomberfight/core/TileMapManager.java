@@ -142,9 +142,10 @@ public class TileMapManager {
 					// Set the controller according to the controller property
 					String controller = (String) objectProperties.get("controller");
 					if (controller.equalsIgnoreCase("wasdspace")) {
-						bomber.setBomberController(new BomberController(true));
+						bomber.setController(new BomberController(true));
+						//bomber.setController(new AndroidController());
 					} else {
-						bomber.setBomberController(new BomberController(false));
+						bomber.setController(new BomberController(false));
 					}
 					
 					// Attach a point light to player

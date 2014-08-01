@@ -6,8 +6,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.interfaces.Picker;
+import com.game.bomberfight.model.Controller;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
@@ -18,7 +18,7 @@ public class Bomber extends Player implements Picker{
  	private int bombPlacementCounter;
  	private boolean placeBomb;  //the flag indicate whether the bomb can be placed
  	private float timeCounter;        //time counter;
- 	private BomberController bomberController = null;
+ 	private Controller controller = null;
  	private ArrayList<Item> inventory;  //store items for player
 
 
@@ -122,8 +122,8 @@ public class Bomber extends Player implements Picker{
 			}
 		}
 		
-		if (bomberController != null) {
-			bomberController.processInput();
+		if (controller != null) {
+			controller.update();
 		}
 		
 		
@@ -155,9 +155,9 @@ public class Bomber extends Player implements Picker{
 	/**
 	 * @param bomberController the bomberController to set
 	 */
-	public void setBomberController(BomberController bomberController) {
-		this.bomberController = bomberController;
-		this.bomberController.owner = this;
+	public void setController(Controller bomberController) {
+		this.controller = bomberController;
+		this.controller.owner = this;
 	}
 
 	/**
