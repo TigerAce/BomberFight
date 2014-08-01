@@ -181,6 +181,7 @@ public class GamePlay implements Screen {
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item2.png", Texture.class, textureParameter);
+		assetManager.load("img/texture/item3.png", Texture.class, textureParameter);
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
@@ -217,6 +218,7 @@ public class GamePlay implements Screen {
 		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
 		item = new Item();
+		item.setName("ADDBOMB");
 		item.getAttr().setNumBombPerRound(1);
 		this.itemList.add(item);
 		// add blast power
