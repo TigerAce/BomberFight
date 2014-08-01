@@ -137,7 +137,7 @@ public class TileMapManager {
 					
 					Bomber bomber = new Bomber(vec3.x, vec3.y, width, height, speed, hitpoint, numBombPerRound, roundInterval);
 					bomber.create();
-					bomber.setAnimation(gamePlay.getAssetManager().get("img/animation/soldier.png", Texture.class), 3, 1);
+					bomber.setAnimation(gamePlay.getAssetManager().get("img/animation/soldier1.png", Texture.class), 3, 1);
 					
 					// Set the controller according to the controller property
 					String controller = (String) objectProperties.get("controller");

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -92,11 +93,14 @@ public class Player extends GameObject implements Controllable, Destructible{
         playerDef.fixedRotation = true;
         
 
-        shape = new PolygonShape();
+        //shape = new PolygonShape();
+        shape = new CircleShape();
         if (width <= 0 && height <= 0) {
-        	((PolygonShape) shape).setAsBox(1, 1);
+        	//((PolygonShape) shape).setAsBox(1, 1);
+        	((CircleShape) shape).setRadius(1);
 		} else {
-			((PolygonShape) shape).setAsBox(width / 2, height / 2);
+			//((PolygonShape) shape).setAsBox(width / 2, height / 2);
+			((CircleShape) shape).setRadius(width / 2);
 		}
 
         FixtureDef playerFixtureDef = new FixtureDef();
