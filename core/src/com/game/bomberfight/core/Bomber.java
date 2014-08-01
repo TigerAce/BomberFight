@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.interfaces.Picker;
