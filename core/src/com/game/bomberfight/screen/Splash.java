@@ -73,7 +73,7 @@ public class Splash implements Screen {
                         /*
                          * Move to GamePlay screen and ready to play the game
                          */
-                        ((Game) Gdx.app.getApplicationListener()).setScreen(new GamePlay());
+                    	((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
                     }
                 }
         ).start(tweenManager);

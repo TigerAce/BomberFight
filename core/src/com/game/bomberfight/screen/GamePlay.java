@@ -169,9 +169,9 @@ public class GamePlay implements Screen {
 			timeNow = System.currentTimeMillis();
 		}
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		//if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
 			rayHandler.updateAndRender();
-		}
+		//}
 		
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
 			Gdx.app.log("Efficiency test", "rayHandler updateAndRender: " + (System.currentTimeMillis() - timeNow) + "ms");
