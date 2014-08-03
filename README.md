@@ -44,3 +44,5 @@ BomberFight
 
 <h3>Tutorial on How to use Map Editor<h3>
 [MapEditor](https://github.com/TigerAce/BomberFight/wiki/Use%20of%20Map%20Editor)
+
+![](https://fbcdn-sphotos-g-a.akamaihd.net/hphotos-ak-xfa1/t1.0-9/10592694_594775423977108_7754717510489374463_n.jpg)
