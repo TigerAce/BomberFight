@@ -41,7 +41,7 @@ public class TileMapManager {
 		// TODO Auto-generated constructor stub
 		// Initialize tile map and tiledMapRenderer and set the unitscale
 		this.gamePlay = gamePlay;
-		this.tiledMap = this.gamePlay.getAssetManager().get("img/tmx/ground2.tmx");
+		this.tiledMap = this.gamePlay.getAssetManager().get(gamePlay.getGameInfo().gameMap);
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, unitScale);
 		if (!isObjectLoaded) {
 			loadObject(Config.getInstance().get("viewportWidth", Float.class), 

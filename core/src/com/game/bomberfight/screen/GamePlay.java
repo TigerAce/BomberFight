@@ -11,16 +11,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -34,6 +26,7 @@ import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
+import com.game.bomberfight.model.GameInfo;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
 
@@ -87,6 +80,8 @@ public class GamePlay implements Screen {
 	private Gui gui;
 	
 	private InputMultiplexer inputMultiplexer;
+	
+	private GameInfo gameInfo;
 
 	@Override
 	public void render(float delta) {
@@ -247,27 +242,23 @@ public class GamePlay implements Screen {
 		/**
 		 * load resources
 		 */
-		TextureParameter textureParameter = new TextureParameter();
-		textureParameter.minFilter = TextureFilter.Linear;
-		textureParameter.magFilter = TextureFilter.Linear;
-		assetManager.load("img/texture/crate4.jpg", Texture.class, textureParameter);
-		assetManager.load("img/texture/brick3.jpg", Texture.class, textureParameter);
-		assetManager.load("img/animation/soldier1.png", Texture.class, textureParameter);
-		assetManager.load("particle/flame.p", ParticleEffect.class);
-		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
-		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
-		assetManager.load("img/texture/item2.png", Texture.class, textureParameter);
-		assetManager.load("img/texture/item3.png", Texture.class, textureParameter);
-		// load audio
-		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
-		assetManager.load("audio/timer/timer1.mp3", Sound.class);
-		
-		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		assetManager.load("img/tmx/ground2.tmx", TiledMap.class);
-		
-		while (!assetManager.update()) {
-			Gdx.app.log("Loading progress", ""+assetManager.getProgress()+"%");
-		}
+//		TextureParameter textureParameter = new TextureParameter();
+//		textureParameter.minFilter = TextureFilter.Linear;
+//		textureParameter.magFilter = TextureFilter.Linear;
+//		assetManager.load("img/texture/crate4.jpg", Texture.class, textureParameter);
+//		assetManager.load("img/texture/brick3.jpg", Texture.class, textureParameter);
+//		assetManager.load("img/animation/soldier1.png", Texture.class, textureParameter);
+//		assetManager.load("particle/flame.p", ParticleEffect.class);
+//		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
+//		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
+//		assetManager.load("img/texture/item2.png", Texture.class, textureParameter);
+//		assetManager.load("img/texture/item3.png", Texture.class, textureParameter);
+//		// load audio
+//		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
+//		assetManager.load("audio/timer/timer1.mp3", Sound.class);
+//		
+//		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+//		assetManager.load("img/tmx/ground2.tmx", TiledMap.class);
 
 		// create ray handler
 		rayHandler = new RayHandler(world);
@@ -406,5 +397,19 @@ public class GamePlay implements Screen {
 	 */
 	public Gui getGui() {
 		return gui;
+	}
+
+	/**
+	 * @return the gameInfo
+	 */
+	public GameInfo getGameInfo() {
+		return gameInfo;
+	}
+
+	/**
+	 * @param gameInfo the gameInfo to set
+	 */
+	public void setGameInfo(GameInfo gameInfo) {
+		this.gameInfo = gameInfo;
 	}
 }

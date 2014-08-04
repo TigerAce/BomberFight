@@ -40,10 +40,13 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 		Gdx.app.setLogLevel(Application.LOG_NONE);
 		else Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		}
-
 		
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        
+        if(keycode == Input.Keys.ESCAPE) {
+        	((GamePlay) currentScreen).getGui().showMenu();
+		}
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {

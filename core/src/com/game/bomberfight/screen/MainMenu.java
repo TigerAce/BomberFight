@@ -2,12 +2,14 @@ package com.game.bomberfight.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -18,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.game.bomberfight.model.GameInfo;
 import com.game.bomberfight.utility.Config;
 
 public class MainMenu implements Screen {
@@ -26,7 +29,7 @@ public class MainMenu implements Screen {
 
 	private Object[] mapEntries = { 
 			"Metal Classic", 
-			"Mud Classic", 
+			"No Hide", 
 			"Another map1", 
 			"Another map2", 
 			"Another map3", 
@@ -52,12 +55,14 @@ public class MainMenu implements Screen {
 
 	private Skin skin;
 	private Stage stage;
+	private GameInfo gameInfo;
 
 	public MainMenu() {
 		// TODO Auto-generated constructor stub
 		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
 		skin = new Skin();
 		stage = new Stage();
+		gameInfo = new GameInfo();
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -132,6 +137,7 @@ public class MainMenu implements Screen {
 		list.setItems(mapEntries);
 		list.getSelection().setMultiple(false);
 		list.getSelection().setRequired(true);
+		gameInfo.gameMap = "img/tmx/ground2.tmx";
 		
 		ScrollPane scrollPane = new ScrollPane(list, skin);
 		scrollPane.setFlickScroll(true);
@@ -152,8 +158,14 @@ public class MainMenu implements Screen {
 				if (item.equalsIgnoreCase("Metal Classic")) {
 					imageContainer.setActor(new Image(new Texture(Gdx.files
 							.internal("img/ui/metal_classic.png"))));
+					gameInfo.gameMap = "img/tmx/ground2.tmx";
+				} else if (item.equalsIgnoreCase("No Hide")) {
+					imageContainer.setActor(new Image(new Texture(Gdx.files
+							.internal("img/ui/no_hide.png"))));
+					gameInfo.gameMap = "img/tmx/ground1.tmx";
 				} else {
 					imageContainer.setActor(null);
+					gameInfo.gameMap = null;
 				}
 			}
 		});
@@ -165,7 +177,15 @@ public class MainMenu implements Screen {
 				// TODO Auto-generated method stub
 				TextButton button = (TextButton) actor;
 				if (button.isPressed()) {
-					((Game) Gdx.app.getApplicationListener()).setScreen(new GamePlay());
+					if (gameInfo.gameMap == null) {
+						Dialog dialog = new Dialog("Warning!", skin);
+						dialog.text("The map you selected is not available!").button("OK", true).key(Keys.ENTER, true)
+						.key(Keys.ESCAPE, false).show(stage);
+					} else {
+						LoadingScreen loadingScreen = new LoadingScreen();
+						loadingScreen.setGameInfo(gameInfo);
+						((Game) Gdx.app.getApplicationListener()).setScreen(loadingScreen);
+					}
 				}
 			}
 		});

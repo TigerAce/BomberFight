@@ -1,11 +1,14 @@
 package com.game.bomberfight.core;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MainMenu;
 
 public class Gui {
 	
@@ -207,6 +211,18 @@ public class Gui {
 		cellContainer2.add(buffLabel2).maxSize(25, 25);
 		cellContainer2.setUserObject(item);
 		buffTable.addActor(cellContainer2);
+	}
+	
+	public void showMenu() {
+		Dialog dialog = new Dialog("Warning!", uiSkin) {
+			protected void result (Object object) {
+				boolean b = (Boolean) object;
+				if (b) {
+					((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+				}
+			}
+			}.text("Do you really want to exit?").button("Yes", true).button("No", false).key(Keys.ENTER, true)
+		.key(Keys.ESCAPE, false).show(uiStage);
 	}
 
 }
