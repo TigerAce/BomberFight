@@ -20,7 +20,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.game.bomberfight.InputSource.BomberController;
+import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.Config;
 
 public class TileMapManager {
 	
@@ -32,6 +34,8 @@ public class TileMapManager {
 	private float unitScale = 1.f / 8.f;
 	private boolean isObjectLoaded = false;
 	private GamePlay gamePlay;
+	private Player playerA;
+	private Player playerB;
 
 	public TileMapManager(GamePlay gamePlay) {
 		// TODO Auto-generated constructor stub
@@ -39,6 +43,11 @@ public class TileMapManager {
 		this.gamePlay = gamePlay;
 		this.tiledMap = this.gamePlay.getAssetManager().get("img/tmx/ground2.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, unitScale);
+		if (!isObjectLoaded) {
+			loadObject(Config.getInstance().get("viewportWidth", Float.class), 
+					Config.getInstance().get("viewportHeight",Float.class));
+			isObjectLoaded = true;
+		}
 	}
 	
 	public void loadObject(float viewportWidth, float viewportHeight) {
@@ -144,8 +153,10 @@ public class TileMapManager {
 					if (controller.equalsIgnoreCase("wasdspace")) {
 						bomber.setController(new BomberController(true));
 						//bomber.setController(new AndroidController());
+						playerA = bomber;
 					} else {
 						bomber.setController(new BomberController(false));
+						playerB = bomber;
 					}
 					
 					// Attach a point light to player
@@ -162,10 +173,6 @@ public class TileMapManager {
 		mat = projectionMatrix.cpy();
 		mat.translate(-viewportWidth / 2.f, -viewportHeight / 2.f, 0);
 		tiledMapRenderer.setView(mat, 0, 0, viewportWidth, viewportHeight);
-		if (!isObjectLoaded) {
-			loadObject(viewportWidth, viewportHeight);
-			isObjectLoaded = true;
-		}
 	}
 	
 	public void renderBackground() {
@@ -178,6 +185,20 @@ public class TileMapManager {
 	
 	public void dispose() {
 		tiledMapRenderer.dispose();
+	}
+
+	/**
+	 * @return the playerA
+	 */
+	public Player getPlayerA() {
+		return playerA;
+	}
+
+	/**
+	 * @return the playerB
+	 */
+	public Player getPlayerB() {
+		return playerB;
 	}
 
 }

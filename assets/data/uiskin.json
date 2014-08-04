@@ -41,7 +41,8 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: { background: default-slider, knob: default-slider-knob },
-	default-vertical: { background: default-slider, knob: default-round-large }
+	default-vertical: { background: default-slider, knob: default-round-large },
+	hp-horizontal: { background: default-scroll, knobBefore: default-round-down }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: { font: default-font, fontColor: white, background: default-pane }
@@ -60,5 +61,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
 	default: { minus: tree-minus, plus: tree-plus, selection: default-select-selection }
+},
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default: { background: default-pane, knob: default-round-large, knobBefore: check-off, knobAfter: check-on }
 }
 }

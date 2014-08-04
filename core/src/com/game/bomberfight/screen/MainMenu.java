@@ -50,8 +50,8 @@ public class MainMenu implements Screen {
 			"Superman"
 			};
 
-	Skin skin;
-	Stage stage;
+	private Skin skin;
+	private Stage stage;
 
 	public MainMenu() {
 		// TODO Auto-generated constructor stub

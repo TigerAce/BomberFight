@@ -8,6 +8,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
@@ -28,6 +29,7 @@ import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
+import com.game.bomberfight.core.Gui;
 import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.interfaces.Controllable;
@@ -79,6 +81,12 @@ public class GamePlay implements Screen {
 	private TileMapManager tileMapManager;
 	
 	private long timeNow = 0;
+	
+	private boolean isEfficiencyTest = false;
+	
+	private Gui gui;
+	
+	private InputMultiplexer inputMultiplexer;
 
 	@Override
 	public void render(float delta) {
@@ -94,14 +102,14 @@ public class GamePlay implements Screen {
 		viewport.getCamera().update();
 		batch.setProjectionMatrix(viewport.getCamera().combined);
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "camera update + batch setProjectionMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
 		
 		tileMapManager.renderBackground();
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "tileMapManager renderBackground: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -117,7 +125,7 @@ public class GamePlay implements Screen {
 			this.timeAccumulator -= this.TIMESTEP;
 		}
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "accumulate and world step: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -127,21 +135,21 @@ public class GamePlay implements Screen {
 		 */
 		gameObjectManager.updateAll(delta);
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "gameObjectManager updateAll: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
 		
 		gameObjectManager.drawAll(batch);
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "gameObjectManager drawAll: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
 		
 		tileMapManager.renderForeground();
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "tileMapManager renderForeground: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -154,7 +162,7 @@ public class GamePlay implements Screen {
 				explosions.remove(i);
 		}
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "render explosion: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -164,7 +172,7 @@ public class GamePlay implements Screen {
 		 */
 		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "rayHandler setCombinedMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -173,7 +181,7 @@ public class GamePlay implements Screen {
 			rayHandler.updateAndRender();
 		//}
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "rayHandler updateAndRender: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
@@ -183,14 +191,17 @@ public class GamePlay implements Screen {
 			debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "debugRenderer render: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
 		
+		gui.update();
+		gui.draw();
+		
 		FpsDisplayer.getInstance().draw(batch, 0, 0);
 		
-		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "FpsDisplayer draw: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 			Gdx.app.log("Efficiency test", "\n\n");
@@ -202,6 +213,7 @@ public class GamePlay implements Screen {
 		viewport.update(width, height, false);
 		FpsDisplayer.getInstance().update(width, height);
 		tileMapManager.update(viewport.getCamera().combined, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
+		gui.resize(viewport);
 	}
 
 	@Override
@@ -265,7 +277,9 @@ public class GamePlay implements Screen {
 		/**********************************************************
 		 * input listener *
 		 **********************************************************/
-		Gdx.input.setInputProcessor(new GamePlayScreenKeyboard());
+		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(new GamePlayScreenKeyboard());
+		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		// create spritebatch
 		batch = new SpriteBatch();
@@ -291,6 +305,10 @@ public class GamePlay implements Screen {
 		item.getAttr().setPowerX(10f);
 		item.getAttr().setPowerY(10f);
 		this.itemList.add(item);
+		
+		gui = new Gui(this);
+		gui.setPlayerA(tileMapManager.getPlayerA());
+		gui.setPlayerB(tileMapManager.getPlayerB());
 	}
 
 	@Override
@@ -318,6 +336,8 @@ public class GamePlay implements Screen {
 		world.dispose();
 		debugRenderer.dispose();
 		tileMapManager.dispose();
+		
+		gui.dispose();
 	}
 
 	public World getWorld() {

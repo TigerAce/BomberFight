@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MainMenu;
 
 /**
  * Created by Tong on 2014/7/25.
@@ -25,7 +25,7 @@ public class SplashScreenKeyboard implements InputProcessor{
         switch (keycode) {
             case Input.Keys.ESCAPE:
                 // Skip the splash screen and go into GamePlay screen
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new GamePlay());
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
                 return true;
         }
         return false;
