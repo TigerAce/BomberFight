@@ -400,4 +400,11 @@ public class GamePlay implements Screen {
 	public RayHandler getRayHandler() {
 		return rayHandler;
 	}
+
+	/**
+	 * @return the gui
+	 */
+	public Gui getGui() {
+		return gui;
+	}
 }

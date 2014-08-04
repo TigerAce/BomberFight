@@ -143,6 +143,8 @@ public class Bomber extends Player implements Picker{
 		//if affect time is not forever, add to inventory
 		if(item.getAffectTime() >= 0){
 			inventory.add(item);
+			Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+	    	((GamePlay)currentScreen).getGui().createBuff(item);
 		}
 		
 		//add the effects to player
@@ -233,6 +235,13 @@ public class Bomber extends Player implements Picker{
 				this.setPlaceBomb(false);
 			}
 		}
+	}
+
+	/**
+	 * @return the inventory
+	 */
+	public ArrayList<Item> getInventory() {
+		return inventory;
 	}
 
 }
