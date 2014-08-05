@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -30,14 +29,8 @@ public class Gui {
 	private Skin uiSkin;
 	private GamePlay gamePlay;
 	private Table stateTable;
-	private Player playerA;
-	private Player playerB;
-	private Slider HPBarA;
-	private Slider HPBarB;
-	private Viewport gamePlayViewport;
-	private Label buffLabel1;
-	private Label buffLabel3;
-	private HorizontalGroup buffTable;
+	private HorizontalGroup buffGroupA;
+	private HorizontalGroup buffGroupB;
 
 	public Gui(GamePlay gamePlay) {
 		// TODO Auto-generated constructor stub
@@ -50,58 +43,16 @@ public class Gui {
 		stateTable = new Table();
 		stateTable.setFillParent(true);
 		
-		buffTable = new HorizontalGroup();
-		buffTable.setFillParent(false);
-		stateTable.add(buffTable).expand().top();
+		buffGroupA = new HorizontalGroup();
+		buffGroupA.top();
+		buffGroupB = new HorizontalGroup();
+		buffGroupB.top();
 		
-		
-		
-		Image buffImage1 = new Image(new Texture(Gdx.files.internal("img/texture/item1.png")));
-		//Image buffImage2 = new Image(new Texture(Gdx.files.internal("img/texture/item2.png")));
-		Image buffImage3 = new Image(new Texture(Gdx.files.internal("img/texture/item3.png")));
-		
-		LabelStyle buffLabelStyle = new LabelStyle();
-		buffLabelStyle.font = new BitmapFont(Gdx.files.internal("data/GiddyupStd.fnt"));
-		
-		buffLabel1 = new Label("", buffLabelStyle);
-		
-		buffLabel3 = new Label("", buffLabelStyle);
-		
-		Table cellContainer1 = new Table();
-		cellContainer1.add(buffImage1).maxSize(25, 25).padRight(10).padLeft(10);
-		cellContainer1.row();
-		cellContainer1.add(buffLabel1).maxSize(25, 25);
-		buffTable.addActor(cellContainer1);
-		
-		Table cellContainer3 = new Table();
-		cellContainer3.add(buffImage3).maxSize(25, 25).padRight(10).padLeft(10);
-		cellContainer3.row();
-		cellContainer3.add(buffLabel3).maxSize(25, 25);
-		buffTable.addActor(cellContainer3);
-		
-		Label hpLabel = new Label("HP ", uiSkin);
-		stateTable.add(hpLabel).expandY().top().right().padLeft(10);
-		
-		HPBarA = new Slider(0, 1, 0.1f, false, uiSkin);
-		HPBarA.setAnimateDuration(0.5f);
-		HPBarA.setValue(1);
-		HPBarA.setStyle(uiSkin.get("hp-horizontal", SliderStyle.class));
-		HPBarA.setDisabled(true);
-		stateTable.add(HPBarA).top().right();
-		
-		HPBarB = new Slider(0, 1, 0.1f, false, uiSkin);
-		HPBarB.setAnimateDuration(0.5f);
-		HPBarB.setValue(1);
-		HPBarB.setStyle(uiSkin.get("hp-horizontal", SliderStyle.class));
-		HPBarB.setSize(50, 25);
-		HPBarB.setDisabled(true);
-		uiStage.addActor(HPBarB);
+		stateTable.add(buffGroupA).expand().bottom().left();
+		stateTable.add(buffGroupB).expand().top().right();
 		
 		//stateTable.debug();
 		uiStage.addActor(stateTable);
-		
-		playerA = playerB = null;
-		gamePlayViewport = null;
 	}
 	
 	public void resize(Viewport viewport) {
@@ -123,30 +74,28 @@ public class Gui {
 			stateTable.padTop(0);
 			stateTable.padBottom(0);
 		}
-		this.gamePlayViewport = viewport;
+		//this.gamePlayViewport = viewport;
 	}
 	
 	public void update() {
-		if (playerA != null) {
-			HPBarA.setValue(playerA.getAttr().getLife());
-			updateBuffs(playerA);
-		}
-		if (playerB != null && gamePlayViewport != null) {
-			float x = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).x;
-			float y = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).y;
-			x = x - HPBarB.getWidth() / 2;
-			y = y + 15;
-			HPBarB.setPosition(x, y);
-			HPBarB.setValue(playerB.getAttr().getLife());
-		} else {
-			HPBarB.setVisible(false);
-		}
+		updateBuffs(buffGroupA);
+		updateBuffs(buffGroupB);
+//		if (playerB != null && gamePlayViewport != null) {
+//			float x = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).x;
+//			float y = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).y;
+//			x = x - HPBarB.getWidth() / 2;
+//			y = y + 15;
+//			HPBarB.setPosition(x, y);
+//			HPBarB.setValue(playerB.getAttr().getLife());
+//		} else {
+//			HPBarB.setVisible(false);
+//		}
 		uiStage.act(Gdx.graphics.getDeltaTime());
 	}
 	
 	public void draw() {
 		uiStage.draw();
-		Table.drawDebug(uiStage);
+		//Table.drawDebug(uiStage);
 	}
 	
 	public void dispose() {
@@ -156,61 +105,56 @@ public class Gui {
 
 	/**
 	 * @param playerA the playerA to set
+	 * Then create corresponding ui for playerA
 	 */
-	public void setPlayerA(Player playerA) {
-		this.playerA = playerA;
-		float hp = playerA.getAttr().getLife();
-		HPBarA.setRange(0, hp);
-		HPBarA.setStepSize(hp / 100);
-		HPBarA.setValue(hp);
+	public void setPlayerA(Player player) {
+		createStateGroup(player, buffGroupA);
 	}
 
 	/**
 	 * @param playerB the playerB to set
+	 * Then create corresponding ui for playerB
 	 */
-	public void setPlayerB(Player playerB) {
-		this.playerB = playerB;
-		float hp = playerB.getAttr().getLife();
-		HPBarB.setRange(0, hp);
-		HPBarB.setStepSize(hp / 100);
-		HPBarB.setValue(hp);
+	public void setPlayerB(Player player) {
+		createStateGroup(player, buffGroupB);
 	}
 	
-	public void updateBuffs(Player player) {
-		int power = (int) player.getAttr().getPowerX();
-		buffLabel1.setText(""+power);
-		buffLabel3.setText(""+player.getAttr().getNumBombPerRound());
-		
-		for (Actor actor : buffTable.getChildren()) {
-			if (actor.getUserObject() != null) {
-				Item item = (Item) actor.getUserObject();
-				int time = (int) item.getAffectTime();
-				if (time <= 0) {
-					actor.remove();
-				} else {
-					Table cellContainer = (Table) actor;
-					Label label = cellContainer.findActor("buffLabel2");
-					label.setText(""+time);
+	public void updateBuffs(HorizontalGroup buffGroup) {
+		for (Actor actor : buffGroup.getChildren()) {
+			Table table = (Table) actor;
+			if (table.getName().equalsIgnoreCase("bombnumber")) {
+				Label label = table.findActor("label");
+				Player player = (Player) table.getUserObject();
+				label.setText(""+player.getAttr().getNumBombPerRound());
+			} else if (table.getName().equalsIgnoreCase("bombpower")) {
+				Label label = table.findActor("label");
+				Player player = (Player) table.getUserObject();
+				label.setText(""+(int)player.getAttr().getPowerX());
+			} else if (table.getName().equalsIgnoreCase("hpbar")) {
+				Slider slider = table.findActor("slider");
+				Player player = (Player) table.getUserObject();
+				slider.setValue(player.getAttr().getLife());
+			} else {
+				if (table.getUserObject() instanceof Item) {
+					Item item = (Item) table.getUserObject();
+					if (item.getAffectTime() <= 0) {
+						actor.remove();
+					} else {
+						Label label = table.findActor("label");
+						label.setText(""+(int)item.getAffectTime());
+					}
 				}
 			}
 		}
 	}
 	
-	public void createBuff(Item item) {
-		Image buffImage2 = new Image(new Texture(Gdx.files.internal("img/texture/item2.png")));
-		
-		LabelStyle buffLabelStyle = new LabelStyle();
-		buffLabelStyle.font = new BitmapFont(Gdx.files.internal("data/GiddyupStd.fnt"));
-		
-		Label buffLabel2 = new Label(""+item.getAffectTime(), buffLabelStyle);
-		buffLabel2.setName("buffLabel2");
-		
-		Table cellContainer2 = new Table();
-		cellContainer2.add(buffImage2).maxSize(25, 25).padRight(10).padLeft(10);
-		cellContainer2.row();
-		cellContainer2.add(buffLabel2).maxSize(25, 25);
-		cellContainer2.setUserObject(item);
-		buffTable.addActor(cellContainer2);
+	public void pickUpBuff(Player player, Item item) {
+		if (player.getName().equalsIgnoreCase("playerA")) {
+			buffGroupA.addActor(createBuff(item.getName(), item));
+		}
+		if (player.getName().equalsIgnoreCase("playerB")) {
+			buffGroupB.addActorAt(0, createBuff(item.getName(), item));
+		}
 	}
 	
 	public void showMenu() {
@@ -218,11 +162,89 @@ public class Gui {
 			protected void result (Object object) {
 				boolean b = (Boolean) object;
 				if (b) {
+					Gdx.input.setInputProcessor(null);
 					((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 				}
 			}
 			}.text("Do you really want to exit?").button("Yes", true).button("No", false).key(Keys.ENTER, true)
 		.key(Keys.ESCAPE, false).show(uiStage);
+	}
+	
+	public Table createBuff(String name, Object userObject) {
+		Table table = new Table();
+		table.setName(name);
+		table.setUserObject(userObject);
+		
+		Image image = null;
+		
+		if (name.equalsIgnoreCase("bombpower")) {
+			image = new Image(new Texture(Gdx.files.internal("img/texture/item1.png")));
+		} else if (name.equalsIgnoreCase("bombnumber")) {
+			image = new Image(new Texture(Gdx.files.internal("img/texture/item3.png")));
+		} else {
+			if (userObject instanceof Item) {
+				Item item = (Item) userObject;
+				if (item.getSprite() != null) {
+					image = new Image(item.getSprite().getTexture());
+				} else {
+					image = new Image();
+				}
+			}
+		}
+		image.setName("image");
+		
+		table.add(image).minSize(25, 25).maxSize(25, 25).padLeft(10).padRight(10);
+		
+		table.row();
+		
+		LabelStyle labelStyle = new LabelStyle();
+		labelStyle.font = new BitmapFont(Gdx.files.internal("data/Aharoni.fnt"));
+		
+		Label label = new Label("", labelStyle);
+		label.setName("label");
+		table.add(label).maxSize(25, 25);
+		
+		return table;
+	}
+	
+	public Table createHPBar(String name, Object userObject) {
+		Table table = new Table();
+		table.setName(name);
+		table.setUserObject(userObject);
+		
+		Label label = new Label("HP ", uiSkin);
+		label.setName("label");
+		table.add(label);
+		
+		Slider slider = new Slider(0, 1, 0.1f, false, uiSkin, "hp-horizontal");
+		slider.setName("slider");
+		slider.setAnimateDuration(0.5f);
+		slider.setValue(1);
+		slider.setDisabled(true);
+		table.add(slider);
+		
+		return table;
+	}
+	
+	public void createStateGroup(Player player, HorizontalGroup buffGroup) {
+		float hp = player.getAttr().getLife();
+		
+		if (buffGroup == buffGroupB) {
+			buffGroup.addActor(createBuff("bombnumber", player));
+			buffGroup.addActor(createBuff("bombpower", player));
+		}
+		
+		Table table = createHPBar("hpbar", player);
+		Slider slider = table.findActor("slider");
+		slider.setRange(0, hp);
+		slider.setStepSize(hp / 100f);
+		slider.setValue(hp);
+		buffGroup.addActor(table);
+		
+		if (buffGroup == buffGroupA) {
+			buffGroup.addActor(createBuff("bombnumber", player));
+			buffGroup.addActor(createBuff("bombpower", player));
+		}
 	}
 
 }

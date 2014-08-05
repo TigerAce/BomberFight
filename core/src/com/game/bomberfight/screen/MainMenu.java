@@ -30,7 +30,7 @@ public class MainMenu implements Screen {
 	private Object[] mapEntries = { 
 			"Metal Classic", 
 			"No Hide", 
-			"Another map1", 
+			"Mud&Grass", 
 			"Another map2", 
 			"Another map3", 
 			"Another map4", 
@@ -163,6 +163,10 @@ public class MainMenu implements Screen {
 					imageContainer.setActor(new Image(new Texture(Gdx.files
 							.internal("img/ui/no_hide.png"))));
 					gameInfo.gameMap = "img/tmx/ground1.tmx";
+				} else if (item.equalsIgnoreCase("Mud&Grass")) {
+					imageContainer.setActor(new Image(new Texture(Gdx.files
+							.internal("img/ui/mud_grass.png"))));
+					gameInfo.gameMap = "img/tmx/ground4.tmx";
 				} else {
 					imageContainer.setActor(null);
 					gameInfo.gameMap = null;

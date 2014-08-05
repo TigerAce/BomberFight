@@ -1,26 +1,32 @@
 package com.game.bomberfight.InputSource;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.screen.GamePlay;
-
-import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * Created by Tong on 2014/7/27.
  */
 public class GamePlayScreenKeyboard implements InputProcessor {
+	
+	private GamePlay gamePlay;
+	private HashSet<Controllable> controllableObjects;
+	
+	public GamePlayScreenKeyboard(GamePlay gamePlay) {
+		this.gamePlay = gamePlay;
+	}
 
     @Override
     public boolean keyDown(int keycode) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -41,11 +47,12 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 		else Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		}
 		
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+		controllableObjects = gamePlay.getControllableObjects();
         
         if(keycode == Input.Keys.ESCAPE) {
-        	((GamePlay) currentScreen).getGui().showMenu();
+        	gamePlay.getGui().showMenu();
 		}
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
@@ -57,8 +64,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -69,8 +77,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -82,8 +91,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -95,8 +105,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -108,8 +119,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {
@@ -121,8 +133,9 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-        Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-        HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+        //Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+        //HashSet<Controllable> controllableObjects = ((GamePlay) currentScreen).getControllableObjects();
+    	controllableObjects = gamePlay.getControllableObjects();
 
         Iterator<Controllable> iterator = controllableObjects.iterator();
         while (iterator.hasNext()) {

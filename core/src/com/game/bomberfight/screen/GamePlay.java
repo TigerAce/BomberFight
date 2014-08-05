@@ -27,6 +27,7 @@ import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
 
@@ -82,6 +83,8 @@ public class GamePlay implements Screen {
 	private InputMultiplexer inputMultiplexer;
 	
 	private GameInfo gameInfo;
+	
+	private TileMapEffectSystem tileMapEffectSystem;
 
 	@Override
 	public void render(float delta) {
@@ -143,6 +146,7 @@ public class GamePlay implements Screen {
 		}
 		
 		tileMapManager.renderForeground();
+		tileMapEffectSystem.update(delta);
 		
 		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "tileMapManager renderForeground: " + (System.currentTimeMillis() - timeNow) + "ms");
@@ -269,7 +273,7 @@ public class GamePlay implements Screen {
 		 * input listener *
 		 **********************************************************/
 		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(new GamePlayScreenKeyboard());
+		inputMultiplexer.addProcessor(new GamePlayScreenKeyboard(this));
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		// create spritebatch
@@ -284,22 +288,27 @@ public class GamePlay implements Screen {
 		item.setName("ANNULAR");
 		item.setAffectTime(10);
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
+		item.setStackable(false);
 		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
 		item = new Item();
 		item.setName("ADDBOMB");
 		item.getAttr().setNumBombPerRound(1);
+		item.setStackable(true);
 		this.itemList.add(item);
 		// add blast power
 		item = new Item();
 		item.setName("POWER_UP");
 		item.getAttr().setPowerX(10f);
 		item.getAttr().setPowerY(10f);
+		item.setStackable(true);
 		this.itemList.add(item);
 		
 		gui = new Gui(this);
 		gui.setPlayerA(tileMapManager.getPlayerA());
 		gui.setPlayerB(tileMapManager.getPlayerB());
+		
+		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager);
 	}
 
 	@Override

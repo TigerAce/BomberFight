@@ -101,5 +101,17 @@ public abstract class GameObject implements Disposable{
 	public void setBox2dBody(Body box2dBody) {
 		this.box2dBody = box2dBody;
 	}
+	/**
+	 * @return the sprite
+	 */
+	public Sprite getSprite() {
+		return sprite;
+	}
+	/**
+	 * @param sprite the sprite to set
+	 */
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 
 }
