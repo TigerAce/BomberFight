@@ -154,9 +154,11 @@ public class TileMapManager {
 						bomber.setController(new BomberController(true));
 						//bomber.setController(new AndroidController());
 						playerA = bomber;
+						bomber.setName("playerA");
 					} else {
 						bomber.setController(new BomberController(false));
 						playerB = bomber;
+						bomber.setName("playerB");
 					}
 					
 					// Attach a point light to player
@@ -185,6 +187,7 @@ public class TileMapManager {
 	
 	public void dispose() {
 		tiledMapRenderer.dispose();
+		tiledMap.dispose();
 	}
 
 	/**
@@ -199,6 +202,27 @@ public class TileMapManager {
 	 */
 	public Player getPlayerB() {
 		return playerB;
+	}
+
+	/**
+	 * @return the unitScale
+	 */
+	public float getUnitScale() {
+		return unitScale;
+	}
+
+	/**
+	 * @return the mat
+	 */
+	public Matrix4 getMat() {
+		return mat;
+	}
+
+	/**
+	 * @return the tiledMap
+	 */
+	public TiledMap getTiledMap() {
+		return tiledMap;
 	}
 
 }

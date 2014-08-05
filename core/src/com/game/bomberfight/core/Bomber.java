@@ -140,15 +140,33 @@ public class Bomber extends Player implements Picker{
 
 	@Override
 	public void pickUp(Item item) {
-		//if affect time is not forever, add to inventory
-		if(item.getAffectTime() >= 0){
-			inventory.add(item);
-			Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-	    	((GamePlay)currentScreen).getGui().createBuff(item);
+		Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		
+		boolean isExist = false;
+		
+		int i = 0;
+		for (; i < inventory.size(); i++) {
+			if (inventory.get(i).getName() == item.getName()) {
+				isExist = true;
+				break;
+			}
 		}
 		
-		//add the effects to player
-		this.attr.add(item.getAttr());
+		if(item.getAffectTime() >= 0){
+			if (isExist) {
+				//reset affect time
+				inventory.get(i).setAffectTime(item.getAffectTime());
+				item.setDiscard(true);
+			} else {
+				inventory.add(item);
+		    	((GamePlay)currentScreen).getGui().pickUpBuff(this, item);
+		    	//add the effects to player
+				this.attr.add(item.getAttr());
+			}
+		} else {
+			//add the effects to player
+			this.attr.add(item.getAttr());
+		}
 		
 		//set pickup to true
 		item.setPicked(true);
