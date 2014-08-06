@@ -199,7 +199,7 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 		//sent move action to server if multiplayer game
 		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
 		
-			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer());
+			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer(this.direction));
 		}
     	
     	

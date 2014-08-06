@@ -4,6 +4,8 @@ package com.game.bomberfight.screen;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -14,11 +16,20 @@ import com.game.bomberfight.net.Network;
 public class MultiplayerGamePlay extends GamePlay{
 
 	public static final Client client = new Client();
+	private float correction = 1;
 
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		super.render(delta);
+		
+		//correct position every 1 sec
+		correction -= delta;
+		if(correction <= 0){
+			Body b = tileMapManager.getPlayerA().getBox2dBody();
+			client.sendTCP(new Network.CorrectPosition(new Vector2(b.getPosition().x,b.getPosition().y)));
+			correction = 1;
+		}
 	}
 
 	@Override
@@ -63,6 +74,11 @@ public class MultiplayerGamePlay extends GamePlay{
 	    			
 	    			tileMapManager.getPlayerB().stopMovePlayer();
 	    			
+	    		}
+	    		
+	    		if(object instanceof Network.CorrectPosition){
+	    			
+	    			tileMapManager.getPlayerB().getBox2dBody().setTransform(((Network.CorrectPosition)object).pos, tileMapManager.getPlayerB().getBox2dBody().getAngle());
 	    		}
 	        }
 	     });

@@ -1,4 +1,5 @@
 package com.game.bomberfight.net;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.game.bomberfight.enums.Direction;
@@ -15,10 +16,18 @@ public class Network {
          kryo.register(StartMovePlayer.class);
          kryo.register(StopMovePlayer.class);
          kryo.register(Direction.class);
-        
+         kryo.register(Vector2.class);
   
 	}
 	
+	public static class CorrectPosition{
+		public Vector2 pos;
+		
+		public CorrectPosition(){};
+		public CorrectPosition(Vector2 pos){
+			this.pos = pos;
+		}
+	}
 	
 	public static class StartMovePlayer{
 		public Direction direction;
