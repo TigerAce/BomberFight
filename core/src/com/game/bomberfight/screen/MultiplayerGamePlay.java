@@ -77,8 +77,12 @@ public class MultiplayerGamePlay extends GamePlay{
 	    		}
 	    		
 	    		if(object instanceof Network.CorrectPosition){
+	    		
+	    			Vector2 p = ((Network.CorrectPosition)object).pos;
+	    			Body b = tileMapManager.getPlayerB().getBox2dBody();
 	    			
-	    			tileMapManager.getPlayerB().getBox2dBody().setTransform(((Network.CorrectPosition)object).pos, tileMapManager.getPlayerB().getBox2dBody().getAngle());
+	    			if(b.getPosition().x != p.x || b.getPosition().y != p.y)
+	    			b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
 	    		}
 	        }
 	     });

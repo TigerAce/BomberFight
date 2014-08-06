@@ -6,6 +6,7 @@ import com.game.bomberfight.enums.Direction;
 
 
 
+
 public class Network {
 	public static final int portTCP = 54555;
 	public static final int portUDP = 54777;
@@ -15,6 +16,7 @@ public class Network {
         
          kryo.register(StartMovePlayer.class);
          kryo.register(StopMovePlayer.class);
+         kryo.register(CorrectPosition.class);
          kryo.register(Direction.class);
          kryo.register(Vector2.class);
   
