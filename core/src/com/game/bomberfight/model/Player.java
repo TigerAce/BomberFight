@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -168,7 +169,7 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 	public boolean doKeyUp(int keycode) {
 		if(!remoteControl){
 			keyMap.put(keycode, false);
-		
+			 System.out.println(direction);
 		//sent stop action to server if multiplayer game
 		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
 			MultiplayerGamePlay.client.sendTCP(new Network.StopMovePlayer());
@@ -183,11 +184,22 @@ public class Player extends GameObject implements Controllable, Destructible, Re
     public boolean doKeyDown(int keycode) {
     	if(!remoteControl){
         keyMap.put(keycode, true);
+     
+        
+        if(keycode == Input.Keys.W){
+        	this.direction = Direction.up;
+        }else if(keycode == Input.Keys.A){
+        	this.direction = Direction.left;
+        }else if(keycode == Input.Keys.S){
+        	this.direction = Direction.down;
+        }else if(keycode == Input.Keys.D){
+        	this.direction = Direction.right;
+        }  
         
 		//sent move action to server if multiplayer game
 		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
 		
-			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer(this.getDirection()));
+			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer());
 		}
     	
     	
