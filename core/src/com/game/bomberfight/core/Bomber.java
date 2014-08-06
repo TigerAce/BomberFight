@@ -146,7 +146,7 @@ public class Bomber extends Player implements Picker{
 		
 		int i = 0;
 		for (; i < inventory.size(); i++) {
-			if (inventory.get(i).getName() == item.getName()) {
+			if (inventory.get(i).getName().equalsIgnoreCase(item.getName())) {
 				isExist = true;
 				break;
 			}
@@ -260,6 +260,15 @@ public class Bomber extends Player implements Picker{
 	 */
 	public ArrayList<Item> getInventory() {
 		return inventory;
+	}
+	
+	public boolean hasItem(String name) {
+		for (int i = 0; i < inventory.size(); i++) {
+			if (inventory.get(i).getName().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -125,7 +125,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		if(items.size() != 0){
 			Random r = new Random();
 			int rand = r.nextInt(6);
-			if(rand == 1){
+			if(rand > 0){
 				int totalDropProbabilityInterval = 0;
 				//add on probability intervals from item list
 				for(Item item : items){

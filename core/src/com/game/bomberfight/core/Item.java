@@ -24,7 +24,6 @@ public class Item extends GameObject{
 	private int dropProbability; //probability interval
 	private boolean picked = false;
 	private boolean discard = false;
-	private boolean stackable = false;
 	
 	public Item(float x, float y, PlayerGameAttributes attr, float affectTime, int dropProbability) {
 		super(x, y);
@@ -45,6 +44,7 @@ public class Item extends GameObject{
 	
 	public Item(Item item){
 		this(0, 0, new PlayerGameAttributes(item.getAttr()), item.affectTime, item.dropProbability);
+		this.setName(item.getName());
 	}
 
 	@Override
@@ -157,20 +157,6 @@ public class Item extends GameObject{
 
 	public void setDiscard(boolean discard) {
 		this.discard = discard;
-	}
-
-	/**
-	 * @return the stackable
-	 */
-	public boolean isStackable() {
-		return stackable;
-	}
-
-	/**
-	 * @param stackable the stackable to set
-	 */
-	public void setStackable(boolean stackable) {
-		this.stackable = stackable;
 	}
  
 }

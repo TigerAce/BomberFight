@@ -289,20 +289,17 @@ public class GamePlay implements Screen {
 		item.setName("ANNULAR");
 		item.setAffectTime(10);
 		item.getAttr().setCurrStyle(Explosion.Style.ANNULAR);
-		item.setStackable(false);
 		this.itemList.add(item);
 		// add 1 to number of bomb can be placed in one round
 		item = new Item();
 		item.setName("ADDBOMB");
 		item.getAttr().setNumBombPerRound(1);
-		item.setStackable(true);
 		this.itemList.add(item);
 		// add blast power
 		item = new Item();
 		item.setName("POWER_UP");
 		item.getAttr().setPowerX(10f);
 		item.getAttr().setPowerY(10f);
-		item.setStackable(true);
 		this.itemList.add(item);
 		
 		gui = new Gui(this);

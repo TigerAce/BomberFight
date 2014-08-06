@@ -47,7 +47,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		
 		//connect to server
 	    try {
-			client.connect(5000, "192.168.1.5", Network.portTCP, Network.portUDP);	
+			client.connect(5000, "127.0.0.1", Network.portTCP, Network.portUDP);	
 			
 			
 		} catch (IOException e) {

@@ -51,25 +51,28 @@ public class TileMapEffectSystem {
 		Cell cell = tiledMapTileLayer.getCell(x, y);
 		MapProperties mapProperties = cell.getTile().getProperties();
 		Object object = mapProperties.get("effect");
+		Bomber bomber = (Bomber) player;
 		if (object != null) {
 			String value = (String) object;
 			if (value.equalsIgnoreCase("speedup")) {
-				Item item = new Item();
-				item.setName("SPEED_UP");
-				item.setAffectTime(1);
-				item.setStackable(false);
-				item.getAttr().setSpeed(5f);
-				item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item4.png", Texture.class));
-				((Bomber)player).pickUp(item);
+				if (!bomber.hasItem("SPEED_UP")) {
+					Item item = new Item();
+					item.setName("SPEED_UP");
+					item.setAffectTime(1);
+					item.getAttr().setSpeed(5f);
+					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item4.png", Texture.class));
+					bomber.pickUp(item);
+				}
 			}
 			if (value.equalsIgnoreCase("speeddown")) {
-				Item item = new Item();
-				item.setName("SPEED_DOWN");
-				item.setAffectTime(1);
-				item.setStackable(false);
-				item.getAttr().setSpeed(-5f);
-				item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item5.png", Texture.class));
-				((Bomber)player).pickUp(item);
+				if (!bomber.hasItem("SPEED_DOWN")) {
+					Item item = new Item();
+					item.setName("SPEED_DOWN");
+					item.setAffectTime(1);
+					item.getAttr().setSpeed(-5f);
+					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item5.png", Texture.class));
+					bomber.pickUp(item);
+				}
 			}
 		}
 	}
