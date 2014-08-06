@@ -23,11 +23,12 @@ import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.interfaces.Destructible;
+import com.game.bomberfight.interfaces.RemoteControllable;
 import com.game.bomberfight.net.Network;
 import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.screen.MultiplayerGamePlay;
 
-public class Player extends GameObject implements Controllable, Destructible{
+public class Player extends GameObject implements Controllable, Destructible, RemoteControllable{
 	
 	protected PlayerGameAttributes attr;
 
@@ -374,11 +375,29 @@ public class Player extends GameObject implements Controllable, Destructible{
 	    box2dBody.applyLinearImpulse(impulsex, impulsey, box2dBody.getWorldCenter().x, box2dBody.getWorldCenter().y, true);
 	}
 
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////
+	
 	public boolean isRemoteControl() {
 		return remoteControl;
 	}
 
 	public void setRemoteControl(boolean remoteControl) {
 		this.remoteControl = remoteControl;
+	}
+
+	@Override
+	public void startMovePlayer() {
+		this.movement.y = this.attr.getSpeed();
+		
+	}
+
+	@Override
+	public void stopMovePlayer() {
+		this.movement.y = 0;
+		
 	}
 }

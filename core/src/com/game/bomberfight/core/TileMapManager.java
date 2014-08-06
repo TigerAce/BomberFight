@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MultiplayerGamePlay;
 import com.game.bomberfight.utility.Config;
 
 public class TileMapManager {
@@ -151,18 +152,42 @@ public class TileMapManager {
 					
 					// Set the controller according to the controller property
 					String controller = (String) objectProperties.get("controller");
-					if (controller.equalsIgnoreCase("wasdspace")) {
-						bomber.setController(new BomberController(true));
-						//bomber.setController(new AndroidController());
-						playerA = bomber;
-						bomber.setName("playerA");
-					} else {
-						if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.SINGLE_GAME_PLAY_STATE)
-						bomber.setController(new BomberController(false));
-						playerB = bomber;
-						playerB.setRemoteControl(true);
-						bomber.setName("playerB");
+					
+					
+					
+					
+					
+					if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
+						
+							if (controller.equalsIgnoreCase("wasdspace")) {
+								bomber.setController(new BomberController(true));
+								playerA = bomber;
+								bomber.setName("playerA");
+							} else {
+								
+								//bomber.setController(new BomberController(false));
+								playerB = bomber;
+								playerB.setRemoteControl(true);
+								bomber.setName("playerB");
+							}
+						
+				
+					}else{
+						
+						if (controller.equalsIgnoreCase("wasdspace")) {
+							bomber.setController(new BomberController(true));
+							//bomber.setController(new AndroidController());
+							playerA = bomber;
+							bomber.setName("playerA");
+						} else {
+							
+							bomber.setController(new BomberController(false));
+							playerB = bomber;
+							playerB.setRemoteControl(true);
+							bomber.setName("playerB");
+						}
 					}
+					
 					
 					// Attach a point light to player
 					PointLight pl = new PointLight(gamePlay.getRayHandler(), 1000, new Color(0.1f, 0.5f,

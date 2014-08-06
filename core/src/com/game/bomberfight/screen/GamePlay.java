@@ -33,58 +33,58 @@ import com.game.bomberfight.utility.FpsDisplayer;
 
 public class GamePlay implements Screen {
 
-	private World world;
-	private Box2DDebugRenderer debugRenderer;
-	private ExtendViewport viewport;
-	private SpriteBatch batch;
-	private CollisionListener collisionListener;
-	private RayHandler rayHandler;
+	protected World world;
+	protected Box2DDebugRenderer debugRenderer;
+	protected ExtendViewport viewport;
+	protected SpriteBatch batch;
+	protected CollisionListener collisionListener;
+	protected RayHandler rayHandler;
 
-	private AssetManager assetManager = new AssetManager();
-	private GameObjectManager gameObjectManager = new GameObjectManager();
+	protected AssetManager assetManager = new AssetManager();
+	protected GameObjectManager gameObjectManager = new GameObjectManager();
 	/**
 	 * TODO: Not sure whether we need to put this Controllable thingy into a
 	 * manager? For simplicity, I just create a HashSet for it.
 	 */
-	private HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
+	protected HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
 
 	/**
 	 * store all explosions
 	 */
-	private ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+	protected ArrayList<Explosion> explosions = new ArrayList<Explosion>();
 	
 	/**
 	 * item list
 	 */
-	private ArrayList<Item> itemList = new ArrayList<Item>();
+	protected ArrayList<Item> itemList = new ArrayList<Item>();
 
-	private final float TIMESTEP = 1 / 60f;
-	private final int VELOCITYITERATIONS = 3;
-	private final int POSITIONITERATIONS = 2;
+	protected final float TIMESTEP = 1 / 60f;
+	protected final int VELOCITYITERATIONS = 3;
+	protected final int POSITIONITERATIONS = 2;
 
 	/**
 	 * Since world.step only accept a fixed TIMESTEP, a timeAccumulator is used
 	 * to smooth display in different environment with varies FPS
 	 */
-	private float timeAccumulator = 0.0f;
+	protected float timeAccumulator = 0.0f;
 	
 	/*
 	 * tileMapManager load tile map first and create objects(include players) on the map
 	 * then update and render it
 	 */
-	private TileMapManager tileMapManager;
+	protected TileMapManager tileMapManager;
 	
-	private long timeNow = 0;
+	protected long timeNow = 0;
 	
-	private boolean isEfficiencyTest = false;
+	protected boolean isEfficiencyTest = false;
 	
-	private Gui gui;
+	protected Gui gui;
 	
-	private InputMultiplexer inputMultiplexer;
+	protected InputMultiplexer inputMultiplexer;
 	
-	private GameInfo gameInfo;
+	protected GameInfo gameInfo;
 	
-	private TileMapEffectSystem tileMapEffectSystem;
+	protected TileMapEffectSystem tileMapEffectSystem;
 
 	@Override
 	public void render(float delta) {
