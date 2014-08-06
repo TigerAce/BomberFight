@@ -218,8 +218,8 @@ public class GamePlay implements Screen {
 	@Override
 	public void show() {
 		// Set the current game state to BomberFight.GAME_PLAY_STATE
-		((BomberFight) Gdx.app.getApplicationListener())
-				.setGameState(BomberFight.GAME_PLAY_STATE);
+	//	((BomberFight) Gdx.app.getApplicationListener())
+	//			.setGameState(BomberFight.SINGLE_GAME_PLAY_STATE);
 
 		/**********************************************************
 		 * environment setup *
@@ -240,6 +240,7 @@ public class GamePlay implements Screen {
 		/**
 		 * collision listener setup
 		 */
+		
 		collisionListener = new CollisionListener();
 		world.setContactListener(collisionListener);
 

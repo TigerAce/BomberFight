@@ -19,10 +19,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.interfaces.Destructible;
+import com.game.bomberfight.net.Network;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MultiplayerGamePlay;
 
 public class Player extends GameObject implements Controllable, Destructible{
 	
@@ -37,6 +40,7 @@ public class Player extends GameObject implements Controllable, Destructible{
     protected Direction direction = Direction.up;
     protected Animation animation = null;
     protected float animTime;
+    protected boolean remoteControl = false;
     
   
     public enum Direction {
@@ -165,14 +169,32 @@ public class Player extends GameObject implements Controllable, Destructible{
 
 	@Override
 	public boolean doKeyUp(int keycode) {
-		keyMap.put(keycode, false);
+		if(!remoteControl){
+			keyMap.put(keycode, false);
+		
+		//sent stop action to server if multiplayer game
+		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
+			MultiplayerGamePlay.client.sendTCP(new Network.StopMovePlayer());
+		}
+		
+		}
 	
 		return true;
 	}
 
     @Override
     public boolean doKeyDown(int keycode) {
+    	if(!remoteControl){
         keyMap.put(keycode, true);
+        
+		//sent move action to server if multiplayer game
+		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
+			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer());
+		}
+    	
+    	
+    	}
+     
         return true;
     }
 
@@ -316,7 +338,7 @@ public class Player extends GameObject implements Controllable, Destructible{
 	}
 	
 	public void moveUp() {
-	
+		
 		this.movement.y = this.attr.getSpeed();
 	}
 	
@@ -350,5 +372,13 @@ public class Player extends GameObject implements Controllable, Destructible{
 	    float impulsex = box2dBody.getMass() * velChangex;
 	    float impulsey = box2dBody.getMass() * velChangey;
 	    box2dBody.applyLinearImpulse(impulsex, impulsey, box2dBody.getWorldCenter().x, box2dBody.getWorldCenter().y, true);
+	}
+
+	public boolean isRemoteControl() {
+		return remoteControl;
+	}
+
+	public void setRemoteControl(boolean remoteControl) {
+		this.remoteControl = remoteControl;
 	}
 }

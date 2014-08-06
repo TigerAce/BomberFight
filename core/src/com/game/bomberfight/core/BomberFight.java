@@ -13,7 +13,8 @@ public class BomberFight extends Game {
      * Define different game state
      */
 	public static final int SPLASH_SCREEN_STATE = 0;
-    public static final int GAME_PLAY_STATE = 1;
+    public static final int SINGLE_GAME_PLAY_STATE = 1;
+    public static final int MULTIPLAYER_GAME_PLAY_STATE = 2;
 
     /**
      * Set the initial game state to -1, so that it won't math any of the states declared above.

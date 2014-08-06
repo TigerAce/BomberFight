@@ -37,7 +37,7 @@ public class LoadingScreen implements Screen {
 		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
 		skin = new Skin();
 		stage = new Stage();
-		gamePlay = new GamePlay(); 
+		gamePlay = new MultiplayerGamePlay(); 
 		assetManager = gamePlay.getAssetManager();
 		Gdx.input.setInputProcessor(stage);
 	}

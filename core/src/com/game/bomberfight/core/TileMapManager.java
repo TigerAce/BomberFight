@@ -5,6 +5,7 @@ import java.util.Iterator;
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
@@ -156,8 +157,10 @@ public class TileMapManager {
 						playerA = bomber;
 						bomber.setName("playerA");
 					} else {
+						if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.SINGLE_GAME_PLAY_STATE)
 						bomber.setController(new BomberController(false));
 						playerB = bomber;
+						playerB.setRemoteControl(true);
 						bomber.setName("playerB");
 					}
 					
