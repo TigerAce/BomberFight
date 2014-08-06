@@ -1,6 +1,7 @@
 package com.game.bomberfight.net;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.game.bomberfight.enums.Direction;
 
 
 
@@ -13,12 +14,19 @@ public class Network {
         
          kryo.register(StartMovePlayer.class);
          kryo.register(StopMovePlayer.class);
+         kryo.register(Direction.class);
+        
   
 	}
 	
 	
 	public static class StartMovePlayer{
+		public Direction direction;
 		
+		public StartMovePlayer(){};
+		public StartMovePlayer(Direction direction){
+			this.direction = direction;
+		}
 	}
 	
 	public static class StopMovePlayer{

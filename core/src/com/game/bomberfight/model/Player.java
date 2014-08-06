@@ -21,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.PlayerGameAttributes;
+import com.game.bomberfight.enums.Direction;
 import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.RemoteControllable;
@@ -42,11 +43,6 @@ public class Player extends GameObject implements Controllable, Destructible, Re
     protected Animation animation = null;
     protected float animTime;
     protected boolean remoteControl = false;
-    
-  
-    public enum Direction {
-    	left, right, down, up, left_up, left_down, right_up, right_down
-    }
     
 
     /**
@@ -190,7 +186,8 @@ public class Player extends GameObject implements Controllable, Destructible, Re
         
 		//sent move action to server if multiplayer game
 		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
-			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer());
+		
+			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer(this.getDirection()));
 		}
     	
     	
@@ -390,14 +387,21 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 	}
 
 	@Override
-	public void startMovePlayer() {
-		this.movement.y = this.attr.getSpeed();
+	public void startMovePlayer(Direction direction) {
+		if(direction.equals(Direction.up))
+			this.movement.y = this.attr.getSpeed();
+		else if(direction.equals(Direction.down))
+			this.movement.y = -this.attr.getSpeed();
+		else if(direction.equals(Direction.left))
+			this.movement.x = -this.attr.getSpeed();
+		else if(direction.equals(Direction.right))
+			this.movement.x = this.attr.getSpeed();
 		
 	}
 
 	@Override
 	public void stopMovePlayer() {
 		this.movement.y = 0;
-		
+		this.movement.x = 0;
 	}
 }

@@ -54,8 +54,8 @@ public class MultiplayerGamePlay extends GamePlay{
 	        public void received (Connection connection, Object object) {
 	        	
 	        	if(object instanceof Network.StartMovePlayer){
-	        	
-	    			tileMapManager.getPlayerB().startMovePlayer();
+	       
+	    			tileMapManager.getPlayerB().startMovePlayer(((Network.StartMovePlayer)object).direction);
 	        		
 	    		}
 	    		
