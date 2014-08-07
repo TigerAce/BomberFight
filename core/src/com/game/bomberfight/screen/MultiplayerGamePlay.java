@@ -4,6 +4,7 @@ package com.game.bomberfight.screen;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.esotericsoftware.kryonet.Client;
@@ -29,13 +30,9 @@ public class MultiplayerGamePlay extends GamePlay{
 		//correct position every 1 sec
 		correction -= delta;
 		if(correction <= 0){
-			Body b;
-			if(position == 1){
-				 b = tileMapManager.getPlayerA().getBox2dBody();
-			}else{
-				 b = tileMapManager.getPlayerB().getBox2dBody();
-			}
-			client.sendTCP(new Network.CorrectPosition(new Vector2(b.getPosition().x,b.getPosition().y)));
+			Body b = playerList.get(position).getBox2dBody();
+		
+			client.sendTCP(new Network.CorrectPosition(new Vector2(b.getPosition().x,b.getPosition().y),position));
 			correction = 1;
 		}
 	}
@@ -45,7 +42,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		// TODO Auto-generated method stub
 		((BomberFight) Gdx.app.getApplicationListener())
 		.setGameState(BomberFight.MULTIPLAYER_GAME_PLAY_STATE);
-		
+		System.out.println("multi");
 		super.show();
 		//register client
 		Network.register(client);
@@ -55,7 +52,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		
 		//connect to server
 	    try {
-			client.connect(5000, "127.0.0.1", Network.portTCP, Network.portUDP);	
+			client.connect(5000, "192.168.1.5", Network.portTCP, Network.portUDP);	
 		
 			
 		} catch (IOException e) {
@@ -90,48 +87,32 @@ public class MultiplayerGamePlay extends GamePlay{
 	        		
 	        	}
 	        	
-	        	if(object instanceof Network.StartMovePlayer){
-	        		if(position == 1){
-	        			tileMapManager.getPlayerB().startMovePlayer(((Network.StartMovePlayer)object).direction);
-	        		}else{
-	        			tileMapManager.getPlayerA().startMovePlayer(((Network.StartMovePlayer)object).direction);
-	        		}
+	        	if(object instanceof Network.RemoteControl){
+	        		
 	        		
 	    		}
 	    		
 	    		if(object instanceof Network.StopMovePlayer){
-	    			if(position == 1){
-	        			tileMapManager.getPlayerB().stopMovePlayer();
-	        		}else{
-	        			tileMapManager.getPlayerA().stopMovePlayer();
-	        		}
+	    			
 	    			
 	    		}
 	    		
 	    		if(object instanceof Network.CorrectPosition){
 	    		
-	    			if(position == 1){
+	    			
 	    				Vector2 p = ((Network.CorrectPosition)object).pos;
-		    			Body b = tileMapManager.getPlayerB().getBox2dBody();
-		    			
+	    				int playerID = ((Network.CorrectPosition)object).playerID;
+		    		
+		    			Body b = playerList.get(playerID).getBox2dBody();
 		    			if(b.getPosition().x != p.x || b.getPosition().y != p.y){
 		    				if(!world.isLocked()){
 		    					b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
 		    				}
 		    			}
-	        		}else{
-	        			
-	        			Vector2 p = ((Network.CorrectPosition)object).pos;
-		    			Body b = tileMapManager.getPlayerA().getBox2dBody();
-		    			
-		    			if(b.getPosition().x != p.x || b.getPosition().y != p.y){
-		    				if(!world.isLocked()){
-		    					b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
-		    				}
-		    			}
-	        		}
-	    	
 	    		}
+	    		
+	    		
+	    		
 	        }
 	     });
 	    
@@ -154,16 +135,12 @@ public class MultiplayerGamePlay extends GamePlay{
 	}
 	
 	public void assignController(int position){
-		if(position == 1){
-			tileMapManager.getPlayerA().setRemoteControl(false);
-			((Bomber)tileMapManager.getPlayerA()).setController(new BomberController(true));
-		}
-		
-		if(position == 2){
-			tileMapManager.getPlayerB().setRemoteControl(false);
-			((Bomber)tileMapManager.getPlayerB()).setController(new BomberController(true));
-		}
-	
+		Bomber me = (Bomber) playerList.get(position);
+		gui.setFixedStatusBar(me);
+		BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
+		inputMultiplexer.addProcessor(bomberController);
+		me.setController(bomberController);
+
 	}
 	
 }

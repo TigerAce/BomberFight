@@ -16,7 +16,7 @@ public class Network {
 	public static void register (EndPoint endPoint) {
          Kryo kryo = endPoint.getKryo();
         
-         kryo.register(StartMovePlayer.class);
+         kryo.register(RemoteControl.class);
          kryo.register(StopMovePlayer.class);
          kryo.register(CorrectPosition.class);
          kryo.register(JoinGame.class);
@@ -51,20 +51,26 @@ public class Network {
 	}
 	
 	public static class CorrectPosition{
+		public int playerID;
 		public Vector2 pos;
 		
 		public CorrectPosition(){}
-		public CorrectPosition(Vector2 pos){
+		public CorrectPosition(Vector2 pos, int playerID){
 			this.pos = pos;
+			this.playerID = playerID;
 		}
 	}
 	
-	public static class StartMovePlayer{
-		public Direction direction;
+	public static class RemoteControl{
+		public int playerID;
+		public int keycode;
+		public boolean upOrDown;
 		
-		public StartMovePlayer(){}
-		public StartMovePlayer(Direction direction){
-			this.direction = direction;
+		public RemoteControl(){}
+		public RemoteControl(int playerID, int keycode, boolean upOrDown){
+			this.playerID = playerID;
+			this.keycode = keycode;
+			this.upOrDown = upOrDown;
 		}
 	}
 	

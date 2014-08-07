@@ -38,7 +38,7 @@ public class LoadingScreen implements Screen {
 		skin = new Skin();
 		stage = new Stage();
 		//gamePlay = new MultiplayerGamePlay();
-		gamePlay = new GamePlay();
+		gamePlay = new MultiplayerGamePlay();
 		assetManager = gamePlay.getAssetManager();
 		Gdx.input.setInputProcessor(stage);
 	}

@@ -292,21 +292,27 @@ public class GamePlay implements Screen {
 					spawnPoint.speed, spawnPoint.hitPoint, spawnPoint.numBombPerRound, spawnPoint.roundInterval);
 			bomber.setAnimation(assetManager.get("img/animation/soldier1.png",  Texture.class), 3, 1);
 			bomber.create();
+		
 			playerList.add(bomber);
 			// Attach a point light to player
 			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
 					0.5f, 1f), 50, 0, 0);
 			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
-			if (i == 0) {
-				gui.setFixedStatusBar(bomber);
-				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
-				inputMultiplexer.addProcessor(bomberController);
-				bomber.setController(bomberController);
-			} else {
+			
+			if(gameInfo.networkMode.equals("WAN")){
 				gui.setHUD(bomber);
-				BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
-				inputMultiplexer.addProcessor(bomberController);
-				bomber.setController(bomberController);
+			}else{
+				if (i == 0) {
+					gui.setFixedStatusBar(bomber);
+					BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
+					inputMultiplexer.addProcessor(bomberController);
+					bomber.setController(bomberController);
+				} else {
+					gui.setHUD(bomber);
+					BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
+					inputMultiplexer.addProcessor(bomberController);
+					bomber.setController(bomberController);
+				}
 			}
 		}
 		

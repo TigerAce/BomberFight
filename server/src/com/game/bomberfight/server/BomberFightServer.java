@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.game.bomberfight.server.Network;
+import com.game.bomberfight.server.Network.RemoteControl;
 import com.game.bomberfight.server.Player;
 import com.game.bomberfight.server.Room;
 import com.game.bomberfight.server.Room.RoomState;
@@ -42,7 +43,7 @@ public class BomberFightServer{
 		//distribute player born position  & send player position to each client
 		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
 
-			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.AssignBornPosition((short)(i + 1)));
+			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.AssignBornPosition((short)(i)));
 		}
 		
 		//set up player check list for room
@@ -192,7 +193,7 @@ public class BomberFightServer{
 		    		/********************************
 		    		 * if player moved              *
 		    		 ********************************/
-			    	if(object instanceof Network.StartMovePlayer){
+			    	if(object instanceof RemoteControl){
 			    		server.sendToAllExceptTCP(connection.getID(), object);
 			    	}
 			    	
