@@ -22,15 +22,22 @@ public class Network {
          kryo.register(Direction.class);
          kryo.register(Vector2.class);
          kryo.register(Ping.class);
-       
+         kryo.register(BornPosition.class);
 	}
 	
+	public static class BornPosition{
+		public short positionNumber;
+		public BornPosition(){}
+		public BornPosition(short positionNumber){
+			this.positionNumber = positionNumber;
+		}
+	}
 	public static class JoinGame{
 		public String mapName;
-		public int numPlayers;
+		public short numPlayers;
 		
-		public JoinGame(){};
-		public JoinGame(String mapName, int numPlayer){
+		public JoinGame(){}
+		public JoinGame(String mapName, short numPlayer){
 			this.mapName = mapName;
 			this.numPlayers = numPlayer;
 		}
@@ -39,7 +46,7 @@ public class Network {
 	public static class CorrectPosition{
 		public Vector2 pos;
 		
-		public CorrectPosition(){};
+		public CorrectPosition(){}
 		public CorrectPosition(Vector2 pos){
 			this.pos = pos;
 		}
@@ -48,7 +55,7 @@ public class Network {
 	public static class StartMovePlayer{
 		public Direction direction;
 		
-		public StartMovePlayer(){};
+		public StartMovePlayer(){}
 		public StartMovePlayer(Direction direction){
 			this.direction = direction;
 		}

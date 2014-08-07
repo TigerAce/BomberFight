@@ -48,7 +48,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		//connect to server
 	    try {
 			client.connect(5000, "192.168.1.5", Network.portTCP, Network.portUDP);	
-			client.sendTCP(new Network.JoinGame("map1", 2));
+			client.sendTCP(new Network.JoinGame("map1", (short)2));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -63,6 +63,9 @@ public class MultiplayerGamePlay extends GamePlay{
 	    	
 	    
 	        public void received (Connection connection, Object object) {
+	        	if(object instanceof Network.BornPosition){
+	        		System.out.println(((Network.BornPosition)object).positionNumber);
+	        	}
 	        	
 	        	if(object instanceof Network.StartMovePlayer){
 	       

@@ -65,6 +65,14 @@ public class Room {
 	public void setWaitingPlayer(ArrayList<Player> waitingPlayer) {
 		this.playerInRoom = waitingPlayer;
 	}
+
+	public ArrayList<Player> getPlayerInRoom() {
+		return playerInRoom;
+	}
+
+	public void setPlayerInRoom(ArrayList<Player> playerInRoom) {
+		this.playerInRoom = playerInRoom;
+	}
 	
 	
 }

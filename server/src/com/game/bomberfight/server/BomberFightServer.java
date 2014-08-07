@@ -28,10 +28,10 @@ public class BomberFightServer{
 
 	public static void startGame(Room room){
 		
-		//distribute player born position
-		
-		//send player position to each client
-		
+		//distribute player born position  & send player position to each client
+		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
+			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), i + 1);
+		}
 		//wait all clients create players and signal back to server for completion
 		
 		//signal to all clients to start game
