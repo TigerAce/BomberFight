@@ -27,10 +27,11 @@ public class BomberFightServer{
 	
 
 	public static void startGame(Room room){
-		
+	
 		//distribute player born position  & send player position to each client
 		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
-			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), i + 1);
+
+			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.BornPosition((short)(i + 1)));
 		}
 		//wait all clients create players and signal back to server for completion
 		
@@ -74,15 +75,20 @@ public class BomberFightServer{
 	    	
 	    	public void received (Connection connection, Object object) {
 			    	  
-	    		/**
-	    		 * if a player want to join game
-	    		 */
+	    		/********************************
+	    		 * if a player want to join game*
+	    		 ********************************/
+	    		
 			    	if(object instanceof Network.JoinGame){
 			    		Network.JoinGame jg = (Network.JoinGame)object;
 			    		
 			    		//check if there exist a game satisfy player's requirements
 			    		for(Room room : BomberFightServer.waitingRoomList){
-			    			if(jg.mapName == room.getMapName() && jg.numPlayers == room.getDesireNumPlayer()){
+			    		
+			    			if(jg.mapName.equals(room.getMapName()) && jg.numPlayers == room.getDesireNumPlayer()){
+			    				
+			    				System.out.println("found room for player id:" + connection.getID());
+			    				
 			    				//match the condition, add player to room
 			    				room.addPlayer(BomberFightServer.players.get(connection.getID()));
 			    				
@@ -90,11 +96,17 @@ public class BomberFightServer{
 			    			}
 			    		}
 			    		
+			    	
 			    		//if no room found, create a new room for player
 			    		if(BomberFightServer.players.get(connection.getID()).getRoomNumber() == -1){
+			  
+			    			System.out.println("create room for player id:" + connection.getID());
 			    			
 			    			Room room = new Room(BomberFightServer.waitingRoomList.size() + 1, jg.mapName, Network.MapInfo.mapInfo.get(jg.mapName),jg.numPlayers);
 			    			room.addPlayer(BomberFightServer.players.get(connection.getID()));
+			    			
+			    			//add room to waiting room list
+			    			BomberFightServer.waitingRoomList.add(room);
 			    		}
 			    		
 			    	}

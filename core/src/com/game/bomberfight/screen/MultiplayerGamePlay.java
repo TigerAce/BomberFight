@@ -64,6 +64,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	    
 	        public void received (Connection connection, Object object) {
 	        	if(object instanceof Network.BornPosition){
+	        		
 	        		System.out.println(((Network.BornPosition)object).positionNumber);
 	        	}
 	        	
