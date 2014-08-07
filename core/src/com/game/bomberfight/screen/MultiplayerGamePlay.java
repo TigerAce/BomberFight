@@ -20,7 +20,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	public static final Client client = new Client();
 	private float correction = 1;
 	private int position;
-	private boolean startGame = false;
+	private String startGame[] = {"false"};
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -56,7 +56,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		//connect to server
 	    try {
 			client.connect(5000, "192.168.1.5", Network.portTCP, Network.portUDP);	
-			client.sendTCP(new Network.JoinGame("map1", (short)2));
+		
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +73,10 @@ public class MultiplayerGamePlay extends GamePlay{
 	        public void received (Connection connection, Object object) {
 	        	
 	        	if(object instanceof Network.StartGame){
-	        		startGame = true;
+	        		synchronized(startGame){
+	        			startGame[0] = "true";
+	        			startGame.notify();
+	        		}
 	        		System.out.println("start the game");
 	        	}
 	        	
@@ -132,6 +135,19 @@ public class MultiplayerGamePlay extends GamePlay{
 	        }
 	     });
 	    
+	    
+		client.sendTCP(new Network.JoinGame("map1", (short)2));
+		
+		System.out.println("waiting");
+		synchronized(startGame){
+			while(startGame[0] != "true")
+				try {
+					startGame.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	 
 	    
 
