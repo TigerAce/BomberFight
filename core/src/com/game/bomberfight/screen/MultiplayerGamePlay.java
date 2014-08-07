@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.game.bomberfight.InputSource.BomberController;
+import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.net.Network;
 
@@ -66,6 +68,8 @@ public class MultiplayerGamePlay extends GamePlay{
 	        	if(object instanceof Network.BornPosition){
 	        		
 	        		System.out.println(((Network.BornPosition)object).positionNumber);
+	        		assignController(((Network.BornPosition)object).positionNumber);
+	        		
 	        	}
 	        	
 	        	if(object instanceof Network.StartMovePlayer){
@@ -94,6 +98,18 @@ public class MultiplayerGamePlay extends GamePlay{
 	 
 	    super.show();
 
+	}
+	
+	public void assignController(int position){
+		if(position == 1){
+			tileMapManager.getPlayerA().setRemoteControl(false);
+			((Bomber)tileMapManager.getPlayerA()).setController(new BomberController(true));
+		}
+		if(position == 2){
+			tileMapManager.getPlayerB().setRemoteControl(false);
+			((Bomber)tileMapManager.getPlayerB()).setController(new BomberController(true));
+		}
+	
 	}
 	
 }
