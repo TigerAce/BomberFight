@@ -2,6 +2,7 @@ package com.game.bomberfight.net;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
 import com.game.bomberfight.enums.Direction;
 
 
@@ -17,9 +18,22 @@ public class Network {
          kryo.register(StartMovePlayer.class);
          kryo.register(StopMovePlayer.class);
          kryo.register(CorrectPosition.class);
+         kryo.register(JoinGame.class);
          kryo.register(Direction.class);
          kryo.register(Vector2.class);
-  
+         kryo.register(Ping.class);
+       
+	}
+	
+	public static class JoinGame{
+		public String mapName;
+		public int numPlayers;
+		
+		public JoinGame(){};
+		public JoinGame(String mapName, int numPlayer){
+			this.mapName = mapName;
+			this.numPlayers = numPlayer;
+		}
 	}
 	
 	public static class CorrectPosition{
