@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.TileMapManager;
@@ -18,27 +19,26 @@ import com.game.bomberfight.screen.GamePlay;
 public class TileMapEffectSystem {
 	
 	private TileMapManager tileMapManager;
-	private Player playerA;
-	private Player playerB;
 	private float unitScale;
 	private Matrix4 trans = new Matrix4();
 	private TiledMapTileLayer tiledMapTileLayer;
 	private Vector2 tempVector2 = new Vector2();
 	private Vector3 tempVector3 = new Vector3();
+	private Array<Player> playerList;
 
-	public TileMapEffectSystem(TileMapManager tileMapManager) {
+	public TileMapEffectSystem(TileMapManager tileMapManager, Array<Player> playerList) {
 		// TODO Auto-generated constructor stub
 		this.tileMapManager = tileMapManager;
 		unitScale = this.tileMapManager.getUnitScale();
-		playerA = this.tileMapManager.getPlayerA();
-		playerB = this.tileMapManager.getPlayerB();
 		tiledMapTileLayer = (TiledMapTileLayer) this.tileMapManager.getTiledMap().getLayers().get("image_layer_1");
 		trans.setTranslation(100f / 2.f, 70f / 2.f, 0);
+		this.playerList = playerList;
 	}
 	
 	public void update(float delta) {
-		update(playerA);
-		update(playerB);
+		for (Player player : playerList) {
+			update(player);
+		}
 	}
 	
 	public void update(Player player) {

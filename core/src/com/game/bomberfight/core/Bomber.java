@@ -84,13 +84,6 @@ public class Bomber extends Player implements Picker{
 	}
 
     @Override
-    public void create() {
-    	super.create();
-    	Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-    	((GamePlay)currentScreen).getControllableObjects().add(this);
-    }
-
-    @Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		super.update(delta);
@@ -125,10 +118,6 @@ public class Bomber extends Player implements Picker{
 		if (controller != null) {
 			controller.update();
 		}
-		
-		
-		
-		
 	}
 
 

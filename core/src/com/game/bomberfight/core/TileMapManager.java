@@ -3,11 +3,8 @@ package com.game.bomberfight.core;
 import java.util.Iterator;
 
 import box2dLight.ConeLight;
-import box2dLight.PointLight;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -20,10 +17,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.game.bomberfight.InputSource.BomberController;
-import com.game.bomberfight.model.Player;
+import com.badlogic.gdx.utils.Array;
 import com.game.bomberfight.screen.GamePlay;
-import com.game.bomberfight.screen.MultiplayerGamePlay;
 import com.game.bomberfight.utility.Config;
 
 public class TileMapManager {
@@ -36,15 +31,15 @@ public class TileMapManager {
 	private float unitScale = 1.f / 8.f;
 	private boolean isObjectLoaded = false;
 	private GamePlay gamePlay;
-	private Player playerA;
-	private Player playerB;
+	private Array<PlayerSpawnPoint> PlayerSpawnPointList;
 
 	public TileMapManager(GamePlay gamePlay) {
 		// TODO Auto-generated constructor stub
 		// Initialize tile map and tiledMapRenderer and set the unitscale
 		this.gamePlay = gamePlay;
-		this.tiledMap = this.gamePlay.getAssetManager().get(gamePlay.getGameInfo().gameMap);
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, unitScale);
+		this.tiledMap = this.gamePlay.getAssetManager().get(gamePlay.getGameInfo().mapInfo.tmx);
+		this.tiledMapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, unitScale);
+		this.PlayerSpawnPointList = new Array<PlayerSpawnPoint>();
 		if (!isObjectLoaded) {
 			loadObject(Config.getInstance().get("viewportWidth", Float.class), 
 					Config.getInstance().get("viewportHeight",Float.class));
@@ -146,54 +141,17 @@ public class TileMapManager {
 					int numBombPerRound = Integer.parseInt((String) objectProperties.get("numBombPerRound"));
 					float roundInterval = Float.parseFloat((String) objectProperties.get("roundInterval"));
 					
-					Bomber bomber = new Bomber(vec3.x, vec3.y, width, height, speed, hitpoint, numBombPerRound, roundInterval);
-					bomber.create();
-					bomber.setAnimation(gamePlay.getAssetManager().get("img/animation/soldier1.png", Texture.class), 3, 1);
+					PlayerSpawnPoint spawnPoint = new PlayerSpawnPoint();
+					spawnPoint.x = vec3.x;
+					spawnPoint.y = vec3.y;
+					spawnPoint.width = width;
+					spawnPoint.height = height;
+					spawnPoint.speed = speed;
+					spawnPoint.hitPoint = hitpoint;
+					spawnPoint.numBombPerRound = numBombPerRound;
+					spawnPoint.roundInterval = roundInterval;
 					
-					// Set the controller according to the controller property
-					String controller = (String) objectProperties.get("controller");
-					
-					
-					
-					
-					
-					if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
-						
-							if (controller.equalsIgnoreCase("wasdspace")) {
-							
-								playerA = bomber;
-								playerA.setRemoteControl(true);
-								bomber.setName("playerA");
-							} else {
-								
-								//bomber.setController(new BomberController(false));
-								playerB = bomber;
-								playerB.setRemoteControl(true);
-								bomber.setName("playerB");
-							}
-						
-				
-					}else{
-						
-						if (controller.equalsIgnoreCase("wasdspace")) {
-							bomber.setController(new BomberController(true));
-							//bomber.setController(new AndroidController());
-							playerA = bomber;
-							bomber.setName("playerA");
-						} else {
-							
-							bomber.setController(new BomberController(false));
-							playerB = bomber;
-							playerB.setRemoteControl(true);
-							bomber.setName("playerB");
-						}
-					}
-					
-					
-					// Attach a point light to player
-					PointLight pl = new PointLight(gamePlay.getRayHandler(), 1000, new Color(0.1f, 0.5f,
-							0.5f, 1f), 50, 0, 0);
-					pl.attachToBody(bomber.getBox2dBody(), 0, 0);
+					PlayerSpawnPointList.add(spawnPoint);
 				}
 			}
 			
@@ -220,20 +178,6 @@ public class TileMapManager {
 	}
 
 	/**
-	 * @return the playerA
-	 */
-	public Player getPlayerA() {
-		return playerA;
-	}
-
-	/**
-	 * @return the playerB
-	 */
-	public Player getPlayerB() {
-		return playerB;
-	}
-
-	/**
 	 * @return the unitScale
 	 */
 	public float getUnitScale() {
@@ -252,6 +196,24 @@ public class TileMapManager {
 	 */
 	public TiledMap getTiledMap() {
 		return tiledMap;
+	}
+	
+	public class PlayerSpawnPoint {
+		public float x;
+		public float y;
+		public float width;
+		public float height;
+		public float speed;
+		public float hitPoint;
+		public int numBombPerRound;
+		public float roundInterval;
+	}
+
+	/**
+	 * @return the playerSpawnPointList
+	 */
+	public Array<PlayerSpawnPoint> getPlayerSpawnPointList() {
+		return PlayerSpawnPointList;
 	}
 
 }

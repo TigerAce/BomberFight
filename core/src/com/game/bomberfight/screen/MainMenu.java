@@ -1,5 +1,7 @@
 package com.game.bomberfight.screen;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,26 +26,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.model.MapInfo;
 import com.game.bomberfight.utility.Config;
 
 public class MainMenu implements Screen {
 	
 	private ExtendViewport viewport;
-
-	private Object[] mapEntries = { 
-			"Metal Classic", 
-			"No Hide", 
-			"Mud&Grass", 
-			"Another map2", 
-			"Another map3", 
-			"Another map4", 
-			"Another map5", 
-			"Another map6", 
-			"Another map7", 
-			"Another map8" 
-			};
+	private Array<MapInfo> mapInfoList;
 	
 	private Object[] networkEntries = { 
 			"Localhost", 
@@ -73,6 +67,8 @@ public class MainMenu implements Screen {
 		skin = new Skin();
 		stage = new Stage();
 		gameInfo = new GameInfo();
+		mapInfoList = new Array<MapInfo>();
+		loadMapInfo("data/map.xml");
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -171,16 +167,16 @@ public class MainMenu implements Screen {
 		
 		Label label = new Label("Map:", skin);
 		label.setName("label");
-		table.add(label).left().expand();
+		table.add(label).left().top();
 		
 		table.row();
 		
 		List<Object> list = new List<Object>(skin);
 		list.setName("list");
-		list.setItems(mapEntries);
+		list.setItems(mapInfoList);
 		list.getSelection().setMultiple(false);
 		list.getSelection().setRequired(true);
-		gameInfo.gameMap = "img/tmx/ground2.tmx";
+		gameInfo.mapInfo = mapInfoList.get(0);
 		
 		ScrollPane scrollPane = new ScrollPane(list, skin);
 		scrollPane.setName("scrollpane");
@@ -193,8 +189,8 @@ public class MainMenu implements Screen {
 				// TODO Auto-generated method stub
 				if (actor instanceof List) {
 					@SuppressWarnings("unchecked")
-					List<Object> list = (List<Object>) actor;
-					String item = (String) list.getSelected();
+					List<MapInfo> list = (List<MapInfo>) actor;
+					MapInfo item = (MapInfo) list.getSelected();
 					Group parent = list.getParent();
 					while (!parent.getName().equalsIgnoreCase("splitPane")) {
 						parent = parent.getParent();
@@ -203,22 +199,8 @@ public class MainMenu implements Screen {
 						Table table = parent.findActor("map preview");
 						ScrollPane scrollPane = table.findActor("scrollpane");
 						Container<Image> container = scrollPane.findActor("container");
-						if (item.equalsIgnoreCase("Metal Classic")) {
-							container.setActor(new Image(new Texture(Gdx.files
-									.internal("img/ui/metal_classic.png"))));
-							gameInfo.gameMap = "img/tmx/ground2.tmx";
-						} else if (item.equalsIgnoreCase("No Hide")) {
-							container.setActor(new Image(new Texture(Gdx.files
-									.internal("img/ui/no_hide.png"))));
-							gameInfo.gameMap = "img/tmx/ground1.tmx";
-						} else if (item.equalsIgnoreCase("Mud&Grass")) {
-							container.setActor(new Image(new Texture(Gdx.files
-									.internal("img/ui/mud_grass.png"))));
-							gameInfo.gameMap = "img/tmx/ground4.tmx";
-						} else {
-							container.setActor(null);
-							gameInfo.gameMap = null;
-						}
+						container.setActor(new Image(new Texture(item.preview)));
+						gameInfo.mapInfo = item;
 					}
 				}
 			}
@@ -309,16 +291,17 @@ public class MainMenu implements Screen {
 				// TODO Auto-generated method stub
 				TextButton button = (TextButton) actor;
 				if (button.isPressed()) {
-					if (gameInfo.gameMap == null) {
-						showDialog("Warning!", "The map you selected is not available!");
+					if (!networkMode.equalsIgnoreCase("Localhost") && nickname.isEmpty()) {
+						showDialog("Warning!", "Please input your nickname so that your friends can talk to you!");
 					} else {
-						if (!networkMode.equalsIgnoreCase("Localhost") && nickname.isEmpty()) {
-							showDialog("Warning!", "Please input your nickname so that your friends can talk to you!");
-						} else {
-							LoadingScreen loadingScreen = new LoadingScreen();
-							loadingScreen.setGameInfo(gameInfo);
-							((Game) Gdx.app.getApplicationListener()).setScreen(loadingScreen);
+						gameInfo.gameMode = gameMode;
+						gameInfo.networkMode = networkMode;
+						for (int i = 0; i < gameInfo.mapInfo.maxNumPlayer; i++) {
+							gameInfo.playerList.add("player-"+i);
 						}
+						LoadingScreen loadingScreen = new LoadingScreen();
+						loadingScreen.setGameInfo(gameInfo);
+						((Game) Gdx.app.getApplicationListener()).setScreen(loadingScreen);
 					}
 				}
 			}
@@ -374,6 +357,25 @@ public class MainMenu implements Screen {
 		Dialog dialog = new Dialog(caption, skin);
 		dialog.text(text).button("OK", true).key(Keys.ENTER, true)
 		.key(Keys.ESCAPE, false).show(stage);
+	}
+	
+	public void loadMapInfo(String filename) {
+		XmlReader reader = new XmlReader();
+		Element root = null;
+		try {
+			root = reader.parse(Gdx.files.internal(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (int i = 0; i < root.getChildCount(); i++) {
+			MapInfo mapInfo = new MapInfo();
+			mapInfo.name = root.getChild(i).getChildByName("name").getText();
+			mapInfo.preview = root.getChild(i).getChildByName("preview").getText();
+			mapInfo.tmx = root.getChild(i).getChildByName("tmx").getText();
+			mapInfo.maxNumPlayer = Integer.parseInt(root.getChild(i).getChildByName("maxNumPlayer").getText());
+			mapInfoList.add(mapInfo);
+		}
 	}
 
 }

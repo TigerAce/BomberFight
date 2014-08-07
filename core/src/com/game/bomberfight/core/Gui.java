@@ -29,8 +29,7 @@ public class Gui {
 	private Skin uiSkin;
 	private GamePlay gamePlay;
 	private Table stateTable;
-	private HorizontalGroup buffGroupA;
-	private HorizontalGroup buffGroupB;
+	private Viewport gamePlayViewport;
 
 	public Gui(GamePlay gamePlay) {
 		// TODO Auto-generated constructor stub
@@ -42,14 +41,6 @@ public class Gui {
 		
 		stateTable = new Table();
 		stateTable.setFillParent(true);
-		
-		buffGroupA = new HorizontalGroup();
-		buffGroupA.top();
-		buffGroupB = new HorizontalGroup();
-		buffGroupB.top();
-		
-		stateTable.add(buffGroupA).expand().bottom().left();
-		stateTable.add(buffGroupB).expand().top().right();
 		
 		//stateTable.debug();
 		uiStage.addActor(stateTable);
@@ -74,22 +65,26 @@ public class Gui {
 			stateTable.padTop(0);
 			stateTable.padBottom(0);
 		}
-		//this.gamePlayViewport = viewport;
+		this.gamePlayViewport = viewport;
 	}
 	
 	public void update() {
-		updateBuffs(buffGroupA);
-		updateBuffs(buffGroupB);
-//		if (playerB != null && gamePlayViewport != null) {
-//			float x = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).x;
-//			float y = gamePlayViewport.project(playerB.getBox2dBody().getPosition()).y;
-//			x = x - HPBarB.getWidth() / 2;
-//			y = y + 15;
-//			HPBarB.setPosition(x, y);
-//			HPBarB.setValue(playerB.getAttr().getLife());
-//		} else {
-//			HPBarB.setVisible(false);
-//		}
+		for (Actor actor : uiStage.getActors()) {
+			if (actor instanceof Table) {
+				HorizontalGroup horizontalGroup = ((Table) actor).findActor("fixedstatusbar");
+				if (horizontalGroup != null) {
+					updateBuffs(horizontalGroup);
+				}
+			} else if (actor instanceof HorizontalGroup) {
+				updateBuffs((HorizontalGroup) actor);
+				Player player = (Player) actor.getUserObject();
+				if (gamePlayViewport != null) {
+					float x = gamePlayViewport.project(player.getBox2dBody().getPosition()).x;
+					float y = gamePlayViewport.project(player.getBox2dBody().getPosition()).y;
+					actor.setPosition(x, y);
+				}
+			}
+		}
 		uiStage.act(Gdx.graphics.getDeltaTime());
 	}
 	
@@ -107,16 +102,47 @@ public class Gui {
 	 * @param playerA the playerA to set
 	 * Then create corresponding ui for playerA
 	 */
-	public void setPlayerA(Player player) {
-		createStateGroup(player, buffGroupA);
+	public void setFixedStatusBar(Player player) {
+		HorizontalGroup horizontalGroup = new HorizontalGroup();
+		horizontalGroup.setUserObject(player);
+		horizontalGroup.setName("fixedstatusbar");
+		horizontalGroup.top();
+		stateTable.add(horizontalGroup).expand().top().right();
+		
+		float hp = player.getAttr().getLife();
+		
+		horizontalGroup.addActor(createBuff("bombnumber", player));
+		horizontalGroup.addActor(createBuff("bombpower", player));
+		
+		Table table = createHPBar("hpbar", player);
+		Slider slider = table.findActor("slider");
+		slider.setRange(0, hp);
+		slider.setStepSize(hp / 100f);
+		slider.setValue(hp);
+		horizontalGroup.addActor(table);
 	}
 
 	/**
 	 * @param playerB the playerB to set
 	 * Then create corresponding ui for playerB
 	 */
-	public void setPlayerB(Player player) {
-		createStateGroup(player, buffGroupB);
+	public void setHUD(Player player) {
+		HorizontalGroup horizontalGroup = new HorizontalGroup();
+		horizontalGroup.setUserObject(player);
+		horizontalGroup.top();
+		uiStage.addActor(horizontalGroup);
+		
+		float hp = player.getAttr().getLife();
+		
+		horizontalGroup.addActor(createBuff("bombnumber", player));
+		horizontalGroup.addActor(createBuff("bombpower", player));
+		
+		Table table = createHPBar("hpbar", player);
+		Slider slider = table.findActor("slider");
+		slider.setRange(0, hp);
+		slider.setStepSize(hp / 100f);
+		slider.setValue(hp);
+		horizontalGroup.addActor(table);
 	}
 	
 	public void updateBuffs(HorizontalGroup buffGroup) {
@@ -149,11 +175,19 @@ public class Gui {
 	}
 	
 	public void pickUpBuff(Player player, Item item) {
-		if (player.getName().equalsIgnoreCase("playerA")) {
-			buffGroupA.addActor(createBuff(item.getName(), item));
-		}
-		if (player.getName().equalsIgnoreCase("playerB")) {
-			buffGroupB.addActorAt(0, createBuff(item.getName(), item));
+		for (Actor actor : uiStage.getActors()) {
+			HorizontalGroup horizontalGroup = null;
+			if (actor instanceof Table) {
+				horizontalGroup = ((Table) actor).findActor("fixedstatusbar");
+			} else if (actor instanceof HorizontalGroup) {
+				horizontalGroup = (HorizontalGroup) actor;
+			}
+			if (horizontalGroup != null) {
+				Player tempPlayer = (Player) horizontalGroup.getUserObject();
+				if (player == tempPlayer) {
+					horizontalGroup.addActorAt(0, createBuff(item.getName(), item));
+				}
+			}
 		}
 	}
 	
@@ -224,27 +258,6 @@ public class Gui {
 		table.add(slider);
 		
 		return table;
-	}
-	
-	public void createStateGroup(Player player, HorizontalGroup buffGroup) {
-		float hp = player.getAttr().getLife();
-		
-		if (buffGroup == buffGroupB) {
-			buffGroup.addActor(createBuff("bombnumber", player));
-			buffGroup.addActor(createBuff("bombpower", player));
-		}
-		
-		Table table = createHPBar("hpbar", player);
-		Slider slider = table.findActor("slider");
-		slider.setRange(0, hp);
-		slider.setStepSize(hp / 100f);
-		slider.setValue(hp);
-		buffGroup.addActor(table);
-		
-		if (buffGroup == buffGroupA) {
-			buffGroup.addActor(createBuff("bombnumber", player));
-			buffGroup.addActor(createBuff("bombpower", player));
-		}
 	}
 
 }

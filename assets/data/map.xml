@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapList>
+	<map>
+		<name>Metal Classic</name>
+		<tmx>img/tmx/ground2.tmx</tmx>
+		<preview>img/ui/metal_classic.png</preview>
+		<maxNumPlayer>2</maxNumPlayer>
+	</map>
+
+	<map>
+		<name>No Hide</name>
+		<tmx>img/tmx/ground1.tmx</tmx>
+		<preview>img/ui/no_hide.png</preview>
+		<maxNumPlayer>2</maxNumPlayer>
+	</map>
+
+	<map>
+		<name>Mud&Grass</name>
+		<tmx>img/tmx/ground4.tmx</tmx>
+		<preview>img/ui/mud_grass.png</preview>
+		<maxNumPlayer>2</maxNumPlayer>
+	</map>
+</mapList>

@@ -1,11 +1,7 @@
 package com.game.bomberfight.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -20,17 +16,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.game.bomberfight.core.BomberFight;
 import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.enums.Direction;
-import com.game.bomberfight.interfaces.Controllable;
 import com.game.bomberfight.interfaces.Destructible;
-import com.game.bomberfight.interfaces.RemoteControllable;
-import com.game.bomberfight.net.Network;
 import com.game.bomberfight.screen.GamePlay;
-import com.game.bomberfight.screen.MultiplayerGamePlay;
 
-public class Player extends GameObject implements Controllable, Destructible, RemoteControllable{
+public class Player extends GameObject implements Destructible {
 	
 	protected PlayerGameAttributes attr;
 
@@ -39,11 +30,9 @@ public class Player extends GameObject implements Controllable, Destructible, Re
     protected float width = -1;
     protected float height = -1;
     protected Sprite sprite;
-    protected Map<Integer, Boolean> keyMap = new LinkedHashMap<Integer, Boolean>();
     protected Direction direction = Direction.up;
     protected Animation animation = null;
     protected float animTime;
-    protected boolean remoteControl = false;
     
 
     /**
@@ -161,83 +150,6 @@ public class Player extends GameObject implements Controllable, Destructible, Re
     	super.dispose();
     }
 
-    /***************************************
-	 * Controllable implementations *
-	 ***************************************/
-
-	@Override
-	public boolean doKeyUp(int keycode) {
-		if(!remoteControl){
-			keyMap.put(keycode, false);
-		
-		//sent stop action to server if multiplayer game
-		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
-			MultiplayerGamePlay.client.sendTCP(new Network.StopMovePlayer());
-		}
-		
-		}
-	
-		return true;
-	}
-
-    @Override
-    public boolean doKeyDown(int keycode) {
-    	if(!remoteControl){
-        keyMap.put(keycode, true);
-     
-        
-        if(keycode == Input.Keys.W){
-        	this.direction = Direction.up;
-        }else if(keycode == Input.Keys.A){
-        	this.direction = Direction.left;
-        }else if(keycode == Input.Keys.S){
-        	this.direction = Direction.down;
-        }else if(keycode == Input.Keys.D){
-        	this.direction = Direction.right;
-        }  
-        
-		//sent move action to server if multiplayer game
-		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
-		
-			MultiplayerGamePlay.client.sendTCP(new Network.StartMovePlayer(this.direction));
-		}
-    	
-    	
-    	}
-     
-        return true;
-    }
-
-    @Override
-    public boolean doKeyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean doTouchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean doTouchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean doTouchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean doMouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean doScrolled(int amount) {
-        return false;
-    }
-
 	@Override
 	public void damage(ContactImpulse impulse) {
 		attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
@@ -320,13 +232,6 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 	}
 
 	/**
-	 * @return the keyMap
-	 */
-	public Map<Integer, Boolean> getKeyMap() {
-		return keyMap;
-	}
-
-	/**
 	 * @return the direction
 	 */
 	public Direction getDirection() {
@@ -384,36 +289,4 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 	    box2dBody.applyLinearImpulse(impulsex, impulsey, box2dBody.getWorldCenter().x, box2dBody.getWorldCenter().y, true);
 	}
 
-	
-	
-	
-	
-	//////////////////////////////////////////////////////////////////////
-	
-	public boolean isRemoteControl() {
-		return remoteControl;
-	}
-
-	public void setRemoteControl(boolean remoteControl) {
-		this.remoteControl = remoteControl;
-	}
-
-	@Override
-	public void startMovePlayer(Direction direction) {
-		if(direction.equals(Direction.up))
-			this.movement.y = this.attr.getSpeed();
-		else if(direction.equals(Direction.down))
-			this.movement.y = -this.attr.getSpeed();
-		else if(direction.equals(Direction.left))
-			this.movement.x = -this.attr.getSpeed();
-		else if(direction.equals(Direction.right))
-			this.movement.x = this.attr.getSpeed();
-		
-	}
-
-	@Override
-	public void stopMovePlayer() {
-		this.movement.y = 0;
-		this.movement.x = 0;
-	}
 }

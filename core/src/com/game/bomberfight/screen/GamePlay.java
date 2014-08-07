@@ -1,32 +1,38 @@
 package com.game.bomberfight.screen;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import box2dLight.Light;
+import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
-import com.game.bomberfight.core.BomberFight;
+import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.core.Gui;
 import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.TileMapManager;
-import com.game.bomberfight.interfaces.Controllable;
+import com.game.bomberfight.core.TileMapManager.PlayerSpawnPoint;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.model.Player;
 import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
@@ -42,11 +48,6 @@ public class GamePlay implements Screen {
 
 	protected AssetManager assetManager = new AssetManager();
 	protected GameObjectManager gameObjectManager = new GameObjectManager();
-	/**
-	 * TODO: Not sure whether we need to put this Controllable thingy into a
-	 * manager? For simplicity, I just create a HashSet for it.
-	 */
-	protected HashSet<Controllable> controllableObjects = new HashSet<Controllable>();
 
 	/**
 	 * store all explosions
@@ -85,6 +86,8 @@ public class GamePlay implements Screen {
 	protected GameInfo gameInfo;
 	
 	protected TileMapEffectSystem tileMapEffectSystem;
+	
+	protected Array<Player> playerList = new Array<Player>();;
 
 	@Override
 	public void render(float delta) {
@@ -244,27 +247,6 @@ public class GamePlay implements Screen {
 		collisionListener = new CollisionListener();
 		world.setContactListener(collisionListener);
 
-		/**
-		 * load resources
-		 */
-//		TextureParameter textureParameter = new TextureParameter();
-//		textureParameter.minFilter = TextureFilter.Linear;
-//		textureParameter.magFilter = TextureFilter.Linear;
-//		assetManager.load("img/texture/crate4.jpg", Texture.class, textureParameter);
-//		assetManager.load("img/texture/brick3.jpg", Texture.class, textureParameter);
-//		assetManager.load("img/animation/soldier1.png", Texture.class, textureParameter);
-//		assetManager.load("particle/flame.p", ParticleEffect.class);
-//		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
-//		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);
-//		assetManager.load("img/texture/item2.png", Texture.class, textureParameter);
-//		assetManager.load("img/texture/item3.png", Texture.class, textureParameter);
-//		// load audio
-//		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
-//		assetManager.load("audio/timer/timer1.mp3", Sound.class);
-//		
-//		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-//		assetManager.load("img/tmx/ground2.tmx", TiledMap.class);
-
 		// create ray handler
 		rayHandler = new RayHandler(world);
 		Light.setContactFilter((short)1, (short)-1, (short)1);
@@ -303,10 +285,32 @@ public class GamePlay implements Screen {
 		this.itemList.add(item);
 		
 		gui = new Gui(this);
-		gui.setPlayerA(tileMapManager.getPlayerA());
-		gui.setPlayerB(tileMapManager.getPlayerB());
 		
-		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager);
+		for (int i = 0; i < tileMapManager.getPlayerSpawnPointList().size; i++) {
+			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
+			Bomber bomber = new Bomber(spawnPoint.x, spawnPoint.y, spawnPoint.width, spawnPoint.height, 
+					spawnPoint.speed, spawnPoint.hitPoint, spawnPoint.numBombPerRound, spawnPoint.roundInterval);
+			bomber.setAnimation(assetManager.get("img/animation/soldier1.png",  Texture.class), 3, 1);
+			bomber.create();
+			playerList.add(bomber);
+			// Attach a point light to player
+			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
+					0.5f, 1f), 50, 0, 0);
+			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
+			if (i == 0) {
+				gui.setFixedStatusBar(bomber);
+				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
+				inputMultiplexer.addProcessor(bomberController);
+				bomber.setController(bomberController);
+			} else {
+				gui.setHUD(bomber);
+				BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
+				inputMultiplexer.addProcessor(bomberController);
+				bomber.setController(bomberController);
+			}
+		}
+		
+		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 	}
 
 	@Override
@@ -352,14 +356,6 @@ public class GamePlay implements Screen {
 
 	public void setGameObjectManager(GameObjectManager gameObjectManager) {
 		this.gameObjectManager = gameObjectManager;
-	}
-
-	public HashSet<Controllable> getControllableObjects() {
-		return controllableObjects;
-	}
-
-	public void setControllableObjects(HashSet<Controllable> controllableObjects) {
-		this.controllableObjects = controllableObjects;
 	}
 
 	public ArrayList<Explosion> getExplosions() {

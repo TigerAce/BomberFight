@@ -37,7 +37,8 @@ public class LoadingScreen implements Screen {
 		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
 		skin = new Skin();
 		stage = new Stage();
-		gamePlay = new MultiplayerGamePlay(); 
+		//gamePlay = new MultiplayerGamePlay();
+		gamePlay = new GamePlay();
 		assetManager = gamePlay.getAssetManager();
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -81,7 +82,7 @@ public class LoadingScreen implements Screen {
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
 		
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		assetManager.load(gameInfo.gameMap, TiledMap.class);
+		assetManager.load(gameInfo.mapInfo.tmx, TiledMap.class);
 		
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		
