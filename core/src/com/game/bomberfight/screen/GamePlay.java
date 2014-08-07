@@ -1,6 +1,7 @@
 package com.game.bomberfight.screen;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
+import com.game.bomberfight.InputSource.RemoteController;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
@@ -89,6 +91,8 @@ public class GamePlay implements Screen {
 	
 	protected Array<Player> playerList = new Array<Player>();;
 
+	protected ArrayList<LinkedHashMap> keyMaps = new ArrayList<LinkedHashMap>();
+	
 	@Override
 	public void render(float delta) {
 
@@ -299,8 +303,12 @@ public class GamePlay implements Screen {
 					0.5f, 1f), 50, 0, 0);
 			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
 			
+			
 			if(gameInfo.networkMode.equals("WAN")){
+				
+				keyMaps.add(i, new LinkedHashMap());
 				gui.setHUD(bomber);
+				bomber.setController(new RemoteController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE},keyMaps.get(i)));
 			}else{
 				if (i == 0) {
 					gui.setFixedStatusBar(bomber);

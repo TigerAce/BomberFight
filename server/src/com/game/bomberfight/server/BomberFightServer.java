@@ -194,7 +194,12 @@ public class BomberFightServer{
 		    		 * if player moved              *
 		    		 ********************************/
 			    	if(object instanceof RemoteControl){
-			    		server.sendToAllExceptTCP(connection.getID(), object);
+			    		//send movement to other player in the same game
+			    		Room room = players.get(connection.getID()).getInRoom();
+			    		for(Player p : room.getPlayerInRoom()){
+			    			server.sendToTCP(p.getPlayerID(), object);
+			    		}
+			    		
 			    	}
 			    	
 			    	/********************************

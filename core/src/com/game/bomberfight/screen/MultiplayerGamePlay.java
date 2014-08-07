@@ -2,6 +2,8 @@ package com.game.bomberfight.screen;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -22,6 +24,8 @@ public class MultiplayerGamePlay extends GamePlay{
 	private float correction = 1;
 	private int position;
 	private String startGame[] = {"false"};
+	
+	
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -39,11 +43,21 @@ public class MultiplayerGamePlay extends GamePlay{
 
 	@Override
 	public void show(){
+		
 		// TODO Auto-generated method stub
 		((BomberFight) Gdx.app.getApplicationListener())
 		.setGameState(BomberFight.MULTIPLAYER_GAME_PLAY_STATE);
 		System.out.println("multi");
 		super.show();
+		
+		
+		//create
+		for(int i = 0; i < playerList.size; i++){
+			
+		}
+		
+		
+		
 		//register client
 		Network.register(client);
 		
@@ -52,7 +66,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		
 		//connect to server
 	    try {
-			client.connect(5000, "192.168.1.5", Network.portTCP, Network.portUDP);	
+			client.connect(5000, "localhost", Network.portTCP, Network.portUDP);	
 		
 			
 		} catch (IOException e) {
@@ -88,9 +102,9 @@ public class MultiplayerGamePlay extends GamePlay{
 	        	}
 	        	
 	        	if(object instanceof Network.RemoteControl){
-	        		
-	        		
-	    		}
+	        		Network.RemoteControl remoteControl = (Network.RemoteControl)object;
+	        		keyMaps.get(remoteControl.playerID).put(remoteControl.keycode, remoteControl.upOrDown);
+	        	}
 	    		
 	    		if(object instanceof Network.StopMovePlayer){
 	    			
@@ -110,9 +124,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		    				}
 		    			}
 	    		}
-	    		
-	    		
-	    		
+	    		   		
 	        }
 	     });
 	    
@@ -136,7 +148,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	
 	public void assignController(int position){
 		Bomber me = (Bomber) playerList.get(position);
-		gui.setFixedStatusBar(me);
+		//gui.setFixedStatusBar(me);
 		BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
 		inputMultiplexer.addProcessor(bomberController);
 		me.setController(bomberController);

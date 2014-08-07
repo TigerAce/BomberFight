@@ -5,9 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
+import com.esotericsoftware.kryonet.Client;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.model.Controller;
+import com.game.bomberfight.net.Network;
+import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MultiplayerGamePlay;
 
 public class BomberController extends Controller implements InputProcessor {
 	
@@ -86,6 +93,13 @@ public class BomberController extends Controller implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub
+		
+		Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		//send to remote
+		if(((GamePlay)currentScreen).getGameInfo().networkMode == "WAN"){
+			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID(), keycode, true));
+		}
+		
 		keyMap.put(keycode, true);
 		return false;
 	}
@@ -93,6 +107,13 @@ public class BomberController extends Controller implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
+		
+		Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+		//send to remote
+		if(((GamePlay)currentScreen).getGameInfo().networkMode == "WAN"){
+			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID(), keycode, false));
+		}
+		
 		keyMap.put(keycode, false);
 		return false;
 	}
