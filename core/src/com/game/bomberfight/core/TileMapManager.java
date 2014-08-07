@@ -160,11 +160,12 @@ public class TileMapManager {
 					if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
 						
 							if (controller.equalsIgnoreCase("wasdspace")) {
+								System.out.println("create a");
 								playerA = bomber;
 								playerA.setRemoteControl(true);
 								bomber.setName("playerA");
 							} else {
-								
+								System.out.println("create b");
 								//bomber.setController(new BomberController(false));
 								playerB = bomber;
 								playerB.setRemoteControl(true);

@@ -111,13 +111,27 @@ public class BomberFightServer{
 			    		
 			    	}
 			    	
+			  	  
+		    		/********************************
+		    		 * if player moved              *
+		    		 ********************************/
+			    	if(object instanceof Network.StartMovePlayer){
+			    		server.sendToAllExceptTCP(connection.getID(), object);
+			    	}
 			    	
+			    	/********************************
+		    		 * if player stop moved         *
+		    		 ********************************/
+			    	if(object instanceof Network.StopMovePlayer){
+			    		server.sendToAllExceptTCP(connection.getID(), object);
+			    	}
 			    	
-			    	
-			    	
-			    	
-			    	
-			    	
+			    	/********************************
+		    		 * player correct position      *
+		    		 ********************************/
+			    	if(object instanceof Network.CorrectPosition){
+			    		server.sendToAllExceptTCP(connection.getID(), object);
+			    	}
 			}
 		      
 		});

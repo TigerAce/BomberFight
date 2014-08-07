@@ -19,6 +19,7 @@ public class MultiplayerGamePlay extends GamePlay{
 
 	public static final Client client = new Client();
 	private float correction = 1;
+	private int position;
 
 	@Override
 	public void render(float delta) {
@@ -40,7 +41,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		((BomberFight) Gdx.app.getApplicationListener())
 		.setGameState(BomberFight.MULTIPLAYER_GAME_PLAY_STATE);
 		
-		
+		super.show();
 		//register client
 		Network.register(client);
 		
@@ -67,36 +68,63 @@ public class MultiplayerGamePlay extends GamePlay{
 	        public void received (Connection connection, Object object) {
 	        	if(object instanceof Network.BornPosition){
 	        		
-	        		System.out.println(((Network.BornPosition)object).positionNumber);
-	        		assignController(((Network.BornPosition)object).positionNumber);
+	        		position = ((Network.BornPosition)object).positionNumber;
+	        		assignController(position);
 	        		
 	        	}
 	        	
 	        	if(object instanceof Network.StartMovePlayer){
-	       
-	    			tileMapManager.getPlayerB().startMovePlayer(((Network.StartMovePlayer)object).direction);
+	        		if(position == 1){
+	        			tileMapManager.getPlayerB().startMovePlayer(((Network.StartMovePlayer)object).direction);
+	        		}else{
+	        			tileMapManager.getPlayerA().startMovePlayer(((Network.StartMovePlayer)object).direction);
+	        		}
 	        		
 	    		}
 	    		
 	    		if(object instanceof Network.StopMovePlayer){
-	    			
-	    			tileMapManager.getPlayerB().stopMovePlayer();
+	    			if(position == 1){
+	        			tileMapManager.getPlayerB().stopMovePlayer();
+	        		}else{
+	        			tileMapManager.getPlayerA().stopMovePlayer();
+	        		}
 	    			
 	    		}
 	    		
 	    		if(object instanceof Network.CorrectPosition){
 	    		
-	    			Vector2 p = ((Network.CorrectPosition)object).pos;
+	    			if(position == 1){
+	    				Vector2 p = ((Network.CorrectPosition)object).pos;
+		    			Body b = tileMapManager.getPlayerB().getBox2dBody();
+		    			
+		    			if(b.getPosition().x != p.x || b.getPosition().y != p.y){
+		    				if(!world.isLocked()){
+		    					b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
+		    				}
+		    			}
+	        		}else{
+	        			
+	        			Vector2 p = ((Network.CorrectPosition)object).pos;
+		    			Body b = tileMapManager.getPlayerA().getBox2dBody();
+		    			
+		    			if(b.getPosition().x != p.x || b.getPosition().y != p.y){
+		    				if(!world.isLocked()){
+		    					b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
+		    				}
+		    			}
+	        		}
+	    			
+	    			/*Vector2 p = ((Network.CorrectPosition)object).pos;
 	    			Body b = tileMapManager.getPlayerB().getBox2dBody();
 	    			
 	    			if(b.getPosition().x != p.x || b.getPosition().y != p.y)
-	    			b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());
+	    			b.setTransform(((Network.CorrectPosition)object).pos, b.getAngle());*/
 	    		}
 	        }
 	     });
 	    
 	 
-	    super.show();
+	    
 
 	}
 	
@@ -105,7 +133,9 @@ public class MultiplayerGamePlay extends GamePlay{
 			tileMapManager.getPlayerA().setRemoteControl(false);
 			((Bomber)tileMapManager.getPlayerA()).setController(new BomberController(true));
 		}
+		
 		if(position == 2){
+		System.out.println("in");
 			tileMapManager.getPlayerB().setRemoteControl(false);
 			((Bomber)tileMapManager.getPlayerB()).setController(new BomberController(true));
 		}
