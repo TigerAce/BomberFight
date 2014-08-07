@@ -97,7 +97,7 @@ public class BomberController extends Controller implements InputProcessor {
 		Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 		//send to remote
 		if(((GamePlay)currentScreen).getGameInfo().networkMode == "WAN"){
-			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID(), keycode, true));
+			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID() - 1, keycode, true));
 		}
 		
 		keyMap.put(keycode, true);
@@ -111,7 +111,7 @@ public class BomberController extends Controller implements InputProcessor {
 		Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
 		//send to remote
 		if(((GamePlay)currentScreen).getGameInfo().networkMode == "WAN"){
-			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID(), keycode, false));
+			MultiplayerGamePlay.client.sendTCP(new Network.RemoteControl(MultiplayerGamePlay.client.getID() - 1, keycode, false));
 		}
 		
 		keyMap.put(keycode, false);

@@ -51,10 +51,6 @@ public class MultiplayerGamePlay extends GamePlay{
 		super.show();
 		
 		
-		//create
-		for(int i = 0; i < playerList.size; i++){
-			
-		}
 		
 		
 		
