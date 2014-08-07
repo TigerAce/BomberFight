@@ -3,28 +3,29 @@ package com.game.bomberfight.server;
 public class Player {
 	private String playerName;
 	private int playerID;
-	private int roomNumber;
+	private Room inRoom;
 
 	
 	
 	
-	public Player(int playerID, int roomNumber){
+	public Player(int playerID, Room inRoom){
 		this.playerID = playerID;
-		this.roomNumber = roomNumber;
+		this.inRoom = inRoom;
 	}
 	
 	
 
 	
-	public int getRoomNumber() {
-		return roomNumber;
+
+	public Room getInRoom() {
+		return inRoom;
 	}
 
-	public void setRoomNumber(int roomNumber) {
-		this.roomNumber = roomNumber;
+
+	public void setInRoom(Room inRoom) {
+		this.inRoom = inRoom;
 	}
 
-	
 
 	public String getPlayerName() {
 		return playerName;

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
-import com.game.bomberfight.net.Network.BornPosition;
+import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.server.Direction;
 
 
@@ -25,14 +25,20 @@ public class Network {
          kryo.register(Direction.class);
          kryo.register(Vector2.class);
          kryo.register(Ping.class);
-         kryo.register(BornPosition.class);
+         kryo.register(AssignBornPosition.class);
+         kryo.register(CompleteInitGame.class);
+         kryo.register(StartGame.class);
       
 	}
 	
-	public static class BornPosition{
+	public static class StartGame{}
+	
+	public static class CompleteInitGame{}
+	
+	public static class AssignBornPosition{
 		public short positionNumber;
-		public BornPosition(){}
-		public BornPosition(short positionNumber){
+		public AssignBornPosition(){}
+		public AssignBornPosition(short positionNumber){
 			this.positionNumber = positionNumber;
 		}
 	}

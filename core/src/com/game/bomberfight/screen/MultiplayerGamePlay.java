@@ -20,7 +20,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	public static final Client client = new Client();
 	private float correction = 1;
 	private int position;
-
+	private boolean startGame = false;
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -71,10 +71,19 @@ public class MultiplayerGamePlay extends GamePlay{
 	    	
 	    
 	        public void received (Connection connection, Object object) {
-	        	if(object instanceof Network.BornPosition){
+	        	
+	        	if(object instanceof Network.StartGame){
+	        		startGame = true;
+	        		System.out.println("start the game");
+	        	}
+	        	
+	        	if(object instanceof Network.AssignBornPosition){
 	        		
-	        		position = ((Network.BornPosition)object).positionNumber;
+	        		position = ((Network.AssignBornPosition)object).positionNumber;
 	        		assignController(position);
+	        		
+	        		//response for completion of initialization of the game
+	        		connection.sendTCP(new Network.CompleteInitGame());
 	        		
 	        	}
 	        	

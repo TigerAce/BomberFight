@@ -169,7 +169,7 @@ public class Player extends GameObject implements Controllable, Destructible, Re
 	public boolean doKeyUp(int keycode) {
 		if(!remoteControl){
 			keyMap.put(keycode, false);
-			 System.out.println(direction);
+		
 		//sent stop action to server if multiplayer game
 		if(((BomberFight) Gdx.app.getApplicationListener()).getGameState() == BomberFight.MULTIPLAYER_GAME_PLAY_STATE){
 			MultiplayerGamePlay.client.sendTCP(new Network.StopMovePlayer());

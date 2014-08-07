@@ -8,7 +8,11 @@ public class Room {
 	private int maxNumPlayer;
 	private int desireNumPlayer;
 	ArrayList<Player> playerInRoom;
+	public RoomState state;
 	
+	private int playerChecker;
+	
+	public enum RoomState{WAITING, PLAYING, CHECKING}
 	
 	public Room(int roomID, String mapName, int maxNumPlayer, int desireNumPlayer){
 		playerInRoom = new ArrayList<Player>();
@@ -16,22 +20,26 @@ public class Room {
 		this.maxNumPlayer = maxNumPlayer;
 		this.desireNumPlayer = desireNumPlayer;
 		this.roomID = roomID;
+		state = RoomState.WAITING;
 	}
 	
 	public void addPlayer(Player player){
-		player.setRoomNumber(this.roomID);
+		player.setInRoom(this);
 		this.playerInRoom.add(player);
 		
 		//if player is full or reach require player number, call server start the game
 		if(this.playerInRoom.size() == desireNumPlayer || this.playerInRoom.size() == maxNumPlayer){
-			BomberFightServer.startGame(this);
+			BomberFightServer.initGame(this);
+			
+			//change state of room to checking
+			state = RoomState.CHECKING;
 		}
 	}
 	
 	public void removePlayer(Player player){
 		for(Player p : playerInRoom){
 			if(p.getPlayerID() == player.getPlayerID()){
-				p.setRoomNumber(-1);
+				p.setInRoom(null);
 				this.playerInRoom.remove(p.getPlayerID());
 				break;
 			}
@@ -47,12 +55,29 @@ public class Room {
 	 * setter getter
 	 * @return
 	 */
-	public String getMapName() {return mapName;}
-	public void setMapName(String mapName) {this.mapName = mapName;}
-	public int getMaxNumPlayer() {return maxNumPlayer;}
-	public void setMaxNumPlayer(int maxNumPlayer) {this.maxNumPlayer = maxNumPlayer;}
-	public int getDesireNumPlayer() {return desireNumPlayer;}
-	public void setDesireNumPlayer(int desireNumPlayer) {this.desireNumPlayer = desireNumPlayer;}
+	public String getMapName() {
+		return mapName;
+	}
+	
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
+	}
+	
+	public int getMaxNumPlayer() {
+		return maxNumPlayer;
+	}
+	
+	public void setMaxNumPlayer(int maxNumPlayer) {
+		this.maxNumPlayer = maxNumPlayer;
+	}
+	
+	public int getDesireNumPlayer() {
+		return desireNumPlayer;
+	}
+	
+	public void setDesireNumPlayer(int desireNumPlayer) {
+		this.desireNumPlayer = desireNumPlayer;
+	}
 
 	public int getRoomID() {
 		return roomID;
@@ -72,6 +97,14 @@ public class Room {
 
 	public void setPlayerInRoom(ArrayList<Player> playerInRoom) {
 		this.playerInRoom = playerInRoom;
+	}
+
+	public int getPlayerChecker() {
+		return playerChecker;
+	}
+
+	public void setPlayerChecker(int playerChecker) {
+		this.playerChecker = playerChecker;
 	}
 	
 	

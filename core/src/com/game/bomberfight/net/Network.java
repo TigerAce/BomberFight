@@ -8,6 +8,7 @@ import com.game.bomberfight.enums.Direction;
 
 
 
+
 public class Network {
 	public static final int portTCP = 54555;
 	public static final int portUDP = 54777;
@@ -22,13 +23,19 @@ public class Network {
          kryo.register(Direction.class);
          kryo.register(Vector2.class);
          kryo.register(Ping.class);
-         kryo.register(BornPosition.class);
+         kryo.register(AssignBornPosition.class);
+         kryo.register(CompleteInitGame.class);
+         kryo.register(StartGame.class);
 	}
 	
-	public static class BornPosition{
+	public static class StartGame{}
+	
+	public static class CompleteInitGame{}
+
+	public static class AssignBornPosition{
 		public short positionNumber;
-		public BornPosition(){}
-		public BornPosition(short positionNumber){
+		public AssignBornPosition(){}
+		public AssignBornPosition(short positionNumber){
 			this.positionNumber = positionNumber;
 		}
 	}
