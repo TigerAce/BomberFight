@@ -20,6 +20,7 @@ import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.enums.Direction;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MultiplayerGamePlay;
 
 public class Player extends GameObject implements Destructible {
 	
@@ -120,10 +121,7 @@ public class Player extends GameObject implements Destructible {
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
     	if(attr.getLife() <= 0){
-    		System.out.println(box2dBody);
-    		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-    		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
-    		 dispose();
+    		dispose();
     	}else{
     		//box2dBody.setLinearVelocity(movement);
     		forceToVelocity();
@@ -146,6 +144,9 @@ public class Player extends GameObject implements Destructible {
     
     @Override
     public void dispose(){
+    	MultiplayerGamePlay.dead = true;
+    	 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
+ 		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
     	shape.dispose();
     	super.dispose();
     }

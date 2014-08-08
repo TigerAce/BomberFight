@@ -44,6 +44,9 @@ public class BomberFightServer{
 		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
 
 			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.AssignBornPosition((short)(i)));
+			
+			//assign room position to each player
+			room.getPlayerInRoom().get(i).setGamePosition(i);;
 		}
 		
 		//set up player check list for room
@@ -67,6 +70,8 @@ public class BomberFightServer{
 		
 		//change room state to playing
 		room.state = RoomState.PLAYING;
+		
+		System.out.println("start game in room #" + room.getRoomID());
 	}
 	
 	
@@ -102,15 +107,39 @@ public class BomberFightServer{
 	    	
 	    	public void connected(Connection connection){
 	    		//if a client is connected server, create a player status for the client
-	    		//give room number -1 indicates no room assigned
+	    		
 	    		BomberFightServer.players.put(connection.getID(),new Player(connection.getID(), null));
 	    		System.out.println("connected player number:" + connection.getID());
 	    	}
 	    	
 	    	public void disconnected(Connection connection){
 	    		/*
-	    		 * TODO: if client disconnected, remove relative player form server
+	    		 * if client disconnected, remove relative player form server
 	    		 */
+	    		System.out.println("player " + connection.getID() + " disconnected");
+	    		
+	    		//find room
+	    		Room r = players.get(connection.getID()).getInRoom();
+	    		
+	    		//send leave game signal for disconnected player to all other player in the room
+	    		for(Player p : r.getPlayerInRoom()){
+	    			if(p != players.get(connection.getID()))
+	    			server.sendToTCP(p.getPlayerID(), new Network.LeaveGame(players.get(connection.getID()).getGamePosition()));
+	    		}
+	    		
+	    		//remove this player from room
+	    		r.removePlayer(players.get(connection.getID()));
+	    		
+	    		//if room is empty close room
+	    		if(r.playerInRoom.isEmpty()){
+	    			System.out.println("close room #" + r.getRoomID());
+	    			roomList.remove(r);
+	    		}
+	    		
+	    		//remove player from server
+	    		players.remove(connection.getID());
+	    		
+	    		System.out.println("remove player " + connection.getID() + " from server");
 	    		
 	    	}
 	    	
@@ -134,7 +163,7 @@ public class BomberFightServer{
 			    			if(room.state == RoomState.WAITING){
 			    				if(jg.mapName.equals(room.getMapName()) && jg.numPlayers == room.getDesireNumPlayer()){
 			    				
-			    					System.out.println("found room for player id:" + connection.getID());
+			    					System.out.println("found room #" + room.getRoomID() + " for player id:" + connection.getID());
 			    				
 			    					//match the condition, add player to room
 			    					room.addPlayer(BomberFightServer.players.get(connection.getID()));
@@ -148,10 +177,13 @@ public class BomberFightServer{
 			    		//if no room found, create a new room for player
 			    		if(BomberFightServer.players.get(connection.getID()).getInRoom() == null){
 			  
-			    			System.out.println("create room for player id:" + connection.getID());
+			    			
 			    			
 			    			Room room = new Room(BomberFightServer.roomList.size() + 1, jg.mapName, Network.MapInfo.mapInfo.get(jg.mapName),jg.numPlayers);
 			    			room.addPlayer(BomberFightServer.players.get(connection.getID()));
+			    			
+			    			
+			    			System.out.println("create room #" + room.getRoomID() + " for player id:" + connection.getID());
 			    			
 			    			//add room to waiting room list
 			    			BomberFightServer.roomList.add(room);
@@ -202,18 +234,16 @@ public class BomberFightServer{
 			    		
 			    	}
 			    	
-			    	/********************************
-		    		 * if player stop moved         *
-		    		 ********************************/
-			    	if(object instanceof Network.StopMovePlayer){
-			    		server.sendToAllExceptTCP(connection.getID(), object);
-			    	}
 			    	
 			    	/********************************
 		    		 * player correct position      *
 		    		 ********************************/
 			    	if(object instanceof Network.CorrectPosition){
-			    		server.sendToAllExceptTCP(connection.getID(), object);
+			    		//send correction to other player in the same game
+			    		Room room = players.get(connection.getID()).getInRoom();
+			    		for(Player p : room.getPlayerInRoom()){
+			    			server.sendToTCP(p.getPlayerID(), object);
+			    		}
 			    	}
 			}
 		      

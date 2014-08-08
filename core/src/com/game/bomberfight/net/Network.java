@@ -17,7 +17,6 @@ public class Network {
          Kryo kryo = endPoint.getKryo();
         
          kryo.register(RemoteControl.class);
-         kryo.register(StopMovePlayer.class);
          kryo.register(CorrectPosition.class);
          kryo.register(JoinGame.class);
          kryo.register(Direction.class);
@@ -26,6 +25,7 @@ public class Network {
          kryo.register(AssignBornPosition.class);
          kryo.register(CompleteInitGame.class);
          kryo.register(StartGame.class);
+         kryo.register(LeaveGame.class);
 	}
 	
 	public static class StartGame{}
@@ -47,6 +47,15 @@ public class Network {
 		public JoinGame(String mapName, short numPlayer){
 			this.mapName = mapName;
 			this.numPlayers = numPlayer;
+		}
+	}
+	
+	public static class LeaveGame{
+		public int gamePosition;
+		
+		public LeaveGame(){}
+		public LeaveGame(int gamePosition){
+			this.gamePosition = gamePosition;
 		}
 	}
 	
@@ -74,9 +83,6 @@ public class Network {
 		}
 	}
 	
-	public static class StopMovePlayer{
-		
-	}
 	
 	
 	

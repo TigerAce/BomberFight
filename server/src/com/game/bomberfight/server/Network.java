@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
+import com.game.bomberfight.net.Network.LeaveGame;
 import com.game.bomberfight.net.Network.RemoteControl;
 import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.server.Direction;
@@ -20,7 +21,6 @@ public class Network {
          Kryo kryo = endPoint.getKryo();
       
          kryo.register(RemoteControl.class);
-         kryo.register(StopMovePlayer.class);
          kryo.register(CorrectPosition.class);
          kryo.register(JoinGame.class);
          kryo.register(Direction.class);
@@ -29,7 +29,7 @@ public class Network {
          kryo.register(AssignBornPosition.class);
          kryo.register(CompleteInitGame.class);
          kryo.register(StartGame.class);
-      
+         kryo.register(LeaveGame.class);
 	}
 	
 	public static class StartGame{}
@@ -52,6 +52,15 @@ public class Network {
 		public JoinGame(String mapName, short numPlayer){
 			this.mapName = mapName;
 			this.numPlayers = numPlayer;
+		}
+	}
+	
+	public static class LeaveGame{
+		public int playerID;
+		
+		public LeaveGame(){}
+		public LeaveGame(int playerID){
+			this.playerID = playerID;
 		}
 	}
 	
@@ -79,9 +88,6 @@ public class Network {
 		}
 	}
 	
-	public static class StopMovePlayer{
-	
-	}
 	
 	public static class MapInfo{
 		//map information stores map name and its maximum player

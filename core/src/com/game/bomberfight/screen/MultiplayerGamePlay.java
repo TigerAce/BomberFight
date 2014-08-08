@@ -2,8 +2,7 @@ package com.game.bomberfight.screen;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -23,6 +22,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	public static final Client client = new Client();
 	private float correction = 1;
 	private int position;
+	public static boolean dead = false;
 	private String startGame[] = {"false"};
 	
 	
@@ -31,13 +31,18 @@ public class MultiplayerGamePlay extends GamePlay{
 		// TODO Auto-generated method stub
 		super.render(delta);
 		
+		
+		
+		if(!dead){
 		//correct position every 1 sec
 		correction -= delta;
 		if(correction <= 0){
+			
 			Body b = playerList.get(position).getBox2dBody();
 		
 			client.sendTCP(new Network.CorrectPosition(new Vector2(b.getPosition().x,b.getPosition().y),position));
 			correction = 1;
+		}
 		}
 	}
 
@@ -47,7 +52,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		// TODO Auto-generated method stub
 		((BomberFight) Gdx.app.getApplicationListener())
 		.setGameState(BomberFight.MULTIPLAYER_GAME_PLAY_STATE);
-		System.out.println("multi");
+		
 		super.show();
 		
 		
@@ -62,7 +67,7 @@ public class MultiplayerGamePlay extends GamePlay{
 		
 		//connect to server
 	    try {
-			client.connect(5000, "localhost", Network.portTCP, Network.portUDP);	
+			client.connect(5000, "localhost", Network.portTCP, Network.portUDP);	//yijiasup.no-ip.org
 		
 			
 		} catch (IOException e) {
@@ -77,7 +82,8 @@ public class MultiplayerGamePlay extends GamePlay{
 	    client.addListener(new Listener() {
 	    	
 	    
-	        public void received (Connection connection, Object object) {
+	        @SuppressWarnings("unchecked")
+			public void received (Connection connection, Object object) {
 	        	
 	        	if(object instanceof Network.StartGame){
 	        		synchronized(startGame){
@@ -102,10 +108,12 @@ public class MultiplayerGamePlay extends GamePlay{
 	        		keyMaps.get(remoteControl.playerID).put(remoteControl.keycode, remoteControl.upOrDown);
 	        	}
 	    		
-	    		if(object instanceof Network.StopMovePlayer){
-	    			
-	    			
-	    		}
+	        	if(object instanceof Network.LeaveGame){
+	        		//the gamePosition of the player need to be delete
+	        		int gamePosition = ((Network.LeaveGame)object).gamePosition;
+	        		playerList.get(gamePosition).dispose();
+	        		playerList.removeIndex(gamePosition);
+	        	}
 	    		
 	    		if(object instanceof Network.CorrectPosition){
 	    		
@@ -140,6 +148,12 @@ public class MultiplayerGamePlay extends GamePlay{
 	 
 	    
 
+	}
+	
+	@Override
+	public void dispose(){
+		super.dispose();
+		client.close();
 	}
 	
 	public void assignController(int position){

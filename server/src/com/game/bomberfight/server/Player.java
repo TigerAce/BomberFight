@@ -4,6 +4,7 @@ public class Player {
 	private String playerName;
 	private int playerID;
 	private Room inRoom;
+	private int gamePosition;
 
 	
 	
@@ -42,4 +43,25 @@ public class Player {
 	public void setPlayerID(int playerID) {
 		this.playerID = playerID;
 	}
+
+
+
+
+
+	public int getGamePosition() {
+		return gamePosition;
+	}
+
+
+
+
+
+	public void setGamePosition(int gamePosition) {
+		this.gamePosition = gamePosition;
+	}
+
+
+
+
+
 }

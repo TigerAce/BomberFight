@@ -40,7 +40,7 @@ public class Room {
 		for(Player p : playerInRoom){
 			if(p.getPlayerID() == player.getPlayerID()){
 				p.setInRoom(null);
-				this.playerInRoom.remove(p.getPlayerID());
+				this.playerInRoom.remove(player);
 				break;
 			}
 		}
