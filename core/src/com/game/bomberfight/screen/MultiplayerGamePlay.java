@@ -4,8 +4,10 @@ package com.game.bomberfight.screen;
 import java.io.IOException;
 
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.esotericsoftware.kryonet.Client;
@@ -14,6 +16,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.BomberFight;
+import com.game.bomberfight.core.Item;
 import com.game.bomberfight.net.Network;
 
 
@@ -103,6 +106,31 @@ public class MultiplayerGamePlay extends GamePlay{
 	        		
 	        	}
 	        	
+	        	if(object instanceof Network.ConfirmDropItem){
+	        		Network.ConfirmDropItem confirm = (Network.ConfirmDropItem)object;
+	        		
+	        		Item tmp = null;
+	        		
+	        		for(Item i : itemList){
+	        			if(i.getName().equals(confirm.itemName)){
+	        				tmp = new Item(i);
+	        				break;
+	        			}
+	        		}
+	        		
+	        		if(tmp != null){
+					if(confirm.itemName == "POWER_UP")
+						tmp.setSprite(assetManager.get("img/texture/item1.png", Texture.class));
+					if(confirm.itemName == "ANNULAR")
+						tmp.setSprite(assetManager.get("img/texture/item2.png", Texture.class));
+					if(confirm.itemName == "ADDBOMB")
+						tmp.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
+    				tmp.setX(confirm.dropPosition.x);
+    				tmp.setY(confirm.dropPosition.y);
+    				tmp.create();
+	        		}
+	        	}
+	        	
 	        	if(object instanceof Network.RemoteControl){
 	        		Network.RemoteControl remoteControl = (Network.RemoteControl)object;
 	        		keyMaps.get(remoteControl.playerID).put(remoteControl.keycode, remoteControl.upOrDown);
@@ -133,7 +161,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	     });
 	    
 	    
-		client.sendTCP(new Network.JoinGame("map1", (short)2));
+		client.sendTCP(new Network.JoinGame(gameInfo.mapInfo.name, (short)2));
 		
 		System.out.println("waiting");
 		synchronized(startGame){

@@ -9,6 +9,7 @@ import com.game.bomberfight.enums.Direction;
 
 
 
+
 public class Network {
 	public static final int portTCP = 54555;
 	public static final int portUDP = 54777;
@@ -26,6 +27,8 @@ public class Network {
          kryo.register(CompleteInitGame.class);
          kryo.register(StartGame.class);
          kryo.register(LeaveGame.class);
+         kryo.register(RequireDropItem.class);
+         kryo.register(ConfirmDropItem.class);
 	}
 	
 	public static class StartGame{}
@@ -83,7 +86,27 @@ public class Network {
 		}
 	}
 	
+	public static class RequireDropItem{
+		public String objectDestroyed;
+		public Vector2 dropPosition;
+		
+		public RequireDropItem(){}
+		public RequireDropItem(String objectDestroyed, Vector2 dropPosition){
+			this.objectDestroyed = objectDestroyed;
+			this.dropPosition = dropPosition;
+		}
+	}
 	
+	public static class ConfirmDropItem{
+		public String itemName;
+		public Vector2 dropPosition;
+		
+		public ConfirmDropItem(){}
+		public ConfirmDropItem(String itemName, Vector2 dropPosition){
+			this.itemName = itemName;
+			this.dropPosition = dropPosition;
+		}
+	}
 	
 	
 	

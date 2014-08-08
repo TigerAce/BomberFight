@@ -30,6 +30,8 @@ public class Network {
          kryo.register(CompleteInitGame.class);
          kryo.register(StartGame.class);
          kryo.register(LeaveGame.class);
+         kryo.register(RequireDropItem.class);
+         kryo.register(ConfirmDropItem.class);
 	}
 	
 	public static class StartGame{}
@@ -89,17 +91,87 @@ public class Network {
 	}
 	
 	
+	/**
+	 * 
+	 * Message class for item drop
+	 *
+	 */
+	
+	public static class RequireDropItem{
+		public String objectDestroyed;
+		public Vector2 dropPosition;
+		
+		public RequireDropItem(){}
+		public RequireDropItem(String objectDestroyed, Vector2 dropPosition){
+			this.objectDestroyed = objectDestroyed;
+			this.dropPosition = dropPosition;
+		}
+	}
+	
+	public static class ConfirmDropItem{
+		public String itemName;
+		public Vector2 dropPosition;
+		
+		public ConfirmDropItem(){}
+		public ConfirmDropItem(String itemName, Vector2 dropPosition){
+			this.itemName = itemName;
+			this.dropPosition = dropPosition;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * Information classes for server
+	 *
+	 */
+	
 	public static class MapInfo{
 		//map information stores map name and its maximum player
 		public static HashMap<String, Integer> mapInfo = new HashMap<String, Integer>();
 		
 		static{
-			mapInfo.put("map1", 2);
-			mapInfo.put("map2", 2);
-			mapInfo.put("map3", 2);
+			mapInfo.put("Metal Classic", 2);
+			mapInfo.put("No Hide", 2);
+			mapInfo.put("Mud&Grass", 2);
 		}
 	}
 	
+	public static class CrateDropList{
+		public static String name = "CRATE";
+		public static int dropProbability = 50;
+		public static class ItemInfo{
+			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			
+			static{
+				itemDropProbability.put("ANNULAR", 10);
+				itemDropProbability.put("POWER_UP", 10);
+				itemDropProbability.put("ADDBOMB", 10);
+			}
+		}
+	}
+	
+	public static class BrickDropList{
+		public static String name = "BRICK";
+		public static int dropProbability = 70;
+		public static class ItemInfo{
+			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			
+			static{
+				itemDropProbability.put("ANNULAR", 10);
+				itemDropProbability.put("POWER_UP", 30);
+				itemDropProbability.put("ADDBOMB", 20);
+			}
+		}
+	}
+	
+	//public static class ItemInfo{
+		
+	//}
 	
 	
 	

@@ -3,6 +3,9 @@ package com.game.bomberfight.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -81,10 +84,6 @@ public class BomberFightServer{
 	
 	
 	
-	
-	
-	
-	
 	public static void main(String[] args){
 	
 		//register server
@@ -123,7 +122,7 @@ public class BomberFightServer{
 	    		
 	    		//send leave game signal for disconnected player to all other player in the room
 	    		for(Player p : r.getPlayerInRoom()){
-	    			if(p != players.get(connection.getID()))
+	    			if(p.getPlayerID() != connection.getID())
 	    			server.sendToTCP(p.getPlayerID(), new Network.LeaveGame(players.get(connection.getID()).getGamePosition()));
 	    		}
 	    		
@@ -229,6 +228,7 @@ public class BomberFightServer{
 			    		//send movement to other player in the same game
 			    		Room room = players.get(connection.getID()).getInRoom();
 			    		for(Player p : room.getPlayerInRoom()){
+			    			if(p.getPlayerID() != connection.getID())
 			    			server.sendToTCP(p.getPlayerID(), object);
 			    		}
 			    		
@@ -242,10 +242,100 @@ public class BomberFightServer{
 			    		//send correction to other player in the same game
 			    		Room room = players.get(connection.getID()).getInRoom();
 			    		for(Player p : room.getPlayerInRoom()){
+			    			if(p.getPlayerID() != connection.getID())
 			    			server.sendToTCP(p.getPlayerID(), object);
 			    		}
 			    	}
-			}
+			    	
+			    	/********************************
+		    		 * require to drop item         *
+		    		 ********************************/
+			    	if(object instanceof Network.RequireDropItem){
+			    		System.out.println("receive drop item");
+			    		Network.RequireDropItem request = (Network.RequireDropItem)object;
+			    		Random r = new Random();
+			    		String itemName = null;
+			    		
+			    		if(request.objectDestroyed.equals(Network.CrateDropList.name)){
+			    			int rand = r.nextInt(Network.CrateDropList.dropProbability);
+			    			if(rand == 1){
+			    				//drop item
+			    				int totalProbability = 0;
+			    				for(Integer i :  Network.CrateDropList.ItemInfo.itemDropProbability.values()){
+			    					totalProbability += i;
+			    				}
+			    				
+			    				rand = r.nextInt(totalProbability);
+			    				
+			    				int counter = 0;
+			    			
+			    				for (Map.Entry<String, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
+			    					
+			    					if(rand >= counter && rand < counter + entry.getValue()){
+			    						itemName = entry.getKey();
+			    						break;
+			    					}else counter += entry.getValue();
+	
+			    				}
+			    				
+			    				
+			    				
+			    			}
+			    				
+			    		}else if(request.objectDestroyed.equals(Network.BrickDropList.name)){
+			    			int rand = r.nextInt(Network.BrickDropList.dropProbability);
+			    			if(rand == 1){
+			    				//drop item
+			    				int totalProbability = 0;
+			    				for(Integer i :  Network.BrickDropList.ItemInfo.itemDropProbability.values()){
+			    					totalProbability += i;
+			    				}
+			    				
+			    				rand = r.nextInt(totalProbability);
+			    				
+			    				int counter = 0;
+			    			
+			    				
+			    				for (Map.Entry<String, Integer> entry : Network.BrickDropList.ItemInfo.itemDropProbability.entrySet()) {
+			    					
+			    					if(rand >= counter && rand < counter + entry.getValue()){
+			    						itemName = entry.getKey();
+			    						break;
+			    					}else counter += entry.getValue();
+	
+			    				}
+			    				
+			    			}
+			    		}
+			    		
+			    		//if item name not null drop item
+			    		if(itemName != null){
+			    			//send drop information to all client in the game
+			    			Room room = players.get(connection.getID()).getInRoom();
+				    		for(Player p : room.getPlayerInRoom()){
+				    			server.sendToTCP(p.getPlayerID(), new Network.ConfirmDropItem(itemName, request.dropPosition));
+				    		}
+			    		}
+			    	
+			    	}
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	}
+	    	
+	    	
 		      
 		});
 		

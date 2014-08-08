@@ -20,7 +20,9 @@ import com.game.bomberfight.interfaces.Breakable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
+import com.game.bomberfight.net.Network;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.screen.MultiplayerGamePlay;
 
 public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
@@ -73,7 +75,8 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
     @Override
 	public void update(float delta) {
     	if(this.life <= 0){	
-    		this.dropItem();
+    		MultiplayerGamePlay.client.sendTCP(new Network.RequireDropItem("CRATE", this.box2dBody.getPosition()));
+    		//this.dropItem();
     		//Destroy crate
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			dispose();
