@@ -143,7 +143,7 @@ public class Network {
 	
 	public static class CrateDropList{
 		public static String name = "CRATE";
-		public static int dropProbability = 50;
+		public static int dropProbability = 3;
 		public static class ItemInfo{
 			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
 			
@@ -157,7 +157,7 @@ public class Network {
 	
 	public static class BrickDropList{
 		public static String name = "BRICK";
-		public static int dropProbability = 70;
+		public static int dropProbability = 4;
 		public static class ItemInfo{
 			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
 			

@@ -251,12 +251,14 @@ public class BomberFightServer{
 		    		 * require to drop item         *
 		    		 ********************************/
 			    	if(object instanceof Network.RequireDropItem){
-			    		System.out.println("receive drop item");
+			    		
 			    		Network.RequireDropItem request = (Network.RequireDropItem)object;
 			    		Random r = new Random();
 			    		String itemName = null;
 			    		
+			    		
 			    		if(request.objectDestroyed.equals(Network.CrateDropList.name)){
+			    
 			    			int rand = r.nextInt(Network.CrateDropList.dropProbability);
 			    			if(rand == 1){
 			    				//drop item
@@ -272,6 +274,7 @@ public class BomberFightServer{
 			    				for (Map.Entry<String, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
 			    					
 			    					if(rand >= counter && rand < counter + entry.getValue()){
+			    					
 			    						itemName = entry.getKey();
 			    						break;
 			    					}else counter += entry.getValue();
@@ -310,6 +313,7 @@ public class BomberFightServer{
 			    		
 			    		//if item name not null drop item
 			    		if(itemName != null){
+			    		
 			    			//send drop information to all client in the game
 			    			Room room = players.get(connection.getID()).getInRoom();
 				    		for(Player p : room.getPlayerInRoom()){

@@ -48,7 +48,7 @@ public class GamePlay implements Screen {
 	protected CollisionListener collisionListener;
 	protected RayHandler rayHandler;
 
-	protected AssetManager assetManager = new AssetManager();
+	protected static AssetManager assetManager = new AssetManager();
 	protected GameObjectManager gameObjectManager = new GameObjectManager();
 
 	/**

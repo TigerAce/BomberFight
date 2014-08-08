@@ -24,7 +24,7 @@ public class MultiplayerGamePlay extends GamePlay{
 
 	public static final Client client = new Client();
 	private float correction = 1;
-	private int position;
+	public static int position;
 	public static boolean dead = false;
 	private String startGame[] = {"false"};
 	
@@ -119,12 +119,13 @@ public class MultiplayerGamePlay extends GamePlay{
 	        		}
 	        		
 	        		if(tmp != null){
-					if(confirm.itemName == "POWER_UP")
-						tmp.setSprite(assetManager.get("img/texture/item1.png", Texture.class));
-					if(confirm.itemName == "ANNULAR")
-						tmp.setSprite(assetManager.get("img/texture/item2.png", Texture.class));
-					if(confirm.itemName == "ADDBOMB")
-						tmp.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
+	        			System.out.println(confirm.itemName);
+					if(confirm.itemName.equals("POWER_UP"))
+						tmp.setSprite(GamePlay.assetManager.get("img/texture/item1.png", Texture.class));
+					if(confirm.itemName.equals("ANNULAR"))
+						tmp.setSprite(GamePlay.assetManager.get("img/texture/item2.png", Texture.class));
+					if(confirm.itemName.equals("ADDBOMB"))
+						tmp.setSprite(GamePlay.assetManager.get("img/texture/item3.png", Texture.class));
     				tmp.setX(confirm.dropPosition.x);
     				tmp.setY(confirm.dropPosition.y);
     				tmp.create();

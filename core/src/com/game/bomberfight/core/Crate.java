@@ -75,6 +75,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
     @Override
 	public void update(float delta) {
     	if(this.life <= 0){	
+    		
     		MultiplayerGamePlay.client.sendTCP(new Network.RequireDropItem("CRATE", this.box2dBody.getPosition()));
     		//this.dropItem();
     		//Destroy crate
