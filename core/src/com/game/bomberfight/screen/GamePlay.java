@@ -303,6 +303,8 @@ public class GamePlay implements Screen {
 					0.5f, 1f), 50, 0, 0);
 			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
 			
+			bomber.light = pl;
+			
 			
 			if(gameInfo.networkMode.equals("WAN")){
 				

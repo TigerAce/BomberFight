@@ -140,7 +140,7 @@ public class MultiplayerGamePlay extends GamePlay{
 	        	if(object instanceof Network.LeaveGame){
 	        		//the gamePosition of the player need to be delete
 	        		int gamePosition = ((Network.LeaveGame)object).gamePosition;
-	        		playerList.get(gamePosition).dispose();
+	        		((Bomber)playerList.get(gamePosition)).dispose();
 	        		playerList.removeIndex(gamePosition);
 	        	}
 	    		
