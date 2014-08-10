@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Item extends GameObject{
 
@@ -74,7 +75,7 @@ public class Item extends GameObject{
 		box2dBody.createFixture(itemFixtureDef);
 		box2dBody.setLinearDamping(0.7f);
 		box2dBody.setAngularDamping(0.9f);
-		box2dBody.setUserData(this);
+		box2dBody.setUserData(new UserData(this, false));
 
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
@@ -90,7 +91,10 @@ public class Item extends GameObject{
 	@Override
 	public void update(float delta) {
 		if(picked){
-			((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+			if(box2dBody.getUserData() != null){
+	    		((UserData)box2dBody.getUserData()).isDead = true;
+	    		}
+			//((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			if(sprite != null){
 				sprite = null;
 			}

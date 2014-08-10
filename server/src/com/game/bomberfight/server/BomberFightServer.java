@@ -151,45 +151,27 @@ public class BomberFightServer {
 		    			
 		    		
 							UpdateDropItem updateDropItem = new UpdateDropItem();
-							//updateDropItem.id = request.id;
+							updateDropItem.id = request.id;
 							updateDropItem.name = itemName;
 							updateDropItem.x = request.x;
 							updateDropItem.y = request.y;
 					
 							sendToAllInRoom(room, updateDropItem);
 		    			
-						}
+						}else{
 						
 						//signal all the client in the room that crate or brick destroyed
 						SignalBarrierDestroyed signal = new SignalBarrierDestroyed();
 						signal.id = request.id;
 						
-						sendToAllInRoom(room, signal);
+						sendToAllInRoomExcept(room, c.getID(), signal);
+						}
+						
+						room.destroyedGameObjectId.add(c.getID());
 						
 		    	
 					}
-					/*RequireUpdateDropItem requireUpdateDropItem = (RequireUpdateDropItem) object;
-					Integer roomNumber = connToRoomMap.get(c.getID());
-					if (roomNumber == null) {
-						return;
-					}
-					Room room = roomList.get(roomNumber);
-					boolean isContain = false;
-					for (int id : room.destroyedGameObjectId) {
-						if (id == requireUpdateDropItem.id) {
-							isContain = true;
-						}
-					}
-					if (!isContain) {
-						UpdateDropItem updateDropItem = new UpdateDropItem();
-						updateDropItem.id = requireUpdateDropItem.id;
-						updateDropItem.name = requireUpdateDropItem.name;
-						updateDropItem.x = requireUpdateDropItem.x;
-						updateDropItem.y = requireUpdateDropItem.y;
-						System.out.println("item "+requireUpdateDropItem.name+"\n");
-						room.destroyedGameObjectId.add(requireUpdateDropItem.id);
-						sendToAllInRoom(room, updateDropItem);
-					}*/
+					
 				}
 			}
 

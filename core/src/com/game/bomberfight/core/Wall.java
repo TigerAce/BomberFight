@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Wall extends Barrier{
 
@@ -84,7 +85,7 @@ public class Wall extends Barrier{
 		Body wall = ((GamePlay)currentScreen).getWorld().createBody(wallDef);
 		wall.createFixture(fixtureDef);
 	
-		wall.setUserData(name);
+		wall.setUserData(new UserData(this, false));
 		
 		this.wallBodies.add(wall);
 		

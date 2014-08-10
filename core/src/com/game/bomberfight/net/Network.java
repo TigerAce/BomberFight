@@ -80,7 +80,7 @@ public class Network {
 		public float x;
 		public float y;
 		public String name;
-		//public int id;
+		public int id;
 	}
 	
 	public static class SignalBarrierDestroyed{

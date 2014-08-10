@@ -22,6 +22,7 @@ import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.enums.Direction;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Player extends GameObject implements Destructible {
 	
@@ -106,7 +107,7 @@ public class Player extends GameObject implements Destructible {
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         box2dBody = ((GamePlay)currentScreen).getWorld().createBody(playerDef);
         box2dBody.createFixture(playerFixtureDef);
-        box2dBody.setUserData(this);
+        box2dBody.setUserData(new UserData(this, false));
 
         // Add into GameObjectManager
         ((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
@@ -126,7 +127,6 @@ public class Player extends GameObject implements Destructible {
     	if(attr.getLife() <= 0){
     		System.out.println(box2dBody);
     		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-    		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
     		 dispose();
     	}else{
     		//box2dBody.setLinearVelocity(movement);
@@ -150,6 +150,9 @@ public class Player extends GameObject implements Destructible {
     
     @Override
     public void dispose(){
+    	if(box2dBody.getUserData() != null){
+    		((UserData)box2dBody.getUserData()).isDead = true;
+    		}
     	if(p != null){
     		p.attachToBody(null, 0, 0);
     	}

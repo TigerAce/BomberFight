@@ -21,6 +21,7 @@ import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 
@@ -60,7 +61,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 		box2dBody.createFixture(brickFixtureDef);
 		box2dBody.setLinearDamping(6.0f);
 		box2dBody.setAngularDamping(4.0f);
-		box2dBody.setUserData(this);
+		box2dBody.setUserData(new UserData(this, false));
 		
 		//sprite
 		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/brick3.jpg", Texture.class));
@@ -92,7 +93,8 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 
 	@Override
 	public void dispose() {
-		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+		((UserData)box2dBody.getUserData()).isDead = true;
+		//((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 		brickShape.dispose();
 		super.dispose();
 		

@@ -19,6 +19,7 @@ import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Explosive;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Bomb extends Explosive{
 
@@ -69,13 +70,16 @@ public class Bomb extends Explosive{
 			((GamePlay)currentScreen).getExplosions().add(e);
 		}
 	
-	     ((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+
 	     this.dispose();
 		
 	}
 
 	@Override
 	public void dispose() {
+		if(box2dBody.getUserData() != null){
+    		((UserData)box2dBody.getUserData()).isDead = true;
+    		}
 		 super.dispose();
 		
 	}
@@ -105,7 +109,7 @@ public class Bomb extends Explosive{
         Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
         box2dBody = ((GamePlay)currentScreen).getWorld().createBody(bombDef);
 		box2dBody.createFixture(bombFixtureDef);
-		box2dBody.setUserData(this);
+		box2dBody.setUserData(new UserData(this, false));
 		
 		//sprite
 		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/bomb.png", Texture.class));

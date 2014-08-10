@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.Picker;
+import com.game.bomberfight.utility.UserData;
 
 
 
@@ -13,15 +14,15 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		Object userDataA = contact.getFixtureA().getBody().getUserData();
-		Object userDataB = contact.getFixtureB().getBody().getUserData();
+		UserData userDataA = (UserData) contact.getFixtureA().getBody().getUserData();
+		UserData userDataB = (UserData) contact.getFixtureB().getBody().getUserData();
 		
 		if(userDataA != null && userDataB != null){
 		
-			if(userDataA instanceof Picker && userDataB instanceof Item){
-				((Picker)userDataA).pickUp((Item)userDataB);
-			}else if(userDataB instanceof Picker && userDataA instanceof Item){
-				((Picker)userDataB).pickUp((Item)userDataA);
+			if(userDataA.object instanceof Picker && userDataB.object instanceof Item){
+				((Picker)userDataA.object).pickUp((Item)userDataB.object);
+			}else if(userDataB.object instanceof Picker && userDataA.object instanceof Item){
+				((Picker)userDataB.object).pickUp((Item)userDataA.object);
 			}
 		
 		}
@@ -34,29 +35,29 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		Object userDataA = contact.getFixtureA().getBody().getUserData();
-		Object userDataB = contact.getFixtureB().getBody().getUserData();
+		UserData userDataA = (UserData) contact.getFixtureA().getBody().getUserData();
+		UserData userDataB = (UserData) contact.getFixtureB().getBody().getUserData();
 		
 		if(userDataA != null && userDataB != null){
 		
-			if(userDataA instanceof Bomb && userDataB instanceof Item){
+			if(userDataA.object instanceof Bomb && userDataB.object instanceof Item){
 				contact.setEnabled(false);
 			}
-			else if(userDataB instanceof Bomb && userDataA instanceof Item){
+			else if(userDataB.object instanceof Bomb && userDataA.object instanceof Item){
 				contact.setEnabled(false);
 			}
 			
 			
-			else if(userDataA instanceof Bomb && userDataB instanceof Particle){
-				((Bomb)userDataA).setTime(0);
-			}else if(userDataB instanceof Bomb && userDataA instanceof Particle){
-				((Bomb)userDataB).setTime(0);
+			else if(userDataA.object instanceof Bomb && userDataB.object instanceof Particle){
+				((Bomb)userDataA.object).setTime(0);
+			}else if(userDataB.object instanceof Bomb && userDataA.object instanceof Particle){
+				((Bomb)userDataB.object).setTime(0);
 			}
 			
 
-			else if(userDataA instanceof Item && userDataB instanceof Particle){
+			else if(userDataA.object instanceof Item && userDataB.object instanceof Particle){
 				contact.setEnabled(false);
-			}else if(userDataB instanceof Item && userDataA instanceof Particle){
+			}else if(userDataB.object instanceof Item && userDataA.object instanceof Particle){
 				contact.setEnabled(false);
 			}
 			
@@ -70,15 +71,15 @@ public class CollisionListener implements ContactListener {
 		/**
 		 * particle will damage any object that is destructible
 		 */
-		Object userDataA = contact.getFixtureA().getBody().getUserData();
-		Object userDataB = contact.getFixtureB().getBody().getUserData();
+		UserData userDataA = (UserData) contact.getFixtureA().getBody().getUserData();
+		UserData userDataB = (UserData) contact.getFixtureB().getBody().getUserData();
 		
 		if(userDataA != null && userDataB != null){
 		
-			if(userDataA instanceof Particle && userDataB instanceof Destructible){
-				((Destructible)userDataB).damage(impulse);;
-			}else if(userDataB instanceof Particle && userDataA instanceof Destructible){
-				((Destructible)userDataA).damage(impulse);
+			if(userDataA.object instanceof Particle && userDataB.object instanceof Destructible){
+				((Destructible)userDataB.object).damage(impulse);
+			}else if(userDataB.object instanceof Particle && userDataA.object instanceof Destructible){
+				((Destructible)userDataA.object).damage(impulse);
 			}
 			
 			

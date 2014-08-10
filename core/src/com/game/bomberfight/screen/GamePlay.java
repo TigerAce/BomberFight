@@ -56,6 +56,7 @@ import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
+import com.game.bomberfight.utility.UserData;
 
 public class GamePlay implements Screen {
 
@@ -155,6 +156,8 @@ public class GamePlay implements Screen {
 			world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 			this.timeAccumulator -= this.TIMESTEP;
 		}
+		
+		removeBodies();
 		
 		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "accumulate and world step: " + (System.currentTimeMillis() - timeNow) + "ms");
@@ -420,6 +423,17 @@ public class GamePlay implements Screen {
 		return gameInfo;
 	}
 	
+	public void removeBodies(){
+		Array<Body> bodies = new Array<Body>();
+		world.getBodies(bodies);
+		for(Body b : bodies){
+			UserData data = (UserData) b.getUserData();
+			if(data != null && data.isDead == true){
+				world.destroyBody(b);
+				data = null;
+			}
+		}
+	}
 	public void createPlayer() {
 		for (int i = 0; i < tileMapManager.getPlayerSpawnPointList().size; i++) {
 			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
@@ -515,10 +529,15 @@ public class GamePlay implements Screen {
 			
 			if (object instanceof UpdateDropItem) {
 				UpdateDropItem updateDropItem = (UpdateDropItem) object;
-			/*	GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
+				GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
 				if (gameObject != null) {
+					if(gameObject.getBox2dBody() != null){
+						if(((UserData)gameObject.getBox2dBody().getUserData()).isDead == false);
+						gameObject.dispose();
+					}
 					gameObject.dispose();
-				}*/
+				}
+				
 				Item item = null;
 				for(Item i : itemList){
 					if(i.getName().equals(updateDropItem.name)){
@@ -545,11 +564,15 @@ public class GamePlay implements Screen {
 			}
 			
 			if(object instanceof SignalBarrierDestroyed){
-			/*	SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
+				SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
 				GameObject gameObject = gameObjectManager.findGameObject(signal.id);
 				if (gameObject != null) {
+					if(gameObject.getBox2dBody() != null){
+						if(((UserData)gameObject.getBox2dBody().getUserData()).isDead == false);
+						gameObject.dispose();
+					}
 					gameObject.dispose();
-				}*/
+				}
 			}
 		}
 

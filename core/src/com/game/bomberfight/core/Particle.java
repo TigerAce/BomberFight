@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Particle extends GameObject{
 
@@ -73,7 +74,9 @@ public class Particle extends GameObject{
 		
 		box2dBody.setLinearVelocity(blastPowerX * dirVector.x,
 							 blastPowerY * dirVector.y);
-		box2dBody.setUserData(this);
+		
+		box2dBody.setUserData(new UserData(this, false));
+
     }
 
     @Override
@@ -101,7 +104,11 @@ public class Particle extends GameObject{
 	@Override
 	public void dispose() {
 		parent.setParticleCounter(parent.getParticleCounter() - 1);
-		((GamePlay)currentScreen).getWorld().destroyBody(this.box2dBody);
+		
+		if(box2dBody.getUserData() != null){
+			((UserData)box2dBody.getUserData()).isDead = true;
+			}
+		//((GamePlay)currentScreen).getWorld().destroyBody(this.box2dBody);
 		super.dispose();
 		effect.dispose();
 		

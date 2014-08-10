@@ -22,6 +22,7 @@ import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
 import com.game.bomberfight.net.Network.RequireUpdateDropItem;
 import com.game.bomberfight.screen.GamePlay;
+import com.game.bomberfight.utility.UserData;
 
 public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
@@ -61,11 +62,12 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 		box2dBody.createFixture(crateFixtureDef);
 		box2dBody.setLinearDamping(4f);
 		box2dBody.setAngularDamping(2f);
-		box2dBody.setUserData(this);
+		box2dBody.setUserData(new UserData(this, false));
 		
 		sprite = new Sprite(((GamePlay)currentScreen).getAssetManager().get("img/texture/crate4.jpg", Texture.class));
 		sprite.setSize(width, height);
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+		
 		
 		((GamePlay)currentScreen).getGameObjectManager().addGameObject(this);
     	
@@ -83,16 +85,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 				requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
 				GamePlay.client.sendTCP(requireUpdateDropItem);
     			
-			/*	String name = this.dropItemName();
-				if (name != null) {
-					RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
-					requireUpdateDropItem.id = this.getId();
-					requireUpdateDropItem.name = name;
-					requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
-					requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
-					GamePlay.client.sendTCP(requireUpdateDropItem);
-					Gdx.app.log("item", requireUpdateDropItem.name+" id "+requireUpdateDropItem.id);
-				}*/
+		
 			} else {
 				this.dropItem();
 			}
@@ -116,8 +109,12 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	public void dispose() {
 		//if(sprite != null)
 		//	sprite.getTexture().dispose();
-		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
-		crateShape.dispose();
+		//((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+	
+		if(box2dBody.getUserData() != null){
+		((UserData)box2dBody.getUserData()).isDead = true;
+		}
+		//crateShape.dispose();
 		super.dispose();
 		
 	}
