@@ -13,7 +13,7 @@ public class RemoteController extends Controller {
 	private Map<Integer, Boolean> keyMap = new LinkedHashMap<Integer, Boolean>();
 	private int[] keys;
 	
-	public RemoteController(int[] keys, LinkedHashMap keyMap) {
+	public RemoteController(int[] keys, Map<Integer, Boolean> keyMap) {
 		// TODO Auto-generated constructor stub
 		owner = null;
 		this.keys = keys;

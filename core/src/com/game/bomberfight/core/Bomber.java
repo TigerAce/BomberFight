@@ -2,8 +2,6 @@ package com.game.bomberfight.core;
 
 import java.util.ArrayList;
 
-import box2dLight.PointLight;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -23,7 +21,6 @@ public class Bomber extends Player implements Picker{
  	private Controller controller = null;
  	private ArrayList<Item> inventory;  //store items for player
 
- 	public PointLight light = null;
 
  	
  	/**
@@ -127,8 +124,6 @@ public class Bomber extends Player implements Picker{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		if(this.light != null)
-			light.attachToBody(null, 0,0);
 		super.dispose();
 	}
 

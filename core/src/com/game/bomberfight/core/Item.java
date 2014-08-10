@@ -40,6 +40,7 @@ public class Item extends GameObject{
 
 	public Item(){
 		this(0, 0, new PlayerGameAttributes(), -1, 10);
+		this.name = "item";
 	}
 	
 	public Item(Item item){
@@ -49,7 +50,6 @@ public class Item extends GameObject{
 
 	@Override
 	public void create() {
-		this.name = "item";
     	
     	FixtureDef itemFixtureDef = new FixtureDef();
 		BodyDef itemDef = new BodyDef();

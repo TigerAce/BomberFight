@@ -1,7 +1,10 @@
 package com.game.bomberfight.screen;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
@@ -18,10 +21,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.InputSource.RemoteController;
@@ -34,7 +40,18 @@ import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.core.TileMapManager.PlayerSpawnPoint;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.model.Player;
+import com.game.bomberfight.model.PlayerInfo;
+import com.game.bomberfight.net.BomberFightClient;
+import com.game.bomberfight.net.Network;
+import com.game.bomberfight.net.Network.RequireJoinGame;
+import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
+import com.game.bomberfight.net.Network.RespondJoinGame;
+import com.game.bomberfight.net.Network.StartGame;
+import com.game.bomberfight.net.Network.UpdateDropItem;
+import com.game.bomberfight.net.Network.UpdateInput;
+import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
@@ -48,7 +65,7 @@ public class GamePlay implements Screen {
 	protected CollisionListener collisionListener;
 	protected RayHandler rayHandler;
 
-	protected static AssetManager assetManager = new AssetManager();
+	protected AssetManager assetManager = new AssetManager();
 	protected GameObjectManager gameObjectManager = new GameObjectManager();
 
 	/**
@@ -85,13 +102,21 @@ public class GamePlay implements Screen {
 	
 	protected InputMultiplexer inputMultiplexer;
 	
-	protected GameInfo gameInfo;
+	public static GameInfo gameInfo = new GameInfo();
 	
 	protected TileMapEffectSystem tileMapEffectSystem;
 	
-	protected Array<Player> playerList = new Array<Player>();;
-
-	protected ArrayList<LinkedHashMap> keyMaps = new ArrayList<LinkedHashMap>();
+	protected Array<Player> playerList = new Array<Player>();
+	
+	public static final BomberFightClient client = new BomberFightClient();
+	
+	protected Map<Integer, Player> connToPlayerMap = new HashMap<Integer, Player>();
+	
+	protected Map<Integer, Map<Integer, Boolean>> connToInputSourceMap = new HashMap<Integer, Map<Integer,Boolean>>();
+	
+	protected float positionUpdateTime = 1.f;
+	
+	protected Vector2 lastPosition = new Vector2();
 	
 	@Override
 	public void render(float delta) {
@@ -212,6 +237,8 @@ public class GamePlay implements Screen {
 			timeNow = System.currentTimeMillis();
 			Gdx.app.log("Efficiency test", "\n\n");
 		}
+		
+		updatePositionToOthers(delta);
 	}
 
 	@Override
@@ -288,45 +315,12 @@ public class GamePlay implements Screen {
 		item.getAttr().setPowerY(10f);
 		this.itemList.add(item);
 		
-		gui = new Gui(this);
+		gui = new Gui();
 		
-		for (int i = 0; i < tileMapManager.getPlayerSpawnPointList().size; i++) {
-			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
-			Bomber bomber = new Bomber(spawnPoint.x, spawnPoint.y, spawnPoint.width, spawnPoint.height, 
-					spawnPoint.speed, spawnPoint.hitPoint, spawnPoint.numBombPerRound, spawnPoint.roundInterval);
-			bomber.setAnimation(assetManager.get("img/animation/soldier1.png",  Texture.class), 3, 1);
-			bomber.create();
-		
-			playerList.add(bomber);
-			// Attach a point light to player
-			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
-					0.5f, 1f), 50, 0, 0);
-			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
-			
-			bomber.light = pl;
-			
-			
-			if(gameInfo.networkMode.equals("WAN")){
-				
-				keyMaps.add(i, new LinkedHashMap());
-				gui.setHUD(bomber);
-				bomber.setController(new RemoteController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE},keyMaps.get(i)));
-			}else{
-				if (i == 0) {
-					gui.setFixedStatusBar(bomber);
-					BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
-					inputMultiplexer.addProcessor(bomberController);
-					bomber.setController(bomberController);
-				} else {
-					gui.setHUD(bomber);
-					BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
-					inputMultiplexer.addProcessor(bomberController);
-					bomber.setController(bomberController);
-				}
-			}
-		}
-		
+		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
+		
+		connect("127.0.0.1");
 	}
 
 	@Override
@@ -424,11 +418,175 @@ public class GamePlay implements Screen {
 	public GameInfo getGameInfo() {
 		return gameInfo;
 	}
+	
+	public void createPlayer() {
+		for (int i = 0; i < tileMapManager.getPlayerSpawnPointList().size; i++) {
+			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
+			Bomber bomber = new Bomber(spawnPoint.x, spawnPoint.y, spawnPoint.width, spawnPoint.height, 
+					spawnPoint.speed, spawnPoint.hitPoint, spawnPoint.numBombPerRound, spawnPoint.roundInterval);
+			bomber.setAnimation(assetManager.get("img/animation/soldier1.png",  Texture.class), 3, 1);
+			bomber.create();
+		
+			playerList.add(bomber);
+			// Attach a point light to player
+			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
+					0.5f, 1f), 50, 0, 0);
+			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
+			
+			if (gameInfo.networkMode.equals("WAN")) {
+				gui.setHUD(bomber);
+			} else {
+				if (i == 0) {
+					gui.setFixedStatusBar(bomber);
+					BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
+					inputMultiplexer.addProcessor(bomberController);
+					bomber.setController(bomberController);
+				} else {
+					gui.setHUD(bomber);
+					BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
+					inputMultiplexer.addProcessor(bomberController);
+					bomber.setController(bomberController);
+				}
+			}
+		}
+	}
+	
+	public void setupInputSource(PlayerInfo[] playerInfoList) {
+		for (int i = 0; i < playerList.size; i++) {
+			Bomber bomber = (Bomber) playerList.get(i);
+			
+			connToPlayerMap.put(playerInfoList[i].conn, bomber);
+			
+			if (gameInfo.playerInfo.spawnPoint == i) {
+				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
+				inputMultiplexer.addProcessor(bomberController);
+				bomber.setController(bomberController);
+			} else {
+				Map<Integer, Boolean> inputSource = new LinkedHashMap<Integer, Boolean>();
+				connToInputSourceMap.put(playerInfoList[i].conn, inputSource);
+				RemoteController remoteController = new RemoteController(
+						new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE}, inputSource);
+				bomber.setController(remoteController);
+			}
+		}
+	}
+	
+	public class ClientListener extends Listener {
+		public void connected (Connection connection) {
+			RequireJoinGame requireJoinGame = new RequireJoinGame();
+			requireJoinGame.gameInfo = GamePlay.gameInfo;
+			requireJoinGame.gameInfo.playerInfo.conn = connection.getID();
+			client.sendTCP(requireJoinGame);
+		}
+
+		public void received (Connection connection, Object object) {
+			if (object instanceof RespondJoinGame) {
+				RespondJoinGame respondJoinGame = (RespondJoinGame) object;
+				GamePlay.gameInfo = respondJoinGame.gameInfo;
+				Gdx.app.log("received RespondJoinGame", respondJoinGame.result);
+				Gdx.app.log("received RespondJoinGame GameInfo", "room number "+respondJoinGame.gameInfo.playerInfo.roomNumber+"spawn point "+respondJoinGame.gameInfo.playerInfo.spawnPoint);
+			}
+			
+			if (object instanceof StartGame) {
+				StartGame startGame = (StartGame) object;
+				setupInputSource(startGame.playerInfoList);
+			}
+			
+			if (object instanceof UpdateInput) {
+				UpdateInput updateInput = (UpdateInput) object;
+				connToInputSourceMap.get(updateInput.conn).put(updateInput.keyCode, updateInput.keyState);
+			}
+			
+			if (object instanceof UpdatePosition) {
+				UpdatePosition updatePosition = (UpdatePosition) object;
+				Body body = connToPlayerMap.get(updatePosition.conn).getBox2dBody();
+				Vector2 pos = body.getPosition();
+				float angle = body.getAngle();
+				if (pos.x != updatePosition.x || pos.y != updatePosition.y) {
+					if (!world.isLocked()) {
+						pos.set(updatePosition.x, updatePosition.y);
+						connToPlayerMap.get(updatePosition.conn).getBox2dBody().setTransform(pos, angle);
+					}
+				}
+			}
+			
+			if (object instanceof UpdateDropItem) {
+				UpdateDropItem updateDropItem = (UpdateDropItem) object;
+				GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
+				if (gameObject != null) {
+					gameObject.dispose();
+				}
+				Item item = null;
+				for(Item i : itemList){
+					if(i.getName().equals(updateDropItem.name)){
+						item = new Item(i);
+						break;
+					}
+				}
+				if (item != null) {
+					if(updateDropItem.name.equals("POWER_UP")){
+						item.setSprite(assetManager.get("img/texture/item1.png", Texture.class));
+					}
+					if(updateDropItem.name.equals("ANNULAR")){
+						item.setSprite(assetManager.get("img/texture/item2.png", Texture.class));
+					}
+					if(updateDropItem.name.equals("ADDBOMB")){
+						item.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
+					}
+					item.setX(updateDropItem.x);
+					item.setY(updateDropItem.y);
+					item.create();
+				}
+			}
+		}
+
+		public void disconnected (Connection connection) {
+		}
+	}
+	
+	public void connect(String host) {
+		Network.register(client);
+		
+		client.addListener(new ClientListener());
+		
+		client.start();
+		
+		try {
+			client.connect(5000, host, Network.portTCP, Network.portUDP);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
-	 * @param gameInfo the gameInfo to set
+	 * @return the connToPlayerMap
 	 */
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
+	public Map<Integer, Player> getConnToPlayerMap() {
+		return connToPlayerMap;
+	}
+
+	/**
+	 * @return the connToInputSourceMap
+	 */
+	public Map<Integer, Map<Integer, Boolean>> getConnToInputSourceMap() {
+		return connToInputSourceMap;
+	}
+	
+	public void updatePositionToOthers (float delta) {
+		if (!connToPlayerMap.isEmpty()) {
+			positionUpdateTime -= delta;
+			if (positionUpdateTime <= 0) {
+				Vector2 position = connToPlayerMap.get(gameInfo.playerInfo.conn).getBox2dBody().getPosition();
+				if (lastPosition.x != position.x || lastPosition.y != position.y) {
+					RequireUpdatePositionToOthers requireUpdatePositionToOthers = new RequireUpdatePositionToOthers();
+					requireUpdatePositionToOthers.x = position.x;
+					requireUpdatePositionToOthers.y = position.y;
+					client.sendTCP(requireUpdatePositionToOthers);
+					lastPosition.set(position);
+				}
+				positionUpdateTime = 1.f;
+			}
+		}
 	}
 }

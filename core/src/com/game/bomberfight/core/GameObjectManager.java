@@ -76,4 +76,15 @@ public class GameObjectManager {
             iterator.remove();
         }
     }
+    
+    public GameObject findGameObject(int id) {
+    	Iterator<GameObject> iterator = this.gameObjects.iterator();
+        while (iterator.hasNext()) {
+        	GameObject gameObject = iterator.next();
+        	if (gameObject.getId() == id) {
+				return gameObject;
+			}
+        }
+        return null;
+    }
 }

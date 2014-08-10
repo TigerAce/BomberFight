@@ -20,20 +20,17 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.bomberfight.model.Player;
-import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.screen.MainMenu;
 
 public class Gui {
 	
 	private Stage uiStage;
 	private Skin uiSkin;
-	private GamePlay gamePlay;
 	private Table stateTable;
 	private Viewport gamePlayViewport;
 
-	public Gui(GamePlay gamePlay) {
+	public Gui() {
 		// TODO Auto-generated constructor stub
-		this.gamePlay = gamePlay;
 		uiStage = new Stage(new ScreenViewport());
 		InputMultiplexer inputMultiplexer = (InputMultiplexer) Gdx.input.getInputProcessor();
 		inputMultiplexer.addProcessor(uiStage);
@@ -192,6 +189,7 @@ public class Gui {
 	}
 	
 	public void showMenu() {
+		@SuppressWarnings("unused")
 		Dialog dialog = new Dialog("Warning!", uiSkin) {
 			protected void result (Object object) {
 				boolean b = (Boolean) object;

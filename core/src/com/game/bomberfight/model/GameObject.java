@@ -19,6 +19,7 @@ public abstract class GameObject implements Disposable{
     protected Sprite sprite;
     protected String name;
     protected int state;
+    protected int id;
 
 
 
@@ -112,6 +113,18 @@ public abstract class GameObject implements Disposable{
 	 */
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
+	}
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

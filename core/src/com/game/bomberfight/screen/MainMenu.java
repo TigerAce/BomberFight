@@ -30,8 +30,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.game.bomberfight.model.GameInfo;
 import com.game.bomberfight.model.MapInfo;
+import com.game.bomberfight.model.PlayerInfo;
 import com.game.bomberfight.utility.Config;
 
 public class MainMenu implements Screen {
@@ -54,7 +54,6 @@ public class MainMenu implements Screen {
 
 	private Skin skin;
 	private Stage stage;
-	private GameInfo gameInfo;
 	private Table table;
 	
 	public String networkMode = "Localhost";
@@ -66,7 +65,6 @@ public class MainMenu implements Screen {
 		viewport = new ExtendViewport(Config.getInstance().get("viewportWidth", Float.class), Config.getInstance().get("viewportHeight", Float.class));
 		skin = new Skin();
 		stage = new Stage();
-		gameInfo = new GameInfo();
 		mapInfoList = new Array<MapInfo>();
 		loadMapInfo("data/map.xml");
 		Gdx.input.setInputProcessor(stage);
@@ -176,7 +174,7 @@ public class MainMenu implements Screen {
 		list.setItems(mapInfoList);
 		list.getSelection().setMultiple(false);
 		list.getSelection().setRequired(true);
-		gameInfo.mapInfo = mapInfoList.get(0);
+		GamePlay.gameInfo.mapInfo = mapInfoList.get(0);
 		
 		ScrollPane scrollPane = new ScrollPane(list, skin);
 		scrollPane.setName("scrollpane");
@@ -200,7 +198,7 @@ public class MainMenu implements Screen {
 						ScrollPane scrollPane = table.findActor("scrollpane");
 						Container<Image> container = scrollPane.findActor("container");
 						container.setActor(new Image(new Texture(item.preview)));
-						gameInfo.mapInfo = item;
+						GamePlay.gameInfo.mapInfo = item;
 					}
 				}
 			}
@@ -294,13 +292,12 @@ public class MainMenu implements Screen {
 					if (!networkMode.equalsIgnoreCase("Localhost") && nickname.isEmpty()) {
 						showDialog("Warning!", "Please input your nickname so that your friends can talk to you!");
 					} else {
-						gameInfo.gameMode = gameMode;
-						gameInfo.networkMode = networkMode;
-						for (int i = 0; i < gameInfo.mapInfo.maxNumPlayer; i++) {
-							gameInfo.playerList.add("player-"+i);
-						}
+						GamePlay.gameInfo.gameMode = gameMode;
+						GamePlay.gameInfo.networkMode = networkMode;
+						PlayerInfo playerInfo = new PlayerInfo();
+						playerInfo.name = nickname;
+						GamePlay.gameInfo.playerInfo = playerInfo;
 						LoadingScreen loadingScreen = new LoadingScreen();
-						loadingScreen.setGameInfo(gameInfo);
 						((Game) Gdx.app.getApplicationListener()).setScreen(loadingScreen);
 					}
 				}

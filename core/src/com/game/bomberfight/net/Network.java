@@ -1,116 +1,82 @@
 package com.game.bomberfight.net;
-import com.badlogic.gdx.math.Vector2;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
-import com.game.bomberfight.enums.Direction;
-
-
-
-
-
+import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.model.MapInfo;
+import com.game.bomberfight.model.PlayerInfo;
 
 public class Network {
 	public static final int portTCP = 54555;
 	public static final int portUDP = 54777;
-	
-	public static void register (EndPoint endPoint) {
-         Kryo kryo = endPoint.getKryo();
-        
-         kryo.register(RemoteControl.class);
-         kryo.register(CorrectPosition.class);
-         kryo.register(JoinGame.class);
-         kryo.register(Direction.class);
-         kryo.register(Vector2.class);
-         kryo.register(Ping.class);
-         kryo.register(AssignBornPosition.class);
-         kryo.register(CompleteInitGame.class);
-         kryo.register(StartGame.class);
-         kryo.register(LeaveGame.class);
-         kryo.register(RequireDropItem.class);
-         kryo.register(ConfirmDropItem.class);
-	}
-	
-	public static class StartGame{}
-	
-	public static class CompleteInitGame{}
 
-	public static class AssignBornPosition{
-		public short positionNumber;
-		public AssignBornPosition(){}
-		public AssignBornPosition(short positionNumber){
-			this.positionNumber = positionNumber;
-		}
-	}
-	public static class JoinGame{
-		public String mapName;
-		public short numPlayers;
+	public static void register(EndPoint endPoint) {
+		Kryo kryo = endPoint.getKryo();
+
+		kryo.register(RequireJoinGame.class);
+		kryo.register(RespondJoinGame.class);
+		kryo.register(StartGame.class);
+		kryo.register(RequireUpdateInputToOthers.class);
+		kryo.register(UpdateInput.class);
+		kryo.register(RequireUpdatePositionToOthers.class);
+		kryo.register(UpdatePosition.class);
+		kryo.register(RequireUpdateDropItem.class);
+		kryo.register(UpdateDropItem.class);
 		
-		public JoinGame(){}
-		public JoinGame(String mapName, short numPlayer){
-			this.mapName = mapName;
-			this.numPlayers = numPlayer;
-		}
-	}
-	
-	public static class LeaveGame{
-		public int gamePosition;
+		kryo.register(GameInfo.class);
+		kryo.register(MapInfo.class);
+		kryo.register(PlayerInfo.class);
 		
-		public LeaveGame(){}
-		public LeaveGame(int gamePosition){
-			this.gamePosition = gamePosition;
-		}
+		kryo.register(PlayerInfo[].class);
 	}
 	
-	public static class CorrectPosition{
-		public int playerID;
-		public Vector2 pos;
-		
-		public CorrectPosition(){}
-		public CorrectPosition(Vector2 pos, int playerID){
-			this.pos = pos;
-			this.playerID = playerID;
-		}
+	public static class RequireJoinGame {
+		public GameInfo gameInfo;
 	}
 	
-	public static class RemoteControl{
-		public int playerID;
-		public int keycode;
-		public boolean upOrDown;
-		
-		public RemoteControl(){}
-		public RemoteControl(int playerID, int keycode, boolean upOrDown){
-			this.playerID = playerID;
-			this.keycode = keycode;
-			this.upOrDown = upOrDown;
-		}
+	public static class RespondJoinGame {
+		public String result;
+		public GameInfo gameInfo;
 	}
 	
-	public static class RequireDropItem{
-		public String objectDestroyed;
-		public Vector2 dropPosition;
-		
-		public RequireDropItem(){}
-		public RequireDropItem(String objectDestroyed, Vector2 dropPosition){
-			this.objectDestroyed = objectDestroyed;
-			this.dropPosition = dropPosition;
-		}
+	public static class StartGame {
+		public PlayerInfo[] playerInfoList;
 	}
 	
-	public static class ConfirmDropItem{
-		public String itemName;
-		public Vector2 dropPosition;
-		
-		public ConfirmDropItem(){}
-		public ConfirmDropItem(String itemName, Vector2 dropPosition){
-			this.itemName = itemName;
-			this.dropPosition = dropPosition;
-		}
+	public static class RequireUpdateInputToOthers {
+		public int keyCode;
+		public boolean keyState;
 	}
 	
+	public static class UpdateInput {
+		public int keyCode;
+		public boolean keyState;
+		public int conn;
+	}
 	
+	public static class RequireUpdatePositionToOthers {
+		public float x;
+		public float y;
+	}
 	
+	public static class UpdatePosition {
+		public float x;
+		public float y;
+		public int conn;
+	}
 	
+	public static class RequireUpdateDropItem {
+		public float x;
+		public float y;
+		public String name;
+		public int id;
+	}
 	
-	
+	public static class UpdateDropItem {
+		public float x;
+		public float y;
+		public String name;
+		public int id;
+	}
+
 }

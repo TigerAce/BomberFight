@@ -11,18 +11,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.bomberfight.interfaces.Breakable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
-import com.game.bomberfight.net.Network;
+import com.game.bomberfight.net.Network.RequireUpdateDropItem;
 import com.game.bomberfight.screen.GamePlay;
-import com.game.bomberfight.screen.MultiplayerGamePlay;
 
 public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
@@ -74,10 +73,23 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
     @Override
 	public void update(float delta) {
-    	if(this.life <= 0){	
-    		
-    		MultiplayerGamePlay.client.sendTCP(new Network.RequireDropItem("CRATE", this.box2dBody.getPosition()));
-    		//this.dropItem();
+    	if(this.life <= 0){
+    		if (GamePlay.gameInfo.networkMode.equals("WAN")) {
+				Item item = this.dropItem();
+				if (item != null) {
+					RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
+					requireUpdateDropItem.id = this.getId();
+					requireUpdateDropItem.name = item.getName();
+					requireUpdateDropItem.x = item.getX();
+					requireUpdateDropItem.y = item.getY();
+					GamePlay.client.sendTCP(requireUpdateDropItem);
+					item.setPicked(true);
+					item.setDiscard(true);
+					Gdx.app.log("item", requireUpdateDropItem.name+" id "+requireUpdateDropItem.id);
+				}
+			} else {
+				this.dropItem();
+			}
     		//Destroy crate
     		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			dispose();
@@ -123,7 +135,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	}
 
 	@Override
-	public void dropItem() {
+	public Item dropItem() {
 		//give 1/6 possibility to generate an random item in item list
 		ArrayList<Item> items = ((GamePlay)currentScreen).getItemList();
 		if(items.size() != 0){
@@ -154,12 +166,13 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	    				tmp.setX(box2dBody.getPosition().x);
 	    				tmp.setY(box2dBody.getPosition().y);
 	    				tmp.create();
-	    				break;
+	    				return tmp;
 					}else counter += prob;
 				}
 				
 			}
 		}
+		return null;
 	}
 
 }

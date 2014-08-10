@@ -110,7 +110,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 	}
 
 	@Override
-	public void dropItem() {
+	public Item dropItem() {
 		//give 1/4 possibility to generate an random item in item list
 		ArrayList<Item> items = ((GamePlay)currentScreen).getItemList();
 		if(items.size() != 0){
@@ -142,13 +142,13 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 						tmp.setX(box2dBody.getPosition().x);
 	    				tmp.setY(box2dBody.getPosition().y);
 	    				tmp.create();
-	    				break;
+	    				return tmp;
 					}else counter += prob;
 				}
 				
 			}
 		}
-		
+		return null;
 	}
 
 	

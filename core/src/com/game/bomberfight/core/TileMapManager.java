@@ -65,6 +65,7 @@ public class TileMapManager {
 		Matrix4 trans = new Matrix4();
 		trans.setTranslation(-viewportWidth / 2.f, -viewportHeight / 2.f, 0);
 		
+		int id = 0;
 		while (iter.hasNext()) {
 			MapObject mapObject = iter.next();
 
@@ -126,12 +127,14 @@ public class TileMapManager {
 				if (rectangleMapObject.getName().equalsIgnoreCase("crate")) {
 					Crate c = new Crate(vec3.x, vec3.y, width, height, hitpoint);
 					c.create();
+					c.setId(id);
 				}
 				
 				//create a brick
 				if (rectangleMapObject.getName().equalsIgnoreCase("brick")) {
 					Brick b = new Brick(vec3.x, vec3.y, width, height, hitpoint);
 					b.create();
+					b.setId(id);
 				}
 				
 				//create bomber a
@@ -154,7 +157,7 @@ public class TileMapManager {
 					PlayerSpawnPointList.add(spawnPoint);
 				}
 			}
-			
+			id++;
 		}
 	}
 	

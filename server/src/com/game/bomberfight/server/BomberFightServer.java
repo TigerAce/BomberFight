@@ -1,348 +1,195 @@
 package com.game.bomberfight.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.game.bomberfight.server.Network;
-import com.game.bomberfight.server.Network.RemoteControl;
-import com.game.bomberfight.server.Player;
-import com.game.bomberfight.server.Room;
+import com.esotericsoftware.minlog.Log;
+import com.game.bomberfight.model.GameInfo;
+import com.game.bomberfight.model.MapInfo;
+import com.game.bomberfight.model.PlayerInfo;
+import com.game.bomberfight.net.Network;
+import com.game.bomberfight.net.Network.RequireJoinGame;
+import com.game.bomberfight.net.Network.RequireUpdateDropItem;
+import com.game.bomberfight.net.Network.RequireUpdateInputToOthers;
+import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
+import com.game.bomberfight.net.Network.RespondJoinGame;
+import com.game.bomberfight.net.Network.StartGame;
+import com.game.bomberfight.net.Network.UpdateDropItem;
+import com.game.bomberfight.net.Network.UpdateInput;
+import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.server.Room.RoomState;
 
+public class BomberFightServer {
+	Server server;
+	Array<Room> roomList;
+	Map<Integer, Integer> connToRoomMap;
 
-
-
-
-
-public class BomberFightServer{
-
-
-	public static ArrayList<Room> roomList = new ArrayList<Room>();
-	public static HashMap<Integer, Player> players = new HashMap<Integer, Player>();
-	public static final Server server = new Server();
-	
-	
-	
-	
-	
-	
-	/**
-	 * this function is used do send the initialization information to client 
-	 * including:
-	 * assign the player positions
-	 * 
-	 * the client will need to send back a CompleteInitGame signal to do the final confirm before start the game
-	 * @param room
-	 */
-	public static void initGame(Room room){
-	
-		//distribute player born position  & send player position to each client
-		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
-
-			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.AssignBornPosition((short)(i)));
-			
-			//assign room position to each player
-			room.getPlayerInRoom().get(i).setGamePosition(i);;
-		}
+	public BomberFightServer() throws IOException {
+		server = new Server();
+		Network.register(server);
 		
-		//set up player check list for room
-		room.setPlayerChecker(room.getPlayerInRoom().size());
-		
-		
-	
-	}
-	
-	/**
-	 * this function is used to send the start game signal to all the client in a room. after the confirmation check finish
-	 * @param room
-	 */
-	public static void startGame(Room room){
-		
-		//signal all the player in the room to start game
-		for(int i = 0; i < room.getPlayerInRoom().size(); i++){
+		roomList = new Array<Room>();
+		connToRoomMap = new HashMap<Integer, Integer>();
 
-			server.sendToTCP(room.getPlayerInRoom().get(i).getPlayerID(), new Network.StartGame());
-		}
-		
-		//change room state to playing
-		room.state = RoomState.PLAYING;
-		
-		System.out.println("start game in room #" + room.getRoomID());
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args){
-	
-		//register server
-		Network.register(BomberFightServer.server);
-		
-		//start server and bind port
-		BomberFightServer.server.start();
-	    
-	    try {
-			server.bind(Network.portTCP, Network.portUDP);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		
-	    
-	    
-	    //add server listener
-	    server.addListener(new Listener() {
-	    	
-	    	public void connected(Connection connection){
-	    		//if a client is connected server, create a player status for the client
-	    		
-	    		BomberFightServer.players.put(connection.getID(),new Player(connection.getID(), null));
-	    		System.out.println("connected player number:" + connection.getID());
-	    	}
-	    	
-	    	public void disconnected(Connection connection){
-	    		/*
-	    		 * if client disconnected, remove relative player form server
-	    		 */
-	    		System.out.println("player " + connection.getID() + " disconnected");
-	    		
-	    		//find room
-	    		Room r = players.get(connection.getID()).getInRoom();
-	    		
-	    		//send leave game signal for disconnected player to all other player in the room
-	    		for(Player p : r.getPlayerInRoom()){
-	    			if(p.getPlayerID() != connection.getID())
-	    			server.sendToTCP(p.getPlayerID(), new Network.LeaveGame(players.get(connection.getID()).getGamePosition()));
-	    		}
-	    		
-	    		//remove this player from room
-	    		r.removePlayer(players.get(connection.getID()));
-	    		
-	    		//if room is empty close room
-	    		if(r.playerInRoom.isEmpty()){
-	    			System.out.println("close room #" + r.getRoomID());
-	    			roomList.remove(r);
-	    		}
-	    		
-	    		//remove player from server
-	    		players.remove(connection.getID());
-	    		
-	    		System.out.println("remove player " + connection.getID() + " from server");
-	    		
-	    	}
-	    	
-	    	public void received (Connection connection, Object object) {
-			
+		server.addListener(new Listener() {
+			public void received(Connection c, Object object) {
+				if (object instanceof RequireJoinGame) {
+					RequireJoinGame requireJoinGame = (RequireJoinGame) object;
+					joinGame(requireJoinGame.gameInfo);
+				}
+				
+				if (object instanceof RequireUpdateInputToOthers) {
+					RequireUpdateInputToOthers requireUpateInputToOthers = (RequireUpdateInputToOthers) object;
+					Integer roomNumber = connToRoomMap.get(c.getID());
+					if (roomNumber == null) {
+						return;
+					}
+					Room room = roomList.get(roomNumber);
+					UpdateInput updateInput = new UpdateInput();
+					updateInput.conn = c.getID();
+					updateInput.keyCode = requireUpateInputToOthers.keyCode;
+					updateInput.keyState = requireUpateInputToOthers.keyState;
+					sendToAllInRoomExcept(room, c.getID(), updateInput);
+				}
+				
+				if (object instanceof RequireUpdatePositionToOthers) {
+					RequireUpdatePositionToOthers requireUpdatePositionToOthers = (RequireUpdatePositionToOthers) object;
+					Integer roomNumber = connToRoomMap.get(c.getID());
+					if (roomNumber == null) {
+						return;
+					}
+					Room room = roomList.get(roomNumber);
+					UpdatePosition updatePosition = new UpdatePosition();
+					updatePosition.conn = c.getID();
+					updatePosition.x = requireUpdatePositionToOthers.x;
+					updatePosition.y = requireUpdatePositionToOthers.y;
+					sendToAllInRoomExcept(room, c.getID(), updatePosition);
+				}
+				
+				if (object instanceof RequireUpdateDropItem) {
+					RequireUpdateDropItem requireUpdateDropItem = (RequireUpdateDropItem) object;
+					Integer roomNumber = connToRoomMap.get(c.getID());
+					if (roomNumber == null) {
+						return;
+					}
+					Room room = roomList.get(roomNumber);
+					boolean isContain = false;
+					for (int id : room.destroyedGameObjectId) {
+						if (id == requireUpdateDropItem.id) {
+							isContain = true;
+						}
+					}
+					if (!isContain) {
+						UpdateDropItem updateDropItem = new UpdateDropItem();
+						updateDropItem.id = requireUpdateDropItem.id;
+						updateDropItem.name = requireUpdateDropItem.name;
+						updateDropItem.x = requireUpdateDropItem.x;
+						updateDropItem.y = requireUpdateDropItem.y;
+						System.out.println("item "+requireUpdateDropItem.name+"\n");
+						room.destroyedGameObjectId.add(requireUpdateDropItem.id);
+						sendToAllInRoom(room, updateDropItem);
+					}
+				}
+			}
 
-		    	/********************************************************************************
-		    	 * 			     ACTIONS BEFORE GAME START                                      *
-		    	 ********************************************************************************/
-	    		
-	    		/********************************
-	    		 * if a player want to join game*
-	    		 ********************************/
-	    		
-			    	if(object instanceof Network.JoinGame){
-			    		Network.JoinGame jg = (Network.JoinGame)object;
-			    		
-			    		//check if there exist a game satisfy player's requirements
-			    		for(Room room : BomberFightServer.roomList){
-			    		
-			    			if(room.state == RoomState.WAITING){
-			    				if(jg.mapName.equals(room.getMapName()) && jg.numPlayers == room.getDesireNumPlayer()){
-			    				
-			    					System.out.println("found room #" + room.getRoomID() + " for player id:" + connection.getID());
-			    				
-			    					//match the condition, add player to room
-			    					room.addPlayer(BomberFightServer.players.get(connection.getID()));
-			    				
-			    					break;
-			    				}
-			    			}
-			    		}
-			    		
-			    	
-			    		//if no room found, create a new room for player
-			    		if(BomberFightServer.players.get(connection.getID()).getInRoom() == null){
-			  
-			    			
-			    			
-			    			Room room = new Room(BomberFightServer.roomList.size() + 1, jg.mapName, Network.MapInfo.mapInfo.get(jg.mapName),jg.numPlayers);
-			    			room.addPlayer(BomberFightServer.players.get(connection.getID()));
-			    			
-			    			
-			    			System.out.println("create room #" + room.getRoomID() + " for player id:" + connection.getID());
-			    			
-			    			//add room to waiting room list
-			    			BomberFightServer.roomList.add(room);
-			    		}
-			    		
-			    	}
-			    	
-
-		    		/********************************
-		    		 * if player complete init game *
-		    		 ********************************/
-			    	if(object instanceof Network.CompleteInitGame){
-			    		//find the room of the player
-			    		Room r = players.get(connection.getID()).getInRoom();
-			    		
-			    		//tick for complete init game
-			    		r.setPlayerChecker(r.getPlayerChecker() - 1);
-			    		
-			    		//if all the player complete the init of game, start game
-			    		if(r.getPlayerChecker() <= 0){
-			    			//start game for this room
-			    			startGame(r);
-			    		}
-			    	}
-			    	
-			    	
-			    	
-			    	
-			    	
-			    	
-			    	
-			    	
-			    	/********************************************************************************
-			    	 * 			     ACTIONS AFTER GAME START                                       *
-			    	 ********************************************************************************/
-			    	
-			    	
-			    	
-		    		/********************************
-		    		 * if player moved              *
-		    		 ********************************/
-			    	if(object instanceof RemoteControl){
-			    		//send movement to other player in the same game
-			    		Room room = players.get(connection.getID()).getInRoom();
-			    		for(Player p : room.getPlayerInRoom()){
-			    			if(p.getPlayerID() != connection.getID())
-			    			server.sendToTCP(p.getPlayerID(), object);
-			    		}
-			    		
-			    	}
-			    	
-			    	
-			    	/********************************
-		    		 * player correct position      *
-		    		 ********************************/
-			    	if(object instanceof Network.CorrectPosition){
-			    		//send correction to other player in the same game
-			    		Room room = players.get(connection.getID()).getInRoom();
-			    		for(Player p : room.getPlayerInRoom()){
-			    			if(p.getPlayerID() != connection.getID())
-			    			server.sendToTCP(p.getPlayerID(), object);
-			    		}
-			    	}
-			    	
-			    	/********************************
-		    		 * require to drop item         *
-		    		 ********************************/
-			    	if(object instanceof Network.RequireDropItem){
-			    		
-			    		Network.RequireDropItem request = (Network.RequireDropItem)object;
-			    		Random r = new Random();
-			    		String itemName = null;
-			    		
-			    		
-			    		if(request.objectDestroyed.equals(Network.CrateDropList.name)){
-			    
-			    			int rand = r.nextInt(Network.CrateDropList.dropProbability);
-			    			if(rand == 1){
-			    				//drop item
-			    				int totalProbability = 0;
-			    				for(Integer i :  Network.CrateDropList.ItemInfo.itemDropProbability.values()){
-			    					totalProbability += i;
-			    				}
-			    				
-			    				rand = r.nextInt(totalProbability);
-			    				
-			    				int counter = 0;
-			    			
-			    				for (Map.Entry<String, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
-			    					
-			    					if(rand >= counter && rand < counter + entry.getValue()){
-			    					
-			    						itemName = entry.getKey();
-			    						break;
-			    					}else counter += entry.getValue();
-	
-			    				}
-			    				
-			    				
-			    				
-			    			}
-			    				
-			    		}else if(request.objectDestroyed.equals(Network.BrickDropList.name)){
-			    			int rand = r.nextInt(Network.BrickDropList.dropProbability);
-			    			if(rand == 1){
-			    				//drop item
-			    				int totalProbability = 0;
-			    				for(Integer i :  Network.BrickDropList.ItemInfo.itemDropProbability.values()){
-			    					totalProbability += i;
-			    				}
-			    				
-			    				rand = r.nextInt(totalProbability);
-			    				
-			    				int counter = 0;
-			    			
-			    				
-			    				for (Map.Entry<String, Integer> entry : Network.BrickDropList.ItemInfo.itemDropProbability.entrySet()) {
-			    					
-			    					if(rand >= counter && rand < counter + entry.getValue()){
-			    						itemName = entry.getKey();
-			    						break;
-			    					}else counter += entry.getValue();
-	
-			    				}
-			    				
-			    			}
-			    		}
-			    		
-			    		//if item name not null drop item
-			    		if(itemName != null){
-			    		
-			    			//send drop information to all client in the game
-			    			Room room = players.get(connection.getID()).getInRoom();
-				    		for(Player p : room.getPlayerInRoom()){
-				    			server.sendToTCP(p.getPlayerID(), new Network.ConfirmDropItem(itemName, request.dropPosition));
-				    		}
-			    		}
-			    	
-			    	}
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	}
-	    	
-	    	
-		      
+			public void disconnected(Connection c) {
+				Room room = roomList.get(connToRoomMap.get(c.getID()));
+				for (PlayerInfo playerInfo : room.playerInfoList) {
+					if (playerInfo.conn == c.getID()) {
+						room.playerInfoList.removeValue(playerInfo, true);
+						if (room.playerInfoList.size == 0) {
+							System.out.println("room#"+room.number+" has been removed"+"\n");
+							roomList.removeValue(room, true);
+							connToRoomMap.remove(c.getID());
+						}
+					}
+				}
+			}
 		});
 		
-	    
+		server.bind(Network.portTCP, Network.portUDP);
+		server.start();
+	}
+	
+	public void joinGame(GameInfo gameInfo) {
+		Room room = findRoomBy(gameInfo.mapInfo, RoomState.waiting);
+		if (room != null) {
+			room.add(gameInfo.playerInfo);
+			gameInfo.playerInfo.roomNumber = room.number;
+			gameInfo.playerInfo.spawnPoint = room.playerInfoList.size - 1;
+			
+			connToRoomMap.put(gameInfo.playerInfo.conn, room.number);
+			
+			RespondJoinGame respondJoinGame = new RespondJoinGame();
+			respondJoinGame.gameInfo = gameInfo;
+			respondJoinGame.result = "joined room #" + room.number;
+			System.out.println("connection"+gameInfo.playerInfo.conn+" joined room#"+room.number+"\n");
+			server.sendToTCP(gameInfo.playerInfo.conn, respondJoinGame);
+			
+			if (room.playerInfoList.size == gameInfo.mapInfo.maxNumPlayer) {
+				System.out.println("room#"+room.number+" start game"+"\n");
+				startGame(room);
+			}
+		} else {
+			room = new Room();
+			roomList.add(room);
+			room.number = roomList.size - 1;
+			room.state = RoomState.waiting;
+			room.playerInfoList.add(gameInfo.playerInfo);
+			room.gameInfo = gameInfo;
+			
+			gameInfo.playerInfo.roomNumber = room.number;
+			gameInfo.playerInfo.spawnPoint = room.playerInfoList.size - 1;
+			
+			connToRoomMap.put(gameInfo.playerInfo.conn, room.number);
+			System.out.println("room#"+room.number+" has been created"+"\n");
+			
+			RespondJoinGame respondJoinGame = new RespondJoinGame();
+			respondJoinGame.gameInfo = gameInfo;
+			respondJoinGame.result = "created room #" + room.number;
+			server.sendToTCP(gameInfo.playerInfo.conn, respondJoinGame);
+		}
+	}
+	
+	public Room findRoomBy(MapInfo mapInfo, RoomState state) {
+		for (Room room : roomList) {
+			if (room.gameInfo.mapInfo.equals(mapInfo) && room.state == state) {
+				return room;
+			}
+		}
+		return null;
+	}
+	
+	public void startGame(Room room) {
+		room.state = RoomState.playing;
+		for (PlayerInfo playerInfo : room.playerInfoList) {
+			StartGame GO = new StartGame();
+			GO.playerInfoList = room.playerInfoList.toArray(PlayerInfo.class);
+			server.sendToTCP(playerInfo.conn, GO);
+		}
+	}
+	
+	public void sendToAllInRoomExcept(Room room, int conn, Object object) {
+		for (PlayerInfo playerInfo : room.playerInfoList) {
+			if (playerInfo.conn != conn) {
+				server.sendToTCP(playerInfo.conn, object);
+			}
+		}
+	}
+	
+	public void sendToAllInRoom(Room room, Object object) {
+		for (PlayerInfo playerInfo : room.playerInfoList) {
+			server.sendToTCP(playerInfo.conn, object);
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		Log.set(Log.LEVEL_DEBUG);
+		new BomberFightServer();
 	}
 }

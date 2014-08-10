@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.game.bomberfight.model.GameInfo;
 import com.game.bomberfight.utility.Config;
 
 public class LoadingScreen implements Screen {
@@ -29,7 +28,6 @@ public class LoadingScreen implements Screen {
 	private ExtendViewport viewport;
 	private AssetManager assetManager;
 	private GamePlay gamePlay;
-	private GameInfo gameInfo;
 	private ProgressBar progressBar;
 
 	public LoadingScreen() {
@@ -38,7 +36,7 @@ public class LoadingScreen implements Screen {
 		skin = new Skin();
 		stage = new Stage();
 		//gamePlay = new MultiplayerGamePlay();
-		gamePlay = new MultiplayerGamePlay();
+		gamePlay = new GamePlay();
 		assetManager = gamePlay.getAssetManager();
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -82,7 +80,7 @@ public class LoadingScreen implements Screen {
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
 		
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		assetManager.load(gameInfo.mapInfo.tmx, TiledMap.class);
+		assetManager.load(GamePlay.gameInfo.mapInfo.tmx, TiledMap.class);
 		
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		
@@ -120,20 +118,12 @@ public class LoadingScreen implements Screen {
 		skin.dispose();
 		stage.dispose();
 	}
-
-	/**
-	 * @param gameInfo the gameInfo to set
-	 */
-	public void setGameInfo(GameInfo gameInfo) {
-		this.gameInfo = gameInfo;
-	}
 	
 	public void load() {
 		if (!assetManager.update()) {
 			progressBar.setValue(assetManager.getProgress());
 		} else {
 			gamePlay.setAssetManager(assetManager);
-			gamePlay.setGameInfo(gameInfo);
 			((Game) Gdx.app.getApplicationListener()).setScreen(gamePlay);
 		}
 	}
