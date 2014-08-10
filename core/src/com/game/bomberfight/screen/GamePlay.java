@@ -202,7 +202,7 @@ public class GamePlay implements Screen {
 		/**
 		 * render light
 		 */
-		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
+		//rayHandler.setCombinedMatrix(viewport.getCamera().combined);
 		
 		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "rayHandler setCombinedMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
@@ -210,7 +210,7 @@ public class GamePlay implements Screen {
 		}
 		
 		//if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-			rayHandler.updateAndRender();
+		//	rayHandler.updateAndRender();
 		//}
 		
 		if (isEfficiencyTest) {
@@ -515,7 +515,7 @@ public class GamePlay implements Screen {
 			
 			if (object instanceof UpdateDropItem) {
 				UpdateDropItem updateDropItem = (UpdateDropItem) object;
-		/*		GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
+			/*	GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
 				if (gameObject != null) {
 					gameObject.dispose();
 				}*/
@@ -538,16 +538,18 @@ public class GamePlay implements Screen {
 					}
 					item.setX(updateDropItem.x);
 					item.setY(updateDropItem.y);
+					if (!world.isLocked()) {
 					item.create();
+					}
 				}
 			}
 			
 			if(object instanceof SignalBarrierDestroyed){
-				SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
+			/*	SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
 				GameObject gameObject = gameObjectManager.findGameObject(signal.id);
 				if (gameObject != null) {
 					gameObject.dispose();
-				}
+				}*/
 			}
 		}
 
