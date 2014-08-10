@@ -75,16 +75,14 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	public void update(float delta) {
     	if(this.life <= 0){
     		if (GamePlay.gameInfo.networkMode.equals("WAN")) {
-				Item item = this.dropItem();
-				if (item != null) {
+				String name = this.dropItemName();
+				if (name != null) {
 					RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
 					requireUpdateDropItem.id = this.getId();
-					requireUpdateDropItem.name = item.getName();
-					requireUpdateDropItem.x = item.getX();
-					requireUpdateDropItem.y = item.getY();
+					requireUpdateDropItem.name = name;
+					requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
+					requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
 					GamePlay.client.sendTCP(requireUpdateDropItem);
-					item.setPicked(true);
-					item.setDiscard(true);
 					Gdx.app.log("item", requireUpdateDropItem.name+" id "+requireUpdateDropItem.id);
 				}
 			} else {
@@ -167,6 +165,34 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	    				tmp.setY(box2dBody.getPosition().y);
 	    				tmp.create();
 	    				return tmp;
+					}else counter += prob;
+				}
+				
+			}
+		}
+		return null;
+	}
+	
+	public String dropItemName() {
+		ArrayList<Item> items = ((GamePlay)currentScreen).getItemList();
+		if(items.size() != 0){
+			Random r = new Random();
+			int rand = r.nextInt(6);
+			if(rand > 0){
+				int totalDropProbabilityInterval = 0;
+				//add on probability intervals from item list
+				for(Item item : items){
+					totalDropProbabilityInterval += item.getDropProbability();
+				}
+				
+				rand = r.nextInt(totalDropProbabilityInterval);
+				
+				//pick item if the random number is in its interval and create item
+				int counter = 0;
+				for(Item i : items){
+					int prob = i.getDropProbability();
+					if(rand >= counter && rand < counter + prob){
+						return i.getName();
 					}else counter += prob;
 				}
 				

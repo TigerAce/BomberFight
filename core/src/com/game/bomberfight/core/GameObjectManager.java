@@ -1,10 +1,10 @@
 package com.game.bomberfight.core;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.game.bomberfight.model.GameObject;
-
 import java.util.HashSet;
 import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.game.bomberfight.model.GameObject;
 
 /**
  * Created by Tong on 2014/7/25.
@@ -78,7 +78,9 @@ public class GameObjectManager {
     }
     
     public GameObject findGameObject(int id) {
-    	Iterator<GameObject> iterator = this.gameObjects.iterator();
+		HashSet<GameObject> gameObjectsClone = new HashSet<GameObject>();
+    	gameObjectsClone.addAll(this.gameObjects);
+    	Iterator<GameObject> iterator = gameObjectsClone.iterator();
         while (iterator.hasNext()) {
         	GameObject gameObject = iterator.next();
         	if (gameObject.getId() == id) {
