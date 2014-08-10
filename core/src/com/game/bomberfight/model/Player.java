@@ -1,5 +1,7 @@
 package com.game.bomberfight.model;
 
+import box2dLight.PointLight;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -33,6 +35,8 @@ public class Player extends GameObject implements Destructible {
     protected Direction direction = Direction.up;
     protected Animation animation = null;
     protected float animTime;
+    
+    public PointLight p = null;
     
 
     /**
@@ -146,6 +150,9 @@ public class Player extends GameObject implements Destructible {
     
     @Override
     public void dispose(){
+    	if(p != null){
+    		p.attachToBody(null, 0, 0);
+    	}
     	shape.dispose();
     	super.dispose();
     }

@@ -35,7 +35,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 
 	@Override
 	public void create() {
-		this.name = "brick";
+		this.name = "BRICK";
 		
 		FixtureDef brickFixtureDef = new FixtureDef();
 		BodyDef brickDef = new BodyDef();
@@ -75,7 +75,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 	
 		if(this.life <= 0){
 			dropItem();
-    		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+    		
 			dispose();
 		}
 		
@@ -92,6 +92,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 
 	@Override
 	public void dispose() {
+		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 		brickShape.dispose();
 		super.dispose();
 		

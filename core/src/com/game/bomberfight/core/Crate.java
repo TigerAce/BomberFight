@@ -36,7 +36,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 
     @Override
     public void create() {
-    	this.name = "crate";
+    	this.name = "CRATE";
     	
     	FixtureDef crateFixtureDef = new FixtureDef();
 		BodyDef crateDef = new BodyDef();
@@ -75,7 +75,15 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	public void update(float delta) {
     	if(this.life <= 0){
     		if (GamePlay.gameInfo.networkMode.equals("WAN")) {
-				String name = this.dropItemName();
+    			
+    			RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
+    			requireUpdateDropItem.name = this.name;
+    			requireUpdateDropItem.id = this.getId();
+    			requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
+				requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
+				GamePlay.client.sendTCP(requireUpdateDropItem);
+    			
+			/*	String name = this.dropItemName();
 				if (name != null) {
 					RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
 					requireUpdateDropItem.id = this.getId();
@@ -84,12 +92,12 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 					requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
 					GamePlay.client.sendTCP(requireUpdateDropItem);
 					Gdx.app.log("item", requireUpdateDropItem.name+" id "+requireUpdateDropItem.id);
-				}
+				}*/
 			} else {
 				this.dropItem();
 			}
     		//Destroy crate
-    		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
+    		
 			dispose();
 		}
 	}
@@ -108,6 +116,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
 	public void dispose() {
 		//if(sprite != null)
 		//	sprite.getTexture().dispose();
+		((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 		crateShape.dispose();
 		super.dispose();
 		

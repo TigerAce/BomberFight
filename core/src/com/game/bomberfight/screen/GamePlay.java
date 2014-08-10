@@ -48,6 +48,7 @@ import com.game.bomberfight.net.Network;
 import com.game.bomberfight.net.Network.RequireJoinGame;
 import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
 import com.game.bomberfight.net.Network.RespondJoinGame;
+import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateInput;
@@ -433,6 +434,8 @@ public class GamePlay implements Screen {
 					0.5f, 1f), 50, 0, 0);
 			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
 			
+			bomber.p = pl;
+			
 			if (gameInfo.networkMode.equals("WAN")) {
 				gui.setHUD(bomber);
 			} else {
@@ -512,10 +515,10 @@ public class GamePlay implements Screen {
 			
 			if (object instanceof UpdateDropItem) {
 				UpdateDropItem updateDropItem = (UpdateDropItem) object;
-				GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
+		/*		GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
 				if (gameObject != null) {
 					gameObject.dispose();
-				}
+				}*/
 				Item item = null;
 				for(Item i : itemList){
 					if(i.getName().equals(updateDropItem.name)){
@@ -536,6 +539,14 @@ public class GamePlay implements Screen {
 					item.setX(updateDropItem.x);
 					item.setY(updateDropItem.y);
 					item.create();
+				}
+			}
+			
+			if(object instanceof SignalBarrierDestroyed){
+				SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
+				GameObject gameObject = gameObjectManager.findGameObject(signal.id);
+				if (gameObject != null) {
+					gameObject.dispose();
 				}
 			}
 		}

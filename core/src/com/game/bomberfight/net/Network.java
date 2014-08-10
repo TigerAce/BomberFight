@@ -1,5 +1,7 @@
 package com.game.bomberfight.net;
 
+import java.util.HashMap;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.game.bomberfight.model.GameInfo;
@@ -28,6 +30,8 @@ public class Network {
 		kryo.register(PlayerInfo.class);
 		
 		kryo.register(PlayerInfo[].class);
+		
+		kryo.register(SignalBarrierDestroyed.class);
 	}
 	
 	public static class RequireJoinGame {
@@ -76,7 +80,39 @@ public class Network {
 		public float x;
 		public float y;
 		public String name;
+		//public int id;
+	}
+	
+	public static class SignalBarrierDestroyed{
 		public int id;
+	}
+	
+	public static class CrateDropList{
+		public static String name = "CRATE";
+		public static int dropProbability = 3;
+		public static class ItemInfo{
+			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			
+			static{
+				itemDropProbability.put("ANNULAR", 10);
+				itemDropProbability.put("POWER_UP", 10);
+				itemDropProbability.put("ADDBOMB", 10);
+			}
+		}
+	}
+	
+	public static class BrickDropList{
+		public static String name = "BRICK";
+		public static int dropProbability = 4;
+		public static class ItemInfo{
+			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			
+			static{
+				itemDropProbability.put("ANNULAR", 10);
+				itemDropProbability.put("POWER_UP", 30);
+				itemDropProbability.put("ADDBOMB", 20);
+			}
+		}
 	}
 
 }

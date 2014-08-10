@@ -78,9 +78,10 @@ public class GameObjectManager {
     }
     
     public GameObject findGameObject(int id) {
-		HashSet<GameObject> gameObjectsClone = new HashSet<GameObject>();
-    	gameObjectsClone.addAll(this.gameObjects);
-    	Iterator<GameObject> iterator = gameObjectsClone.iterator();
+	//	HashSet<GameObject> gameObjectsClone = new HashSet<GameObject>();
+    //	gameObjectsClone.addAll(this.gameObjects);
+    	
+    	Iterator<GameObject> iterator = gameObjects.iterator();
         while (iterator.hasNext()) {
         	GameObject gameObject = iterator.next();
         	if (gameObject.getId() == id) {
@@ -88,5 +89,6 @@ public class GameObjectManager {
 			}
         }
         return null;
+    	
     }
 }

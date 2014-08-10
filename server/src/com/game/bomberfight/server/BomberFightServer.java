@@ -3,6 +3,7 @@ package com.game.bomberfight.server;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -18,6 +19,7 @@ import com.game.bomberfight.net.Network.RequireUpdateDropItem;
 import com.game.bomberfight.net.Network.RequireUpdateInputToOthers;
 import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
 import com.game.bomberfight.net.Network.RespondJoinGame;
+import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateInput;
@@ -72,7 +74,101 @@ public class BomberFightServer {
 				}
 				
 				if (object instanceof RequireUpdateDropItem) {
-					RequireUpdateDropItem requireUpdateDropItem = (RequireUpdateDropItem) object;
+					RequireUpdateDropItem request = (RequireUpdateDropItem)object;
+					
+					
+					Room room = roomList.get(connToRoomMap.get(c.getID()));
+					
+					boolean proccessed = false;
+					for (int id : room.destroyedGameObjectId) {
+						if (id == request.id) {
+							proccessed = true;
+						}
+					}
+					
+					if(!proccessed){
+						
+						Random r = new Random();
+						String itemName = null;
+		    		
+		    		
+						if(request.name.equals(Network.CrateDropList.name)){
+		    
+							int rand = r.nextInt(Network.CrateDropList.dropProbability);
+							if(rand == 1){
+								//drop item
+								int totalProbability = 0;
+								for(Integer i :  Network.CrateDropList.ItemInfo.itemDropProbability.values()){
+									totalProbability += i;
+		    				}
+		    				
+		    				rand = r.nextInt(totalProbability);
+		    				
+		    				int counter = 0;
+		    			
+		    				for (Map.Entry<String, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
+		    					
+		    					if(rand >= counter && rand < counter + entry.getValue()){
+		    					
+		    						itemName = entry.getKey();
+		    						break;
+		    					}else counter += entry.getValue();
+
+		    				}
+		    				
+		    				
+		    				
+		    			}
+		    				
+						}else if(request.name.equals(Network.BrickDropList.name)){
+							int rand = r.nextInt(Network.BrickDropList.dropProbability);
+							if(rand == 1){
+								//drop item
+								int totalProbability = 0;
+								for(Integer i :  Network.BrickDropList.ItemInfo.itemDropProbability.values()){
+									totalProbability += i;
+								}
+		    				
+								rand = r.nextInt(totalProbability);
+		    				
+								int counter = 0;
+		    			
+		    				
+								for (Map.Entry<String, Integer> entry : Network.BrickDropList.ItemInfo.itemDropProbability.entrySet()) {
+		    					
+									if(rand >= counter && rand < counter + entry.getValue()){
+										itemName = entry.getKey();
+										break;
+									}else counter += entry.getValue();
+
+								}
+		    				
+							}
+						}
+		    		
+						//if item name not null drop item
+						if(itemName != null){
+		    			
+		    		
+							UpdateDropItem updateDropItem = new UpdateDropItem();
+							//updateDropItem.id = request.id;
+							updateDropItem.name = itemName;
+							updateDropItem.x = request.x;
+							updateDropItem.y = request.y;
+					
+							sendToAllInRoom(room, updateDropItem);
+		    			
+						}
+						
+						//signal all the client in the room that crate or brick destroyed
+						SignalBarrierDestroyed signal = new SignalBarrierDestroyed();
+						signal.id = request.id;
+						
+						sendToAllInRoom(room, signal);
+						
+		    	
+					}
+					/*RequireUpdateDropItem requireUpdateDropItem = (RequireUpdateDropItem) object;
 					Integer roomNumber = connToRoomMap.get(c.getID());
 					if (roomNumber == null) {
 						return;
@@ -93,7 +189,7 @@ public class BomberFightServer {
 						System.out.println("item "+requireUpdateDropItem.name+"\n");
 						room.destroyedGameObjectId.add(requireUpdateDropItem.id);
 						sendToAllInRoom(room, updateDropItem);
-					}
+					}*/
 				}
 			}
 

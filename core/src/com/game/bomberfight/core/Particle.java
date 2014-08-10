@@ -40,7 +40,7 @@ public class Particle extends GameObject{
 
     @Override
     public void create() {
-    	this.name = "particle";
+    	this.name = "PARTICLE";
     	
     	FixtureDef particleFixtureDef = new FixtureDef();
 		BodyDef particleBodyDef = new BodyDef();
