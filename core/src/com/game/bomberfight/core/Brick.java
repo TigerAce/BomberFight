@@ -20,6 +20,7 @@ import com.game.bomberfight.interfaces.Breakable;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.DropItem;
 import com.game.bomberfight.model.Barrier;
+import com.game.bomberfight.net.Network.RequireUpdateDropItem;
 import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.utility.UserData;
 
@@ -75,8 +76,19 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 	public void update(float delta) {
 	
 		if(this.life <= 0){
-			dropItem();
-    		
+			if (GamePlay.gameInfo.networkMode.equals("WAN")) {
+    			
+    			RequireUpdateDropItem requireUpdateDropItem = new RequireUpdateDropItem();
+    			requireUpdateDropItem.name = this.name;
+    			requireUpdateDropItem.id = this.getId();
+    			requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
+				requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
+				GamePlay.client.sendTCP(requireUpdateDropItem);
+    			
+		
+			} else {
+				this.dropItem();
+			}
 			dispose();
 		}
 		
@@ -93,9 +105,12 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
 
 	@Override
 	public void dispose() {
-		((UserData)box2dBody.getUserData()).isDead = true;
-		//((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
-		brickShape.dispose();
+		
+		if(((UserData)box2dBody.getUserData()) != null){
+			((UserData)box2dBody.getUserData()).isDead = true;
+		}
+		
+		//brickShape.dispose();
 		super.dispose();
 		
 	}
