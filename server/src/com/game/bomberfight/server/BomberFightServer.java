@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -30,6 +32,7 @@ public class BomberFightServer {
 	Server server;
 	Array<Room> roomList;
 	Map<Integer, Integer> connToRoomMap;
+
 
 	public BomberFightServer() throws IOException {
 		server = new Server();
@@ -76,17 +79,24 @@ public class BomberFightServer {
 				if (object instanceof RequireUpdateDropItem) {
 					RequireUpdateDropItem request = (RequireUpdateDropItem)object;
 					
-					
+				
 					Room room = roomList.get(connToRoomMap.get(c.getID()));
 					
 					boolean proccessed = false;
+				
+					
+					
 					for (int id : room.destroyedGameObjectId) {
+						
 						if (id == request.id) {
 							proccessed = true;
+							break;
 						}
 					}
 					
 					if(!proccessed){
+						
+						room.destroyedGameObjectId.add(request.id);
 						
 						Random r = new Random();
 						String itemName = null;
@@ -167,10 +177,10 @@ public class BomberFightServer {
 						sendToAllInRoomExcept(room, c.getID(), signal);
 						}
 						
-						room.destroyedGameObjectId.add(c.getID());
 						
-		    	
 					}
+		    	
+					
 					
 				}
 			}
