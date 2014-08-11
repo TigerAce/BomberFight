@@ -104,7 +104,7 @@ public class GamePlay implements Screen {
 	
 	protected long timeNow = 0;
 	
-	protected boolean isEfficiencyTest = false;
+	protected boolean isEfficiencyTest = true;
 	
 	protected Gui gui;
 	

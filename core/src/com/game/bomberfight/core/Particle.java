@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -24,7 +26,8 @@ public class Particle extends GameObject{
 	private Explosion parent;
 	private Vector2 dirVector;
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-	private ParticleEffect effect;
+	private static ParticleEffectPool bombEffectPool = null;
+	private PooledEffect effect = null;
 	
 	public Particle(float x, float y, float angle, float density, float lifespan, float blastPowerX, float blastPowerY, Explosion parent) {
 		super(x, y);
@@ -34,14 +37,15 @@ public class Particle extends GameObject{
 		this.blastPowerX = blastPowerX;
 		this.blastPowerY = blastPowerY;
 		this.parent = parent;
-	
-		effect = new ParticleEffect(((GamePlay)currentScreen).getAssetManager().get("particle/flame.p", ParticleEffect.class));
-		effect.start();
+		
+		if (bombEffectPool == null) {
+			bombEffectPool = new ParticleEffectPool(((GamePlay)currentScreen).getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
+		}
 	}
 
     @Override
     public void create() {
-    	this.name = "PARTICLE";
+    	this.name = "particle";
     	
     	FixtureDef particleFixtureDef = new FixtureDef();
 		BodyDef particleBodyDef = new BodyDef();
@@ -74,9 +78,9 @@ public class Particle extends GameObject{
 		
 		box2dBody.setLinearVelocity(blastPowerX * dirVector.x,
 							 blastPowerY * dirVector.y);
-		
 		box2dBody.setUserData(new UserData(this, false));
-
+		
+		effect = bombEffectPool.obtain();
     }
 
     @Override
@@ -104,14 +108,12 @@ public class Particle extends GameObject{
 	@Override
 	public void dispose() {
 		parent.setParticleCounter(parent.getParticleCounter() - 1);
-		
 		if(box2dBody.getUserData() != null){
-			((UserData)box2dBody.getUserData()).isDead = true;
-			}
+		((UserData)box2dBody.getUserData()).isDead = true;
+		}
 		//((GamePlay)currentScreen).getWorld().destroyBody(this.box2dBody);
 		super.dispose();
-		effect.dispose();
-		
+		effect.free();
 	}
 
 

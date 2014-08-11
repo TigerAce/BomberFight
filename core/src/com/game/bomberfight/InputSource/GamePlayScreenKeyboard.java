@@ -12,6 +12,7 @@ import com.game.bomberfight.screen.GamePlay;
 public class GamePlayScreenKeyboard implements InputProcessor {
 	
 	private GamePlay gamePlay;
+	int particleCount = 0;
 	
 	public GamePlayScreenKeyboard(GamePlay gamePlay) {
 		this.gamePlay = gamePlay;
@@ -36,6 +37,7 @@ public class GamePlayScreenKeyboard implements InputProcessor {
         if(keycode == Input.Keys.ESCAPE) {
         	gamePlay.getGui().showMenu();
 		}
+        
         return false;
     }
 
