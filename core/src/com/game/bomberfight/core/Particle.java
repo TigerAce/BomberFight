@@ -81,6 +81,7 @@ public class Particle extends GameObject{
 		box2dBody.setUserData(new UserData(this, false));
 		
 		effect = bombEffectPool.obtain();
+		effect.start();
     }
 
     @Override
