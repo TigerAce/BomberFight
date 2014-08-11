@@ -1,10 +1,9 @@
 package com.game.bomberfight.core;
 
-import java.util.Collections;
+
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.GameObject;
@@ -17,10 +16,8 @@ public class GameObjectManager {
     /**
      * A hash set stores all game objects
      */
-	private Set<GameObject> gameObjects = Collections.newSetFromMap(
-	        new ConcurrentHashMap<GameObject, Boolean>());
 	
-    //private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
+    private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
 
     /**
      * A hash set stores all new game objects added in this cycle
@@ -44,7 +41,7 @@ public class GameObjectManager {
      */
     public void updateAll(float delta) {
         // Add newGameObjects to main HashSet
-    	synchronized(gameObjects){
+   
         if (!this.newGameObjects.isEmpty()) {
             this.gameObjects.addAll(this.newGameObjects);
             this.newGameObjects.clear();
@@ -59,7 +56,7 @@ public class GameObjectManager {
                 iterator.remove();
             }
         }
-    	}
+    
     }
 
     /**
@@ -86,9 +83,7 @@ public class GameObjectManager {
     }
     
     public GameObject findGameObject(int id) {
-	//	HashSet<GameObject> gameObjectsClone = new HashSet<GameObject>();
-    //	gameObjectsClone.addAll(this.gameObjects);
-    	synchronized(gameObjects){
+
     	Iterator<GameObject> iterator = gameObjects.iterator();
         while (iterator.hasNext()) {
         	GameObject gameObject = iterator.next();
@@ -97,6 +92,6 @@ public class GameObjectManager {
 			}
         }
         return null;
-    	}
+  
     }
 }

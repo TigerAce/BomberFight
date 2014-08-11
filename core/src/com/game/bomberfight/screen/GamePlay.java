@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
@@ -79,6 +80,11 @@ public class GamePlay implements Screen {
 	 * item list
 	 */
 	protected ArrayList<Item> itemList = new ArrayList<Item>();
+	
+	/**
+	 * remote process queue
+	 */
+	protected ConcurrentLinkedQueue<Object> queue = new ConcurrentLinkedQueue<Object>();
 
 	protected final float TIMESTEP = 1 / 60f;
 	protected final int VELOCITYITERATIONS = 3;
@@ -156,7 +162,7 @@ public class GamePlay implements Screen {
 			world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 			this.timeAccumulator -= this.TIMESTEP;
 		}
-		
+		processingRemote();
 		removeBodies();
 		
 		if (isEfficiencyTest) {
@@ -324,7 +330,7 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("127.0.0.1");
+		connect("localhost");//yijiasup.no-ip.org
 	}
 
 	@Override
@@ -434,6 +440,83 @@ public class GamePlay implements Screen {
 			}
 		}
 	}
+	
+	public void processingRemote(){
+		while(!queue.isEmpty()){
+			
+			Object object = queue.remove();
+			
+		if (object instanceof RespondJoinGame) {
+			RespondJoinGame respondJoinGame = (RespondJoinGame) object;
+			GamePlay.gameInfo = respondJoinGame.gameInfo;
+			Gdx.app.log("received RespondJoinGame", respondJoinGame.result);
+			Gdx.app.log("received RespondJoinGame GameInfo", "room number "+respondJoinGame.gameInfo.playerInfo.roomNumber+"spawn point "+respondJoinGame.gameInfo.playerInfo.spawnPoint);
+		}
+		
+		if (object instanceof StartGame) {
+			StartGame startGame = (StartGame) object;
+			setupInputSource(startGame.playerInfoList);
+		}
+		
+		if (object instanceof UpdateInput) {
+			UpdateInput updateInput = (UpdateInput) object;
+			connToInputSourceMap.get(updateInput.conn).put(updateInput.keyCode, updateInput.keyState);
+		}
+		
+		if (object instanceof UpdatePosition) {
+			UpdatePosition updatePosition = (UpdatePosition) object;
+			Body body = connToPlayerMap.get(updatePosition.conn).getBox2dBody();
+			Vector2 pos = body.getPosition();
+			float angle = body.getAngle();
+			if (pos.x != updatePosition.x || pos.y != updatePosition.y) {
+				if (!world.isLocked()) {
+					pos.set(updatePosition.x, updatePosition.y);
+					connToPlayerMap.get(updatePosition.conn).getBox2dBody().setTransform(pos, angle);
+				}
+			}
+		}
+		
+		if (object instanceof UpdateDropItem) {
+			UpdateDropItem updateDropItem = (UpdateDropItem) object;
+			GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
+			if (gameObject != null) {
+				gameObject.dispose();
+			}
+			
+			Item item = null;
+			for(Item i : itemList){
+				if(i.getName().equals(updateDropItem.name)){
+					item = new Item(i);
+					break;
+				}
+			}
+			if (item != null) {
+				if(updateDropItem.name.equals("POWER_UP")){
+					item.setSprite(assetManager.get("img/texture/item1.png", Texture.class));
+				}
+				if(updateDropItem.name.equals("ANNULAR")){
+					item.setSprite(assetManager.get("img/texture/item2.png", Texture.class));
+				}
+				if(updateDropItem.name.equals("ADDBOMB")){
+					item.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
+				}
+				item.setX(updateDropItem.x);
+				item.setY(updateDropItem.y);
+			
+				item.create();
+		
+			}
+		}
+		
+		if(object instanceof SignalBarrierDestroyed){
+			SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
+			GameObject gameObject = gameObjectManager.findGameObject(signal.id);
+			if (gameObject != null) {
+				gameObject.dispose();
+			}
+		}
+		}
+	}
 	public void createPlayer() {
 		for (int i = 0; i < tileMapManager.getPlayerSpawnPointList().size; i++) {
 			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
@@ -497,83 +580,7 @@ public class GamePlay implements Screen {
 		}
 
 		public void received (Connection connection, Object object) {
-			if (object instanceof RespondJoinGame) {
-				RespondJoinGame respondJoinGame = (RespondJoinGame) object;
-				GamePlay.gameInfo = respondJoinGame.gameInfo;
-				Gdx.app.log("received RespondJoinGame", respondJoinGame.result);
-				Gdx.app.log("received RespondJoinGame GameInfo", "room number "+respondJoinGame.gameInfo.playerInfo.roomNumber+"spawn point "+respondJoinGame.gameInfo.playerInfo.spawnPoint);
-			}
-			
-			if (object instanceof StartGame) {
-				StartGame startGame = (StartGame) object;
-				setupInputSource(startGame.playerInfoList);
-			}
-			
-			if (object instanceof UpdateInput) {
-				UpdateInput updateInput = (UpdateInput) object;
-				connToInputSourceMap.get(updateInput.conn).put(updateInput.keyCode, updateInput.keyState);
-			}
-			
-			if (object instanceof UpdatePosition) {
-				UpdatePosition updatePosition = (UpdatePosition) object;
-				Body body = connToPlayerMap.get(updatePosition.conn).getBox2dBody();
-				Vector2 pos = body.getPosition();
-				float angle = body.getAngle();
-				if (pos.x != updatePosition.x || pos.y != updatePosition.y) {
-					if (!world.isLocked()) {
-						pos.set(updatePosition.x, updatePosition.y);
-						connToPlayerMap.get(updatePosition.conn).getBox2dBody().setTransform(pos, angle);
-					}
-				}
-			}
-			
-			if (object instanceof UpdateDropItem) {
-				UpdateDropItem updateDropItem = (UpdateDropItem) object;
-				GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
-				if (gameObject != null) {
-					if(gameObject.getBox2dBody() != null){
-						if(((UserData)gameObject.getBox2dBody().getUserData()).isDead == false);
-						gameObject.dispose();
-					}
-					gameObject.dispose();
-				}
-				
-				Item item = null;
-				for(Item i : itemList){
-					if(i.getName().equals(updateDropItem.name)){
-						item = new Item(i);
-						break;
-					}
-				}
-				if (item != null) {
-					if(updateDropItem.name.equals("POWER_UP")){
-						item.setSprite(assetManager.get("img/texture/item1.png", Texture.class));
-					}
-					if(updateDropItem.name.equals("ANNULAR")){
-						item.setSprite(assetManager.get("img/texture/item2.png", Texture.class));
-					}
-					if(updateDropItem.name.equals("ADDBOMB")){
-						item.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
-					}
-					item.setX(updateDropItem.x);
-					item.setY(updateDropItem.y);
-					if (!world.isLocked()) {
-					item.create();
-					}
-				}
-			}
-			
-			if(object instanceof SignalBarrierDestroyed){
-				SignalBarrierDestroyed signal = (SignalBarrierDestroyed) object;
-				GameObject gameObject = gameObjectManager.findGameObject(signal.id);
-				if (gameObject != null) {
-					if(gameObject.getBox2dBody() != null){
-						if(((UserData)gameObject.getBox2dBody().getUserData()).isDead == false);
-						gameObject.dispose();
-					}
-					gameObject.dispose();
-				}
-			}
+			queue.add(object);
 		}
 
 		public void disconnected (Connection connection) {
@@ -625,4 +632,5 @@ public class GamePlay implements Screen {
 			}
 		}
 	}
+	
 }
