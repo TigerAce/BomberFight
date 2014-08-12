@@ -668,7 +668,7 @@ public class GamePlay implements Screen {
 					requireUpdateBombPositionToOthers.bombIndex = bomber.getActivatedBombList().indexOf(b);
 					client.sendTCP(requireUpdateBombPositionToOthers);
 				}
-				positionUpdateTime = 0;
+				positionUpdateTime = 0.5f;
 			}
 		}
 	}
