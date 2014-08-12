@@ -20,6 +20,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -326,8 +328,8 @@ public class GamePlay implements Screen {
 		// add blast power
 		item = new Item();
 		item.setName("POWER_UP");
-		item.getAttr().setPowerX(10f);
-		item.getAttr().setPowerY(10f);
+		item.getAttr().setPowerX(5f);
+		item.getAttr().setPowerY(5f);
 		this.itemList.add(item);
 		
 		gui = new Gui();
@@ -335,7 +337,9 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("localhost");//yijiasup.no-ip.org
+		connect("yijiasup.no-ip.org");//yijiasup.no-ip.org
+		
+		ParticleEffectPool bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
 
 	@Override
@@ -622,6 +626,7 @@ public class GamePlay implements Screen {
 		}
 
 		public void disconnected (Connection connection) {
+			client.removeListener(this);
 		}
 	}
 	
@@ -688,5 +693,6 @@ public class GamePlay implements Screen {
 			}
 		}
 	}
+	
 	
 }

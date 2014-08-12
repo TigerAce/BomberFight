@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.model.Player;
+import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.screen.MainMenu;
 
 public class Gui {
@@ -201,6 +202,7 @@ public class Gui {
 				boolean b = (Boolean) object;
 				if (b) {
 					Gdx.input.setInputProcessor(null);
+					GamePlay.client.close();
 					((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 				}
 			}

@@ -114,7 +114,7 @@ public class Network {
 	
 	public static class CrateDropList{
 		public static String name = "CRATE";
-		public static int dropProbability = 3;
+		public static int dropProbability = 5;
 		public static class ItemInfo{
 			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
 			

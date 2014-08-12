@@ -26,7 +26,7 @@ public class Particle extends GameObject{
 	private Explosion parent;
 	private Vector2 dirVector;
 	private Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
-	private static ParticleEffectPool bombEffectPool = null;
+	public static ParticleEffectPool bombEffectPool = null;
 	private PooledEffect effect = null;
 	
 	public Particle(float x, float y, float angle, float density, float lifespan, float blastPowerX, float blastPowerY, Explosion parent) {
