@@ -94,7 +94,7 @@ public class BomberFightServer {
 				}
 				
 				if(object instanceof RequireUpdateHealthToOthers){
-					RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
+					RequireUpdateHealthToOthers requireUpdateHealthToOthers = (RequireUpdateHealthToOthers) object;
 					Integer roomNumber = connToRoomMap.get(c.getID());
 					if (roomNumber == null) {
 						return;

@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.bomberfight.model.GameObject;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.MainMenu;
 
@@ -76,9 +77,14 @@ public class Gui {
 				updateBuffs((HorizontalGroup) actor);
 				Player player = (Player) actor.getUserObject();
 				if (gamePlayViewport != null) {
-					float x = gamePlayViewport.project(player.getBox2dBody().getPosition()).x;
-					float y = gamePlayViewport.project(player.getBox2dBody().getPosition()).y;
-					actor.setPosition(x, y);
+					if (player.getState() == GameObject.RECYCLE) {
+						actor.remove();
+						actor.setUserObject(null);
+					} else {
+						float x = gamePlayViewport.project(player.getBox2dBody().getPosition()).x;
+						float y = gamePlayViewport.project(player.getBox2dBody().getPosition()).y;
+						actor.setPosition(x, y);
+					}
 				}
 			}
 		}

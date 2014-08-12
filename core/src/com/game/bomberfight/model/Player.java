@@ -130,7 +130,6 @@ public class Player extends GameObject implements Destructible {
          */
     	if(attr.getLife() <= 0){
     		System.out.println(box2dBody);
-    		 Screen currentScreen = ((Game) Gdx.app.getApplicationListener()).getScreen();
     		 dispose();
     	}else{
     		//box2dBody.setLinearVelocity(movement);
@@ -160,6 +159,9 @@ public class Player extends GameObject implements Destructible {
     	if(p != null){
     		p.attachToBody(null, 0, 0);
     	}
+    	if (sprite != null) {
+    		sprite = null;
+		}
     	shape.dispose();
     	super.dispose();
     }
