@@ -23,7 +23,7 @@ import com.game.bomberfight.utility.UserData;
 
 public class Bomb extends Explosive{
 
-	private Player owner;
+	private Bomber owner;
 	private Sound timerSound;
 	private float radius;
 	protected Animation animation = null;
@@ -70,7 +70,10 @@ public class Bomb extends Explosive{
 			((GamePlay)currentScreen).getExplosions().add(e);
 		}
 	
-
+		//remove from owner's bomb list
+		this.getOwner().getActivatedBombList().remove(this);
+		
+		//delete bomb
 	     this.dispose();
 		
 	}
@@ -140,13 +143,7 @@ public class Bomb extends Explosive{
 		}
 	}
 
-	public Player getOwner() {
-		return owner;
-	}
 
-	public void setOwner(Player owner) {
-		this.owner = owner;
-	}
 
 	/**
 	 * @param animation the animation to set
@@ -164,5 +161,15 @@ public class Bomb extends Explosive{
         animation.setPlayMode(PlayMode.LOOP);
         animTime = 0f;
 	}
+
+	public Bomber getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Bomber owner) {
+		this.owner = owner;
+	}
+
+	
 	
 }

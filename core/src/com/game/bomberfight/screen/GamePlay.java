@@ -32,6 +32,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.InputSource.GamePlayScreenKeyboard;
 import com.game.bomberfight.InputSource.RemoteController;
+import com.game.bomberfight.core.Bomb;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
@@ -47,10 +48,12 @@ import com.game.bomberfight.model.PlayerInfo;
 import com.game.bomberfight.net.BomberFightClient;
 import com.game.bomberfight.net.Network;
 import com.game.bomberfight.net.Network.RequireJoinGame;
+import com.game.bomberfight.net.Network.RequireUpdateBombPositionToOthers;
 import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
 import com.game.bomberfight.net.Network.RespondJoinGame;
 import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
+import com.game.bomberfight.net.Network.UpdateBombPosition;
 import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
@@ -104,7 +107,7 @@ public class GamePlay implements Screen {
 	
 	protected long timeNow = 0;
 	
-	protected boolean isEfficiencyTest = true;
+	protected boolean isEfficiencyTest = false;
 	
 	protected Gui gui;
 	
@@ -249,6 +252,7 @@ public class GamePlay implements Screen {
 		}
 		
 		updatePositionToOthers(delta);
+		updateBombPositionToOthers(delta);
 	}
 
 	@Override
@@ -476,6 +480,24 @@ public class GamePlay implements Screen {
 			}
 		}
 		
+		if(object instanceof UpdateBombPosition){
+			System.out.println("updateBomb");
+			UpdateBombPosition updateBombPosition = (UpdateBombPosition)object;
+			Bomber bomber = (Bomber) connToPlayerMap.get(updateBombPosition.conn);
+			if(updateBombPosition.bombIndex < bomber.getActivatedBombList().size()){
+				Bomb bomb = bomber.getActivatedBombList().get(updateBombPosition.bombIndex);
+				Body bombBody = bomb.getBox2dBody();
+					Vector2 pos = bombBody.getPosition();
+				if(pos.x != updateBombPosition.x || pos.y != updateBombPosition.y){
+					if(!world.isLocked()){
+						pos.set(updateBombPosition.x, updateBombPosition.y);
+						bombBody.setTransform(pos, bombBody.getAngle());
+					}
+				}
+			}
+			
+		}
+		
 		if (object instanceof UpdateDropItem) {
 			UpdateDropItem updateDropItem = (UpdateDropItem) object;
 			GameObject gameObject = gameObjectManager.findGameObject(updateDropItem.id);
@@ -629,6 +651,24 @@ public class GamePlay implements Screen {
 					lastPosition.set(position);
 				}
 				positionUpdateTime = 1.f;
+			}
+		}
+	}
+	
+	public void updateBombPositionToOthers (float delta) {
+		if (!connToPlayerMap.isEmpty()) {
+			positionUpdateTime -= delta;
+			if (positionUpdateTime <= 0) {
+				Bomber bomber = (Bomber) connToPlayerMap.get(gameInfo.playerInfo.conn);
+				for(Bomb b : bomber.getActivatedBombList()){
+					Vector2 position = b.getBox2dBody().getPosition();
+					RequireUpdateBombPositionToOthers requireUpdateBombPositionToOthers = new RequireUpdateBombPositionToOthers();
+					requireUpdateBombPositionToOthers.x = position.x;
+					requireUpdateBombPositionToOthers.y = position.y;
+					requireUpdateBombPositionToOthers.bombIndex = bomber.getActivatedBombList().indexOf(b);
+					client.sendTCP(requireUpdateBombPositionToOthers);
+				}
+				positionUpdateTime = 0;
 			}
 		}
 	}

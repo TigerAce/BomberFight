@@ -22,6 +22,8 @@ public class Network {
 		kryo.register(UpdateInput.class);
 		kryo.register(RequireUpdatePositionToOthers.class);
 		kryo.register(UpdatePosition.class);
+		kryo.register(RequireUpdateBombPositionToOthers.class);
+		kryo.register(UpdateBombPosition.class);
 		kryo.register(RequireUpdateDropItem.class);
 		kryo.register(UpdateDropItem.class);
 		
@@ -81,6 +83,19 @@ public class Network {
 		public float y;
 		public String name;
 		public int id;
+	}
+	
+	public static class RequireUpdateBombPositionToOthers{
+		public int bombIndex;
+		public float x;
+		public float y;
+	}
+	
+	public static class UpdateBombPosition{
+		public int bombIndex;
+		public float x;
+		public float y;
+		public int conn;
 	}
 	
 	public static class SignalBarrierDestroyed{

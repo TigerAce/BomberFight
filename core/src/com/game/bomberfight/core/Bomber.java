@@ -20,6 +20,7 @@ public class Bomber extends Player implements Picker{
  	private float timeCounter;        //time counter;
  	private Controller controller = null;
  	private ArrayList<Item> inventory;  //store items for player
+ 	private ArrayList<Bomb> activatedBombList;
 
 
  	
@@ -45,6 +46,7 @@ public class Bomber extends Player implements Picker{
 		super(xPos, yPos, speed, life);
 	
 		inventory = new ArrayList<Item>();
+		activatedBombList = new ArrayList<Bomb>();
 		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
@@ -62,6 +64,7 @@ public class Bomber extends Player implements Picker{
 		super(xPos, yPos, width, height, speed, life);
 		
 		inventory = new ArrayList<Item>();
+		activatedBombList = new ArrayList<Bomb>();
 		
 		this.attr.setNumBombPerRound(numBombPerRound);
   		this.attr.setRoundInterval(roundInterval);
@@ -235,7 +238,12 @@ public class Bomber extends Player implements Picker{
 			}
 			Bomb bomb = new Bomb(bombCoordX, bombCoordY, 3, this.getAttr().getPowerX(),
 					this.getAttr().getPowerY(), this.getAttr().getCurrStyle());
+			
+			bomb.setOwner(this);
+			this.activatedBombList.add(bomb);
+			
 			bomb.create();
+			
 			this.setBombPlacementCounter(this
 					.getBombPlacementCounter() - 1);
 			if (this.getBombPlacementCounter() <= 0) {
@@ -258,6 +266,14 @@ public class Bomber extends Player implements Picker{
 			}
 		}
 		return false;
+	}
+
+	public ArrayList<Bomb> getActivatedBombList() {
+		return activatedBombList;
+	}
+
+	public void setActivatedBombList(ArrayList<Bomb> activatedBombList) {
+		this.activatedBombList = activatedBombList;
 	}
 
 }

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -17,12 +15,14 @@ import com.game.bomberfight.model.MapInfo;
 import com.game.bomberfight.model.PlayerInfo;
 import com.game.bomberfight.net.Network;
 import com.game.bomberfight.net.Network.RequireJoinGame;
+import com.game.bomberfight.net.Network.RequireUpdateBombPositionToOthers;
 import com.game.bomberfight.net.Network.RequireUpdateDropItem;
 import com.game.bomberfight.net.Network.RequireUpdateInputToOthers;
 import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
 import com.game.bomberfight.net.Network.RespondJoinGame;
 import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
+import com.game.bomberfight.net.Network.UpdateBombPosition;
 import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
@@ -75,6 +75,22 @@ public class BomberFightServer {
 					updatePosition.y = requireUpdatePositionToOthers.y;
 					sendToAllInRoomExcept(room, c.getID(), updatePosition);
 				}
+				
+				if (object instanceof RequireUpdateBombPositionToOthers) {
+					RequireUpdateBombPositionToOthers requireUpdateBombPositionToOthers = (RequireUpdateBombPositionToOthers) object;
+					Integer roomNumber = connToRoomMap.get(c.getID());
+					if (roomNumber == null) {
+						return;
+					}
+					Room room = roomList.get(roomNumber);
+					UpdateBombPosition updateBombPosition = new UpdateBombPosition();
+					updateBombPosition.conn = c.getID();
+					updateBombPosition.x = requireUpdateBombPositionToOthers.x;
+					updateBombPosition.y = requireUpdateBombPositionToOthers.y;
+					updateBombPosition.bombIndex = requireUpdateBombPositionToOthers.bombIndex;
+					sendToAllInRoomExcept(room, c.getID(), updateBombPosition);
+				}
+				
 				
 				if (object instanceof RequireUpdateDropItem) {
 					RequireUpdateDropItem request = (RequireUpdateDropItem)object;
