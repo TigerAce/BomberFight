@@ -27,4 +27,10 @@
 		<preview>img/ui/mud_grass.png</preview>
 		<maxNumPlayer>4</maxNumPlayer>
 	</map>
+	<map>
+		<name>Mud&Grass3</name>
+		<tmx>img/tmx/ground6.tmx</tmx>
+		<preview>img/ui/mud_grass.png</preview>
+		<maxNumPlayer>3</maxNumPlayer>
+	</map>
 </mapList>
