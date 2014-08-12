@@ -18,7 +18,7 @@ public class Bomber extends Player implements Picker{
  	private int bombPlacementCounter;
  	private boolean placeBomb;  //the flag indicate whether the bomb can be placed
  	private float timeCounter;        //time counter;
- 	private Controller controller = null;
+ 	
  	private ArrayList<Item> inventory;  //store items for player
  	private ArrayList<Bomb> activatedBombList;
 
@@ -164,13 +164,6 @@ public class Bomber extends Player implements Picker{
 		item.setPicked(true);
 	}
 
-	/**
-	 * @param bomberController the bomberController to set
-	 */
-	public void setController(Controller bomberController) {
-		this.controller = bomberController;
-		this.controller.owner = this;
-	}
 
 	/**
 	 * @return the bombPlacementCounter

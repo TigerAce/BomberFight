@@ -26,7 +26,8 @@ public class Network {
 		kryo.register(UpdateBombPosition.class);
 		kryo.register(RequireUpdateDropItem.class);
 		kryo.register(UpdateDropItem.class);
-		
+		kryo.register(RequireUpdateHealthToOthers.class);
+		kryo.register(UpdateHealth.class);
 		kryo.register(GameInfo.class);
 		kryo.register(MapInfo.class);
 		kryo.register(PlayerInfo.class);
@@ -95,6 +96,15 @@ public class Network {
 		public int bombIndex;
 		public float x;
 		public float y;
+		public int conn;
+	}
+	
+	public static class RequireUpdateHealthToOthers{
+		public float health;
+	}
+	
+	public static class UpdateHealth{
+		public float health;
 		public int conn;
 	}
 	

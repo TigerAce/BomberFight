@@ -18,9 +18,11 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.game.bomberfight.InputSource.BomberController;
 import com.game.bomberfight.core.PlayerGameAttributes;
 import com.game.bomberfight.enums.Direction;
 import com.game.bomberfight.interfaces.Destructible;
+import com.game.bomberfight.net.Network.RequireUpdateHealthToOthers;
 import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.utility.UserData;
 
@@ -36,6 +38,8 @@ public class Player extends GameObject implements Destructible {
     protected Direction direction = Direction.up;
     protected Animation animation = null;
     protected float animTime;
+    
+    protected Controller controller = null;
     
     public PointLight p = null;
     
@@ -162,7 +166,18 @@ public class Player extends GameObject implements Destructible {
 
 	@Override
 	public void damage(ContactImpulse impulse) {
-		attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
+		if (GamePlay.gameInfo.networkMode.equals("WAN")) {
+			if(this.controller instanceof BomberController){
+				attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
+				//send health to other player
+				RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
+				requireUpdateHealthToOthers.health = attr.getLife();
+				GamePlay.client.sendTCP(requireUpdateHealthToOthers);
+					
+			}
+		}else{
+			attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
+		}
 	}
 
 	/**
@@ -298,5 +313,12 @@ public class Player extends GameObject implements Destructible {
 	    float impulsey = box2dBody.getMass() * velChangey;
 	    box2dBody.applyLinearImpulse(impulsex, impulsey, box2dBody.getWorldCenter().x, box2dBody.getWorldCenter().y, true);
 	}
+	
+	
+	public void setController(Controller playerController) {
+		this.controller = playerController;
+		this.controller.owner = this;
+	}
+
 
 }

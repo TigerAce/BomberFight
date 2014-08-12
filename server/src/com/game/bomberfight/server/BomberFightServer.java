@@ -17,6 +17,7 @@ import com.game.bomberfight.net.Network;
 import com.game.bomberfight.net.Network.RequireJoinGame;
 import com.game.bomberfight.net.Network.RequireUpdateBombPositionToOthers;
 import com.game.bomberfight.net.Network.RequireUpdateDropItem;
+import com.game.bomberfight.net.Network.RequireUpdateHealthToOthers;
 import com.game.bomberfight.net.Network.RequireUpdateInputToOthers;
 import com.game.bomberfight.net.Network.RequireUpdatePositionToOthers;
 import com.game.bomberfight.net.Network.RespondJoinGame;
@@ -24,6 +25,7 @@ import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.net.Network.UpdateBombPosition;
 import com.game.bomberfight.net.Network.UpdateDropItem;
+import com.game.bomberfight.net.Network.UpdateHealth;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.server.Room.RoomState;
@@ -91,6 +93,18 @@ public class BomberFightServer {
 					sendToAllInRoomExcept(room, c.getID(), updateBombPosition);
 				}
 				
+				if(object instanceof RequireUpdateHealthToOthers){
+					RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
+					Integer roomNumber = connToRoomMap.get(c.getID());
+					if (roomNumber == null) {
+						return;
+					}
+					Room room = roomList.get(roomNumber);
+					UpdateHealth updateHealth = new UpdateHealth();
+					updateHealth.conn = c.getID();
+					updateHealth.health = requireUpdateHealthToOthers.health;
+					sendToAllInRoomExcept(room, c.getID(), updateHealth);
+				}
 				
 				if (object instanceof RequireUpdateDropItem) {
 					RequireUpdateDropItem request = (RequireUpdateDropItem)object;

@@ -55,6 +55,7 @@ import com.game.bomberfight.net.Network.SignalBarrierDestroyed;
 import com.game.bomberfight.net.Network.StartGame;
 import com.game.bomberfight.net.Network.UpdateBombPosition;
 import com.game.bomberfight.net.Network.UpdateDropItem;
+import com.game.bomberfight.net.Network.UpdateHealth;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.system.TileMapEffectSystem;
@@ -481,7 +482,6 @@ public class GamePlay implements Screen {
 		}
 		
 		if(object instanceof UpdateBombPosition){
-			System.out.println("updateBomb");
 			UpdateBombPosition updateBombPosition = (UpdateBombPosition)object;
 			Bomber bomber = (Bomber) connToPlayerMap.get(updateBombPosition.conn);
 			if(updateBombPosition.bombIndex < bomber.getActivatedBombList().size()){
@@ -496,6 +496,14 @@ public class GamePlay implements Screen {
 				}
 			}
 			
+		}
+		
+		if(object instanceof UpdateHealth){
+			UpdateHealth updateHealth = (UpdateHealth)object;
+			Player player = connToPlayerMap.get(updateHealth.conn);
+			if(player != null){
+				player.getAttr().setLife(updateHealth.health);
+			}
 		}
 		
 		if (object instanceof UpdateDropItem) {
