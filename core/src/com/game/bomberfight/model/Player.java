@@ -56,7 +56,8 @@ public class Player extends GameObject implements Destructible {
 		super(xPos, yPos);
 		attr = new PlayerGameAttributes();
 		attr.setSpeed(speed);
-		attr.setLife(life);
+		attr.setMaxLife(life);
+		attr.setCurrLife(life);
 	}
 	
 	/**
@@ -70,7 +71,8 @@ public class Player extends GameObject implements Destructible {
 		super(xPos, yPos);
 		attr = new PlayerGameAttributes();
 		attr.setSpeed(speed);
-		attr.setLife(life);
+		attr.setMaxLife(life);
+		attr.setCurrLife(life);
 		
 		this.width = width;
 		this.height = height;
@@ -130,7 +132,7 @@ public class Player extends GameObject implements Destructible {
          * Don't know what's going on here?
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
-    	if(attr.getLife() <= 0){
+    	if(attr.getCurrLife() <= 0){
     		System.out.println(box2dBody);
     		 dispose();
     	}else{
@@ -180,15 +182,15 @@ public class Player extends GameObject implements Destructible {
 	public void damage(ContactImpulse impulse) {
 		if (GamePlay.gameInfo.networkMode.equals("WAN")) {
 			if(this.controller instanceof BomberController){
-				attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
+				attr.setCurrLife(attr.getCurrLife() - impulse.getNormalImpulses()[0]);
 				//send health to other player
 				RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
-				requireUpdateHealthToOthers.health = attr.getLife();
+				requireUpdateHealthToOthers.health = attr.getCurrLife();
 				GamePlay.client.sendTCP(requireUpdateHealthToOthers);
 					
 			}
 		}else{
-			attr.setLife(attr.getLife() - impulse.getNormalImpulses()[0]);
+			attr.setCurrLife(attr.getCurrLife() - impulse.getNormalImpulses()[0]);
 		}
 	}
 

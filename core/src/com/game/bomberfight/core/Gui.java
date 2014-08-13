@@ -113,7 +113,7 @@ public class Gui {
 		horizontalGroup.top();
 		stateTable.add(horizontalGroup).expand().top().right();
 		
-		float hp = player.getAttr().getLife();
+		float hp = player.getAttr().getMaxLife();
 		
 		horizontalGroup.addActor(createBuff("bombnumber", player));
 		horizontalGroup.addActor(createBuff("bombpower", player));
@@ -136,7 +136,7 @@ public class Gui {
 		horizontalGroup.top();
 		uiStage.addActor(horizontalGroup);
 		
-		float hp = player.getAttr().getLife();
+		float hp = player.getAttr().getMaxLife();
 		
 		horizontalGroup.addActor(createBuff("bombnumber", player));
 		horizontalGroup.addActor(createBuff("bombpower", player));
@@ -163,7 +163,9 @@ public class Gui {
 			} else if (table.getName().equalsIgnoreCase("hpbar")) {
 				Slider slider = table.findActor("slider");
 				Player player = (Player) table.getUserObject();
-				slider.setValue(player.getAttr().getLife());
+				slider.setRange(0, player.getAttr().getMaxLife());
+				slider.setStepSize(player.getAttr().getMaxLife()/100);
+				slider.setValue(player.getAttr().getCurrLife());
 			} else {
 				if (table.getUserObject() instanceof Item) {
 					Item item = (Item) table.getUserObject();

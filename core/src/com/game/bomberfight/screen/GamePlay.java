@@ -336,7 +336,8 @@ public class GamePlay implements Screen {
 		// add heal
 		item = new Item();
 		item.setName("HEAL");
-		item.getAttr().setLife(100);
+		item.getAttr().setMaxLife(100);
+		item.getAttr().setCurrLife(100);
 		this.itemList.add(item);
 		
 		gui = new Gui();
@@ -477,7 +478,7 @@ public class GamePlay implements Screen {
 		if (object instanceof UpdateInput) {
 			UpdateInput updateInput = (UpdateInput) object;
 			Player player = (Player) connToPlayerMap.get(updateInput.conn);
-			if (player.getAttr().getLife() <= 0) {
+			if (player.getAttr().getCurrLife() <= 0) {
 				return;
 			}
 			connToInputSourceMap.get(updateInput.conn).put(updateInput.keyCode, updateInput.keyState);
@@ -486,7 +487,7 @@ public class GamePlay implements Screen {
 		if (object instanceof UpdatePosition) {
 			UpdatePosition updatePosition = (UpdatePosition) object;
 			Player player = (Player) connToPlayerMap.get(updatePosition.conn);
-			if (player.getAttr().getLife() <= 0) {
+			if (player.getAttr().getCurrLife() <= 0) {
 				return;
 			}
 			Body body = connToPlayerMap.get(updatePosition.conn).getBox2dBody();
@@ -521,7 +522,7 @@ public class GamePlay implements Screen {
 			UpdateHealth updateHealth = (UpdateHealth)object;
 			Player player = connToPlayerMap.get(updateHealth.conn);
 			if(player != null){
-				player.getAttr().setLife(updateHealth.health);
+				player.getAttr().setCurrLife(updateHealth.health);
 			}
 		}
 		
