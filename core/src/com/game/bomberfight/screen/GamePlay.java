@@ -666,15 +666,17 @@ public class GamePlay implements Screen {
 		if (!connToPlayerMap.isEmpty()) {
 			positionUpdateTime -= delta;
 			if (positionUpdateTime <= 0) {
-				Vector2 position = connToPlayerMap.get(gameInfo.playerInfo.conn).getBox2dBody().getPosition();
-				if (lastPosition.x != position.x || lastPosition.y != position.y) {
-					RequireUpdatePositionToOthers requireUpdatePositionToOthers = new RequireUpdatePositionToOthers();
-					requireUpdatePositionToOthers.x = position.x;
-					requireUpdatePositionToOthers.y = position.y;
-					client.sendTCP(requireUpdatePositionToOthers);
-					lastPosition.set(position);
+				if(connToPlayerMap.get(gameInfo.playerInfo.conn) != null){
+					Vector2 position = connToPlayerMap.get(gameInfo.playerInfo.conn).getBox2dBody().getPosition();
+					if (lastPosition.x != position.x || lastPosition.y != position.y) {
+						RequireUpdatePositionToOthers requireUpdatePositionToOthers = new RequireUpdatePositionToOthers();
+						requireUpdatePositionToOthers.x = position.x;
+						requireUpdatePositionToOthers.y = position.y;
+						client.sendTCP(requireUpdatePositionToOthers);
+						lastPosition.set(position);
+					}
+					positionUpdateTime = 1.f;
 				}
-				positionUpdateTime = 1.f;
 			}
 		}
 	}
@@ -684,6 +686,7 @@ public class GamePlay implements Screen {
 			positionUpdateTime -= delta;
 			if (positionUpdateTime <= 0) {
 				Bomber bomber = (Bomber) connToPlayerMap.get(gameInfo.playerInfo.conn);
+				if(bomber != null){
 				for(Bomb b : bomber.getActivatedBombList()){
 					Vector2 position = b.getBox2dBody().getPosition();
 					RequireUpdateBombPositionToOthers requireUpdateBombPositionToOthers = new RequireUpdateBombPositionToOthers();
@@ -693,6 +696,7 @@ public class GamePlay implements Screen {
 					client.sendTCP(requireUpdateBombPositionToOthers);
 				}
 				positionUpdateTime = 0.5f;
+				}
 			}
 		}
 	}
