@@ -19,6 +19,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
@@ -40,6 +41,7 @@ import com.game.bomberfight.core.CollisionListener;
 import com.game.bomberfight.core.GameObjectManager;
 import com.game.bomberfight.core.Gui;
 import com.game.bomberfight.core.Item;
+import com.game.bomberfight.core.Particle;
 import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.core.TileMapManager.PlayerSpawnPoint;
 import com.game.bomberfight.model.Explosion;
@@ -150,7 +152,7 @@ public class GamePlay implements Screen {
 			Gdx.app.log("Efficiency test", "camera update + batch setProjectionMatrix: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 		}
-		
+		tileMapManager.update(viewport.getCamera().combined, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
 		tileMapManager.renderBackground();
 		
 		if (isEfficiencyTest) {
@@ -262,7 +264,7 @@ public class GamePlay implements Screen {
 	public void resize(int width, int height) {
 		viewport.update(width, height, false);
 		FpsDisplayer.getInstance().update(width, height);
-		tileMapManager.update(viewport.getCamera().combined, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
+		//tileMapManager.update(viewport.getCamera().combined, viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
 		gui.resize(viewport);
 	}
 
@@ -337,9 +339,9 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("yijiasup.no-ip.org");//yijiasup.no-ip.org
+		connect("128.199.207.133");//yijiasup.no-ip.org
 		
-		ParticleEffectPool bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
+		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
 
 	@Override
@@ -603,6 +605,7 @@ public class GamePlay implements Screen {
 				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
 				inputMultiplexer.addProcessor(bomberController);
 				bomber.setController(bomberController);
+				bomber.setCamra((OrthographicCamera) this.viewport.getCamera());
 			} else {
 				Map<Integer, Boolean> inputSource = new LinkedHashMap<Integer, Boolean>();
 				connToInputSourceMap.put(playerInfoList[i].conn, inputSource);
