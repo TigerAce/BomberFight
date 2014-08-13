@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -166,6 +167,9 @@ public class Gui {
 				slider.setRange(0, player.getAttr().getMaxLife());
 				slider.setStepSize(player.getAttr().getMaxLife()/100);
 				slider.setValue(player.getAttr().getCurrLife());
+				
+				Label label = table.findActor("label1");
+				label.setText((int)player.getAttr().getCurrLife()+"/"+(int)player.getAttr().getMaxLife());
 			} else {
 				if (table.getUserObject() instanceof Item) {
 					Item item = (Item) table.getUserObject();
@@ -258,12 +262,27 @@ public class Gui {
 		label.setName("label");
 		table.add(label);
 		
+		Stack stack = new Stack();
+		stack.setName("stack");
+		table.add(stack);
+		
 		Slider slider = new Slider(0, 1, 0.1f, false, uiSkin, "hp-horizontal");
 		slider.setName("slider");
 		slider.setAnimateDuration(0.5f);
 		slider.setValue(1);
 		slider.setDisabled(true);
-		table.add(slider);
+		//table.add(slider);
+		stack.add(slider);
+		
+		LabelStyle labelStyle = new LabelStyle();
+		labelStyle.font = new BitmapFont(Gdx.files.internal("data/Aharoni.fnt"));
+		
+		Table table1 = new Table();
+		stack.add(table1);
+		
+		Label label1 = new Label("0/0", labelStyle);
+		label1.setName("label1");
+		table1.add(label1).expand().center().padBottom(5);
 		
 		return table;
 	}
