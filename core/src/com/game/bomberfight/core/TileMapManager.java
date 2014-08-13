@@ -116,8 +116,8 @@ public class TileMapManager {
 				vec3.mul(trans);
 				
 				// Compute width and height of object
-				Float width = rectangleMapObject.getRectangle().getWidth() * unitScale - 0.1f;
-				Float height = rectangleMapObject.getRectangle().getHeight() * unitScale - 0.1f;
+				Float width = rectangleMapObject.getRectangle().getWidth() * unitScale;
+				Float height = rectangleMapObject.getRectangle().getHeight() * unitScale;
 				
 				// Fetch properties of object
 				MapProperties objectProperties = rectangleMapObject.getProperties();

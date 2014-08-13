@@ -18,7 +18,7 @@
  </tileset>
  <layer name="image_layer_1" width="25" height="18">
   <properties>
-   <property name="world_height" value="70"/>
+   <property name="world_height" value="72"/>
    <property name="world_width" value="100"/>
   </properties>
   <data encoding="base64">
