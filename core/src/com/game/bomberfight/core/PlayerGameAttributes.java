@@ -67,6 +67,10 @@ public class PlayerGameAttributes {
 			this.setMaxLife(this.getMaxLife() + attr.getMaxLife());
 		
 			this.setCurrLife(this.getCurrLife() + attr.getCurrLife());
+			
+			if(getCurrLife() > getMaxLife()){
+				setCurrLife(getMaxLife());
+			}
 		
 			this.setSpeed(this.getSpeed() + attr.getSpeed());
 		
