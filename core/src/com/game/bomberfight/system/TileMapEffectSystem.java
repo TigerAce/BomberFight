@@ -44,7 +44,7 @@ public class TileMapEffectSystem {
 	
 	public void update(Player player) {
 		tempVector2 = player.getBox2dBody().getPosition();
-		tempVector3 = new Vector3(tempVector2, 0);
+		tempVector3.set(tempVector2, 0);
 		tempVector3.mul(trans);
 		tempVector3.scl(1f / unitScale);
 		int x = (int) (tempVector3.x / 32f);
@@ -65,6 +65,7 @@ public class TileMapEffectSystem {
 					item.setAffectTime(1);
 					item.getAttr().setSpeed(5f);
 					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item4.png", Texture.class));
+					((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getGameObjectManager().addGameObject(item);
 					bomber.pickUp(item);
 				}
 			}
@@ -75,6 +76,7 @@ public class TileMapEffectSystem {
 					item.setAffectTime(1);
 					item.getAttr().setSpeed(-5f);
 					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item5.png", Texture.class));
+					((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getGameObjectManager().addGameObject(item);
 					bomber.pickUp(item);
 				}
 			}
