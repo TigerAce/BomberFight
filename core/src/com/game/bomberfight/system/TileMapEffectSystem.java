@@ -15,7 +15,6 @@ import com.game.bomberfight.core.Item;
 import com.game.bomberfight.core.TileMapManager;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
-import com.game.bomberfight.utility.Config;
 
 public class TileMapEffectSystem {
 	
@@ -32,8 +31,8 @@ public class TileMapEffectSystem {
 		this.tileMapManager = tileMapManager;
 		unitScale = this.tileMapManager.getUnitScale();
 		tiledMapTileLayer = (TiledMapTileLayer) this.tileMapManager.getTiledMap().getLayers().get("image_layer_1");
-		trans.setTranslation(Config.getInstance().get("viewportWidth", Float.class) / 2.f, 
-				Config.getInstance().get("viewportHeight",Float.class) / 2.f, 0);
+		trans.setTranslation(tileMapManager.getMapWidth() / 2.f, 
+				tileMapManager.getMapHeight() / 2.f, 0);
 		this.playerList = playerList;
 	}
 	

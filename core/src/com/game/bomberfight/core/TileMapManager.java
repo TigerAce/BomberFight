@@ -19,7 +19,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.game.bomberfight.screen.GamePlay;
-import com.game.bomberfight.utility.Config;
 
 public class TileMapManager {
 	
@@ -32,6 +31,8 @@ public class TileMapManager {
 	private boolean isObjectLoaded = false;
 	private GamePlay gamePlay;
 	private Array<PlayerSpawnPoint> PlayerSpawnPointList;
+	private float mapWidth = 0;
+	private float mapHeight = 0;
 
 	public TileMapManager(GamePlay gamePlay) {
 		// TODO Auto-generated constructor stub
@@ -41,20 +42,24 @@ public class TileMapManager {
 		this.tiledMapRenderer = new OrthogonalTiledMapRenderer(this.tiledMap, unitScale);
 		this.PlayerSpawnPointList = new Array<PlayerSpawnPoint>();
 		if (!isObjectLoaded) {
-			loadObject(Config.getInstance().get("viewportWidth", Float.class), 
-					Config.getInstance().get("viewportHeight",Float.class));
+//			loadObject(Config.getInstance().get("viewportWidth", Float.class), 
+//					Config.getInstance().get("viewportHeight",Float.class));
+			loadObject();
 			isObjectLoaded = true;
 		}
 	}
 	
-	public void loadObject(float viewportWidth, float viewportHeight) {
+	public void loadObject() {
 		// All properties related to the whole game world is stored in the properties of image_layer_1
 		// Such as the width and height of game world
 		TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("image_layer_1");
 		MapProperties mapProperties = tiledMapTileLayer.getProperties();
 		
+		mapWidth = Float.parseFloat((String) mapProperties.get("world_width"));
+		mapHeight = Float.parseFloat((String) mapProperties.get("world_height"));
+		
 		// create wall frame
-		Wall gameWallFrame = new Wall(0, 0, Float.parseFloat((String) mapProperties.get("world_width")), Float.parseFloat((String) mapProperties.get("world_height")));
+		Wall gameWallFrame = new Wall(0, 0, mapWidth, mapHeight);
 		gameWallFrame.setAsRectangleFrame();
 		
 
@@ -63,7 +68,7 @@ public class TileMapManager {
 		MapObjects mapObjects = objectLayer.getObjects();
 		Iterator<MapObject> iter = mapObjects.iterator();
 		Matrix4 trans = new Matrix4();
-		trans.setTranslation(-viewportWidth / 2.f, -viewportHeight / 2.f, 0);
+		trans.setTranslation(-mapWidth / 2.f, -mapHeight / 2.f, 0);
 		
 		int id = 0;
 		while (iter.hasNext()) {
@@ -163,8 +168,11 @@ public class TileMapManager {
 	
 	public void update(Matrix4 projectionMatrix, float viewportWidth, float viewportHeight) {
 		mat = projectionMatrix.cpy();
-		mat.translate(-viewportWidth / 2.f, -viewportHeight / 2.f, 0);
-		tiledMapRenderer.setView(mat, 0, 0, viewportWidth, viewportHeight);
+//		mat.translate(-viewportWidth / 2.f, -viewportHeight / 2.f, 0);
+//		tiledMapRenderer.setView(mat, 0, 0, viewportWidth, viewportHeight);
+		mat.translate(-mapWidth / 2.f, -mapHeight / 2.f, 0);
+		tiledMapRenderer.setView(mat, 0, 0, mapWidth, mapHeight);
+
 	}
 	
 	public void renderBackground() {
@@ -217,6 +225,20 @@ public class TileMapManager {
 	 */
 	public Array<PlayerSpawnPoint> getPlayerSpawnPointList() {
 		return PlayerSpawnPointList;
+	}
+
+	/**
+	 * @return the mapWidth
+	 */
+	public float getMapWidth() {
+		return mapWidth;
+	}
+
+	/**
+	 * @return the mapHeight
+	 */
+	public float getMapHeight() {
+		return mapHeight;
 	}
 
 }
