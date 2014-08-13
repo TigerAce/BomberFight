@@ -91,9 +91,11 @@ public class Item extends GameObject{
 	@Override
 	public void update(float delta) {
 		if(picked){
-			if(box2dBody.getUserData() != null){
-	    		((UserData)box2dBody.getUserData()).isDead = true;
-	    		}
+			if (box2dBody != null) {
+				if (box2dBody.getUserData() != null) {
+					((UserData) box2dBody.getUserData()).isDead = true;
+				}
+			}
 			//((GamePlay)currentScreen).getWorld().destroyBody(box2dBody);
 			if(sprite != null){
 				sprite = null;
@@ -119,7 +121,9 @@ public class Item extends GameObject{
 	
 	@Override
 	public void dispose(){
-		itemShape.dispose();
+		if (itemShape != null) {
+			itemShape.dispose();
+		}
 		super.dispose();
 	}
 	
