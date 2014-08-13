@@ -333,6 +333,11 @@ public class GamePlay implements Screen {
 		item.getAttr().setPowerX(5f);
 		item.getAttr().setPowerY(5f);
 		this.itemList.add(item);
+		// add heal
+		item = new Item();
+		item.setName("HEAL");
+		item.getAttr().setLife(100);
+		this.itemList.add(item);
 		
 		gui = new Gui();
 		
@@ -543,6 +548,9 @@ public class GamePlay implements Screen {
 				}
 				if(updateDropItem.name.equals("ADDBOMB")){
 					item.setSprite(assetManager.get("img/texture/item3.png", Texture.class));
+				}
+				if(updateDropItem.name.equals("HEAL")){
+					item.setSprite(assetManager.get("img/texture/item6.jpg", Texture.class));
 				}
 				item.setX(updateDropItem.x);
 				item.setY(updateDropItem.y);

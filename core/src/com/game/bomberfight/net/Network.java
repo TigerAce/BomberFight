@@ -122,6 +122,7 @@ public class Network {
 				itemDropProbability.put("ANNULAR", 10);
 				itemDropProbability.put("POWER_UP", 10);
 				itemDropProbability.put("ADDBOMB", 10);
+				itemDropProbability.put("HEAL", 5);
 			}
 		}
 	}
@@ -136,6 +137,7 @@ public class Network {
 				itemDropProbability.put("ANNULAR", 10);
 				itemDropProbability.put("POWER_UP", 30);
 				itemDropProbability.put("ADDBOMB", 20);
+				itemDropProbability.put("HEAL", 5);
 			}
 		}
 	}

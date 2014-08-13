@@ -75,6 +75,7 @@ public class LoadingScreen implements Screen {
 		assetManager.load("img/texture/item3.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item4.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item5.png", Texture.class, textureParameter);
+		assetManager.load("img/texture/item6.jpg", Texture.class, textureParameter);
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
