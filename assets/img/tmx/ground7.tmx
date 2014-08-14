@@ -3154,58 +3154,34 @@
     <property name="speed" value="10"/>
    </properties>
   </object>
-  <object name="Item" type="Item" x="800" y="512" width="32" height="32">
-   <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
-   </properties>
-  </object>
   <object name="Item" type="Item" x="832" y="512" width="32" height="32">
    <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
-   </properties>
-  </object>
-  <object name="Item" type="Item" x="864" y="512" width="32" height="32">
-   <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
+    <property name="name" value="HEAL"/>
+    <property name="refreshTime" value="300"/>
    </properties>
   </object>
   <object name="Item" type="Item" x="800" y="544" width="32" height="32">
    <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
-   </properties>
-  </object>
-  <object name="Item" type="Item" x="800" y="576" width="32" height="32">
-   <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
+    <property name="name" value="HEAL"/>
+    <property name="refreshTime" value="300"/>
    </properties>
   </object>
   <object name="Item" type="Item" x="864" y="544" width="32" height="32">
    <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
+    <property name="name" value="HEAL"/>
+    <property name="refreshTime" value="300"/>
    </properties>
   </object>
   <object name="Item" type="Item" x="832" y="576" width="32" height="32">
    <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
-   </properties>
-  </object>
-  <object name="Item" type="Item" x="864" y="576" width="32" height="32">
-   <properties>
-    <property name="name" value="RANDOM"/>
-    <property name="refreshTime" value="60"/>
+    <property name="name" value="HEAL"/>
+    <property name="refreshTime" value="300"/>
    </properties>
   </object>
   <object name="Item" type="Item" x="832" y="544" width="32" height="32">
    <properties>
     <property name="name" value="HEAL"/>
-    <property name="refreshTime" value="60"/>
+    <property name="refreshTime" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1344" y="320" width="32" height="32">
