@@ -2,6 +2,7 @@ package com.game.bomberfight.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
@@ -174,7 +175,8 @@ public class Gui {
 				if (table.getUserObject() instanceof Item) {
 					Item item = (Item) table.getUserObject();
 					if (item.getAffectTime() <= 0) {
-						actor.remove();
+						table.setUserObject(null);
+						table.remove();
 					} else {
 						Label label = table.findActor("label");
 						label.setText(""+(int)item.getAffectTime());
@@ -224,9 +226,9 @@ public class Gui {
 		Image image = null;
 		
 		if (name.equalsIgnoreCase("bombpower")) {
-			image = new Image(new Texture(Gdx.files.internal("img/texture/item1.png")));
+			image = new Image(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item1.png", Texture.class));
 		} else if (name.equalsIgnoreCase("bombnumber")) {
-			image = new Image(new Texture(Gdx.files.internal("img/texture/item3.png")));
+			image = new Image(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item3.png", Texture.class));
 		} else {
 			if (userObject instanceof Item) {
 				Item item = (Item) userObject;
@@ -244,7 +246,7 @@ public class Gui {
 		table.row();
 		
 		LabelStyle labelStyle = new LabelStyle();
-		labelStyle.font = new BitmapFont(Gdx.files.internal("data/Aharoni.fnt"));
+		labelStyle.font = ((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("data/Aharoni.fnt", BitmapFont.class);
 		
 		Label label = new Label("", labelStyle);
 		label.setName("label");

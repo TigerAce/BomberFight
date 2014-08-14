@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -76,6 +77,8 @@ public class LoadingScreen implements Screen {
 		assetManager.load("img/texture/item4.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item5.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item6.jpg", Texture.class, textureParameter);
+		
+		assetManager.load("data/Aharoni.fnt", BitmapFont.class);
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);

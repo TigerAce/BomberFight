@@ -62,7 +62,7 @@ public class TileMapEffectSystem {
 				if (!bomber.hasItem("SPEED_UP")) {
 					Item item = new Item();
 					item.setName("SPEED_UP");
-					item.setAffectTime(1);
+					item.setAffectTime(1.f);
 					item.getAttr().setSpeed(5f);
 					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item4.png", Texture.class));
 					((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getGameObjectManager().addGameObject(item);
@@ -73,7 +73,7 @@ public class TileMapEffectSystem {
 				if (!bomber.hasItem("SPEED_DOWN")) {
 					Item item = new Item();
 					item.setName("SPEED_DOWN");
-					item.setAffectTime(1);
+					item.setAffectTime(1.f);
 					item.getAttr().setSpeed(-5f);
 					item.setSprite(((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getAssetManager().get("img/texture/item5.png", Texture.class));
 					((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).getGameObjectManager().addGameObject(item);

@@ -22,7 +22,6 @@ public abstract class GameObject implements Disposable{
     protected int id;
 
 
-
     public GameObject(){
     	this(0, 0);
     	state = ACTIVE;

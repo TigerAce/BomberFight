@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.interfaces.Picker;
-import com.game.bomberfight.model.Controller;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;

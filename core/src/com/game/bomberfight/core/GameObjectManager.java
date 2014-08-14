@@ -4,7 +4,6 @@ package com.game.bomberfight.core;
 import java.util.HashSet;
 import java.util.Iterator;
 
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.game.bomberfight.model.GameObject;
 
