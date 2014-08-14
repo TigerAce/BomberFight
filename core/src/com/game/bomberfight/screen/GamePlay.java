@@ -353,7 +353,7 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("yijiasup.no-ip.org");//yijiasup.no-ip.org 128.199.207.133
+		connect("localhost");//yijiasup.no-ip.org 128.199.207.133
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}

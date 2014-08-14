@@ -590,11 +590,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="768" y="448" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Brick" type="Brick" x="640" y="320" width="32" height="32">
    <properties>
     <property name="hitpoint" value="300"/>
@@ -626,11 +621,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="608" y="160" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="768" y="416" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -790,11 +780,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="768" y="480" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="448" y="128" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -826,11 +811,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="448" y="96" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="704" y="480" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -880,17 +860,7 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="736" y="480" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="960" y="288" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="896" y="416" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -976,11 +946,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="992" y="160" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="896" y="480" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -1075,11 +1040,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="928" y="480" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1056" y="160" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -1135,22 +1095,12 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="960" y="480" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1152" y="128" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="992" y="480" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="896" y="448" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -1330,11 +1280,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="1344" y="320" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1440" y="288" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -1343,11 +1288,6 @@
   <object name="Crate" type="Crate" x="1504" y="256" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1344" y="352" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1440" y="352" width="32" height="32">
@@ -1388,11 +1328,6 @@
   <object name="Crate" type="Crate" x="1280" y="352" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1344" y="256" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1376" y="160" width="32" height="32">
@@ -1515,11 +1450,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="1344" y="288" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1280" y="448" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -1543,11 +1473,6 @@
   <object name="Crate" type="Crate" x="1344" y="480" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1344" y="192" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1440" y="480" width="32" height="32">
@@ -1633,11 +1558,6 @@
   <object name="Crate" type="Crate" x="1504" y="96" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1344" y="224" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1504" y="480" width="32" height="32">
@@ -2135,11 +2055,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="704" y="608" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="544" y="1056" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -2260,16 +2175,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="768" y="640" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="768" y="672" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="768" y="704" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -2291,16 +2196,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="448" y="1024" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="736" y="608" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="768" y="608" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -2650,16 +2545,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Crate" type="Crate" x="896" y="640" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="960" y="608" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="896" y="832" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -2721,16 +2606,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1024" y="704" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="928" y="608" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="896" y="672" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -2816,11 +2691,6 @@
    </properties>
   </object>
   <object name="Crate" type="Crate" x="992" y="928" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Crate" type="Crate" x="896" y="608" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
    </properties>
@@ -2935,11 +2805,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="1440" y="896" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1504" y="832" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -2953,11 +2818,6 @@
   <object name="Crate" type="Crate" x="1376" y="608" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1440" y="736" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1280" y="992" width="32" height="32">
@@ -3030,11 +2890,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="1440" y="800" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1504" y="1056" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -3105,11 +2960,6 @@
     <property name="hitpoint" value="100"/>
    </properties>
   </object>
-  <object name="Brick" type="Brick" x="1440" y="768" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
-   </properties>
-  </object>
   <object name="Crate" type="Crate" x="1408" y="928" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
@@ -3148,11 +2998,6 @@
   <object name="Crate" type="Crate" x="1280" y="800" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1440" y="832" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Brick" type="Brick" x="1408" y="864" width="32" height="32">
@@ -3248,11 +3093,6 @@
   <object name="Crate" type="Crate" x="1504" y="640" width="32" height="32">
    <properties>
     <property name="hitpoint" value="100"/>
-   </properties>
-  </object>
-  <object name="Brick" type="Brick" x="1440" y="864" width="32" height="32">
-   <properties>
-    <property name="hitpoint" value="300"/>
    </properties>
   </object>
   <object name="Crate" type="Crate" x="1504" y="672" width="32" height="32">
@@ -3366,6 +3206,426 @@
    <properties>
     <property name="name" value="HEAL"/>
     <property name="refreshTime" value="60"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="320" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="352" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="256" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="192" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="224" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1344" y="288" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="864" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="896" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="800" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="736" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="768" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Crate" type="Crate" x="1440" y="832" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="100"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="672" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="768" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="800" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="736" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="864" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="832" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="896" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="928" y="416" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="704" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="512" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="448" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="544" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="576" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="608" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="640" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
+   </properties>
+  </object>
+  <object name="Brick" type="Brick" x="960" y="480" width="32" height="32">
+   <properties>
+    <property name="hitpoint" value="300"/>
    </properties>
   </object>
  </objectgroup>
