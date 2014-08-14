@@ -234,7 +234,8 @@ public class BomberFightServer {
 								task.cancel();
 							}
 							room.timerTasks.clear();
-							roomList.removeValue(room, true);
+							roomList.set(roomList.indexOf(room, true), null);
+							//roomList.removeValue(room, true);
 							connToRoomMap.remove(c.getID());
 						}
 					}

@@ -44,7 +44,7 @@ public class Player extends GameObject implements Destructible {
     
     public PointLight p = null;
     
-    public int lifeRegenTime = 1;
+    public float lifeRegenTime = 1;
 
     /**
      * Constructor of Player
