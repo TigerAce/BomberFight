@@ -66,6 +66,9 @@ public class CameraSystem {
 		if (offset < 0.1f) {
 			offset = 0;
 		}
+		if (offset > 10) {
+			offset = 10;
+		}
 	}
 
 }
