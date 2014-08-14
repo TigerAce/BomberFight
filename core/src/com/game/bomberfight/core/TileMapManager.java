@@ -18,7 +18,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.game.bomberfight.model.MapInfo;
 import com.game.bomberfight.model.MapInfo.ItemSpawnPoint;
 import com.game.bomberfight.screen.GamePlay;
 
@@ -157,7 +156,7 @@ public class TileMapManager {
 					itemSpawnPoint.refreshTime = refreshTime;
 					itemSpawnPoint.x = vec3.x;
 					itemSpawnPoint.y = vec3.y;
-					gamePlay.gameInfo.mapInfo.itemSpawnPoint.add(itemSpawnPoint);
+					GamePlay.gameInfo.mapInfo.itemSpawnPoint.add(itemSpawnPoint);
 					
 				}
 				

@@ -6,18 +6,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.game.bomberfight.model.Explosion;
 import com.game.bomberfight.model.Explosive;
-import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.utility.UserData;
 
@@ -57,6 +56,8 @@ public class Bomb extends Explosive{
 		  */
 		 Sound explosionSound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
 		 explosionSound.play(0.1f);
+		 
+		 ((GamePlay) currentScreen).getCameraSystem().shake();
 		 
 		 /**
 		  * create explosion

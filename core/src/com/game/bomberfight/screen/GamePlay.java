@@ -63,7 +63,7 @@ import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateHealth;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
-import com.game.bomberfight.system.CameraFollowingSystem;
+import com.game.bomberfight.system.CameraSystem;
 import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
@@ -136,7 +136,7 @@ public class GamePlay implements Screen {
 	
 	protected Vector2 lastPosition = new Vector2();
 	
-	protected CameraFollowingSystem cameraFollowingSystem = null;
+	protected CameraSystem cameraSystem = null;
 	
 	@Override
 	public void render(float delta) {
@@ -260,8 +260,8 @@ public class GamePlay implements Screen {
 			Gdx.app.log("Efficiency test", "\n\n");
 		}
 		
-		if (cameraFollowingSystem != null) {
-			cameraFollowingSystem.update(delta);
+		if (cameraSystem != null) {
+			cameraSystem.update(delta);
 		}
 		
 		updatePositionToOthers(delta);
@@ -640,7 +640,7 @@ public class GamePlay implements Screen {
 				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
 				inputMultiplexer.addProcessor(bomberController);
 				bomber.setController(bomberController);
-				cameraFollowingSystem = new CameraFollowingSystem(viewport.getCamera(), bomber, 
+				cameraSystem = new CameraSystem(viewport.getCamera(), bomber, 
 						tileMapManager.getMapWidth(), tileMapManager.getMapHeight(), 
 						viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
 			} else {
@@ -736,6 +736,13 @@ public class GamePlay implements Screen {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return the cameraSystem
+	 */
+	public CameraSystem getCameraSystem() {
+		return cameraSystem;
 	}
 	
 	public class ItemExistCallback implements QueryCallback{

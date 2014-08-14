@@ -1,11 +1,12 @@
 package com.game.bomberfight.system;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.game.bomberfight.model.GameObject;
 
-public class CameraFollowingSystem {
+public class CameraSystem {
 	
 	private Camera camera;
 	private GameObject target;
@@ -16,8 +17,10 @@ public class CameraFollowingSystem {
 	private float mapHeight;
 	private float viewPortWidth;
 	private float viewPortHeight;
+	private float shakeTime = 1;
+	private float shakeTimeCount = 1;
 
-	public CameraFollowingSystem(Camera camera, GameObject target, float mapWidth, float mapHeight, 
+	public CameraSystem(Camera camera, GameObject target, float mapWidth, float mapHeight, 
 			float viewPortWidth, float viewPortHeight) {
 		this.camera = camera;
 		this.target = target;
@@ -32,8 +35,13 @@ public class CameraFollowingSystem {
 		targetPos.set(this.target.getBox2dBody().getPosition());
 		tempVector3.set(targetPos, 0);
 		
-		this.camera.position.lerp(tempVector3, delta);
-		
+		if (shakeTimeCount <= shakeTime) {
+			this.camera.position.x = this.camera.position.x + MathUtils.random(2.f) * (MathUtils.randomBoolean() ? 1.f : -1.f);
+			this.camera.position.y = this.camera.position.y + MathUtils.random(2.f) * (MathUtils.randomBoolean() ? 1.f : -1.f);
+			shakeTimeCount += delta;
+		} else {
+			this.camera.position.lerp(tempVector3, delta);
+		}
 		if (this.camera.position.x < -(mapWidth - viewPortWidth) / 2) {
 			this.camera.position.x = -(mapWidth - viewPortWidth) / 2;
 		}
@@ -46,6 +54,10 @@ public class CameraFollowingSystem {
 		if (this.camera.position.y > (mapHeight - viewPortHeight) / 2) {
 			this.camera.position.y = (mapHeight - viewPortHeight) / 2;
 		}
+	}
+	
+	public void shake() {
+		shakeTimeCount = 0;
 	}
 
 }
