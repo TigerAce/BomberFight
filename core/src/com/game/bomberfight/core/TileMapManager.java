@@ -18,6 +18,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.game.bomberfight.model.MapInfo;
+import com.game.bomberfight.model.MapInfo.ItemSpawnPoint;
 import com.game.bomberfight.screen.GamePlay;
 
 public class TileMapManager {
@@ -126,10 +128,11 @@ public class TileMapManager {
 				
 				// Fetch properties of object
 				MapProperties objectProperties = rectangleMapObject.getProperties();
-				float hitpoint = Float.parseFloat((String) objectProperties.get("hitpoint"));
+			
 				
 				//create a crate
 				if (rectangleMapObject.getName().equalsIgnoreCase("crate")) {
+					float hitpoint = Float.parseFloat((String) objectProperties.get("hitpoint"));
 					Crate c = new Crate(vec3.x, vec3.y, width, height, hitpoint);
 					c.create();
 					c.setId(id);
@@ -137,9 +140,25 @@ public class TileMapManager {
 				
 				//create a brick
 				if (rectangleMapObject.getName().equalsIgnoreCase("brick")) {
+					float hitpoint = Float.parseFloat((String) objectProperties.get("hitpoint"));
 					Brick b = new Brick(vec3.x, vec3.y, width, height, hitpoint);
 					b.create();
 					b.setId(id);
+				}
+				
+				if(rectangleMapObject.getName().equalsIgnoreCase("item")) {
+					
+					String itemName = (String) objectProperties.get("name");
+					float refreshTime = Float.parseFloat((String) objectProperties.get("refreshTime"));
+				//	System.out.println(itemName);
+				//	System.out.println(refreshTime);
+					ItemSpawnPoint itemSpawnPoint = new ItemSpawnPoint();
+					itemSpawnPoint.itemName = itemName;
+					itemSpawnPoint.refreshTime = refreshTime;
+					itemSpawnPoint.x = vec3.x;
+					itemSpawnPoint.y = vec3.y;
+					gamePlay.gameInfo.mapInfo.itemSpawnPoint.add(itemSpawnPoint);
+					
 				}
 				
 				//create bomber a
@@ -148,6 +167,7 @@ public class TileMapManager {
 					float speed = Float.parseFloat((String) objectProperties.get("speed"));
 					int numBombPerRound = Integer.parseInt((String) objectProperties.get("numBombPerRound"));
 					float roundInterval = Float.parseFloat((String) objectProperties.get("roundInterval"));
+					float hitpoint = Float.parseFloat((String) objectProperties.get("hitpoint"));
 					
 					PlayerSpawnPoint spawnPoint = new PlayerSpawnPoint();
 					spawnPoint.x = vec3.x;

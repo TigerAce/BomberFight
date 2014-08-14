@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -12,8 +14,10 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.game.bomberfight.model.GameInfo;
 import com.game.bomberfight.model.MapInfo;
+import com.game.bomberfight.model.MapInfo.ItemSpawnPoint;
 import com.game.bomberfight.model.PlayerInfo;
 import com.game.bomberfight.net.Network;
+import com.game.bomberfight.net.Network.ItemName;
 import com.game.bomberfight.net.Network.RequireJoinGame;
 import com.game.bomberfight.net.Network.RequireUpdateBombPositionToOthers;
 import com.game.bomberfight.net.Network.RequireUpdateDropItem;
@@ -29,11 +33,15 @@ import com.game.bomberfight.net.Network.UpdateHealth;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
 import com.game.bomberfight.server.Room.RoomState;
+import com.game.bomberfight.utility.RandomEnum;
 
 public class BomberFightServer {
 	Server server;
 	Array<Room> roomList;
 	Map<Integer, Integer> connToRoomMap;
+	
+	public static float serverTime;
+	public static Timer serverTimer;
 
 
 	public BomberFightServer() throws IOException {
@@ -129,7 +137,7 @@ public class BomberFightServer {
 						room.destroyedGameObjectId.add(request.id);
 						
 						Random r = new Random();
-						String itemName = null;
+						ItemName itemName = null;
 		    		
 		    		
 						if(request.name.equals(Network.CrateDropList.name)){
@@ -146,7 +154,7 @@ public class BomberFightServer {
 		    				
 		    				int counter = 0;
 		    			
-		    				for (Map.Entry<String, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
+		    				for (Map.Entry<ItemName, Integer> entry : Network.CrateDropList.ItemInfo.itemDropProbability.entrySet()) {
 		    					
 		    					if(rand >= counter && rand < counter + entry.getValue()){
 		    					
@@ -174,7 +182,7 @@ public class BomberFightServer {
 								int counter = 0;
 		    			
 		    				
-								for (Map.Entry<String, Integer> entry : Network.BrickDropList.ItemInfo.itemDropProbability.entrySet()) {
+								for (Map.Entry<ItemName, Integer> entry : Network.BrickDropList.ItemInfo.itemDropProbability.entrySet()) {
 		    					
 									if(rand >= counter && rand < counter + entry.getValue()){
 										itemName = entry.getKey();
@@ -192,7 +200,7 @@ public class BomberFightServer {
 		    		
 							UpdateDropItem updateDropItem = new UpdateDropItem();
 							updateDropItem.id = request.id;
-							updateDropItem.name = itemName;
+							updateDropItem.name = itemName.toString();
 							updateDropItem.x = request.x;
 							updateDropItem.y = request.y;
 					
@@ -222,6 +230,10 @@ public class BomberFightServer {
 						room.playerInfoList.removeValue(playerInfo, true);
 						if (room.playerInfoList.size == 0) {
 							System.out.println("room#"+room.number+" has been removed"+"\n");
+							for(TimerTask task : room.timerTasks){
+								task.cancel();
+							}
+							room.timerTasks.clear();
 							roomList.removeValue(room, true);
 							connToRoomMap.remove(c.getID());
 						}
@@ -232,6 +244,10 @@ public class BomberFightServer {
 		
 		server.bind(Network.portTCP, Network.portUDP);
 		server.start();
+		serverTimer = new Timer();
+		
+		
+
 	}
 	
 	public void joinGame(GameInfo gameInfo) {
@@ -260,6 +276,8 @@ public class BomberFightServer {
 			room.state = RoomState.waiting;
 			room.playerInfoList.add(gameInfo.playerInfo);
 			room.gameInfo = gameInfo;
+			
+			
 			
 			gameInfo.playerInfo.roomNumber = room.number;
 			gameInfo.playerInfo.spawnPoint = room.playerInfoList.size - 1;
@@ -290,6 +308,8 @@ public class BomberFightServer {
 			GO.playerInfoList = room.playerInfoList.toArray(PlayerInfo.class);
 			server.sendToTCP(playerInfo.conn, GO);
 		}
+		
+		initialItemSpawnPoint(room);
 	}
 	
 	public void sendToAllInRoomExcept(Room room, int conn, Object object) {
@@ -306,6 +326,57 @@ public class BomberFightServer {
 		}
 	}
 
+	
+	
+	
+	/**
+	 * timer task functions
+	 * 
+	 */
+	public void initialItemSpawnPoint(Room room){
+	
+		for(int i = 0; i < room.gameInfo.mapInfo.itemSpawnPoint.size; i++){
+			ItemSpawnPoint itemSpawnPoint = room.gameInfo.mapInfo.itemSpawnPoint.get(i);
+			
+			final int spawnPointID = i;
+			final int roomID = roomList.indexOf(room, true);
+		
+			TimerTask task = new TimerTask(){
+
+				@Override
+				public void run() {
+					
+					refreshItemInSpawnPoint( roomID, spawnPointID);
+				}
+				
+			};
+			serverTimer.schedule(task, 60 * 1000, (long) itemSpawnPoint.refreshTime * 1000);
+			room.timerTasks.add(task);
+		}
+		
+	}
+	
+	
+	public void refreshItemInSpawnPoint(int roomID, int spawnPointID){
+		Room room = roomList.get(roomID);
+		ItemSpawnPoint itemSpawnPoint = room.gameInfo.mapInfo.itemSpawnPoint.get(spawnPointID);
+		
+		String itemName = null;
+		if(itemSpawnPoint.itemName.equalsIgnoreCase("RANDOM")){
+			itemName = RandomEnum.randomEnum(ItemName.class).toString();
+		}else {
+			itemName = itemSpawnPoint.itemName;
+		}
+		
+		UpdateDropItem updateDropItem = new UpdateDropItem();
+		updateDropItem.id = -1;
+		updateDropItem.name = itemName;
+		updateDropItem.x = itemSpawnPoint.x;
+		updateDropItem.y = itemSpawnPoint.y;
+		
+		sendToAllInRoom(room, updateDropItem);
+	}
+	
 	public static void main(String[] args) throws IOException {
 		Log.set(Log.LEVEL_DEBUG);
 		new BomberFightServer();

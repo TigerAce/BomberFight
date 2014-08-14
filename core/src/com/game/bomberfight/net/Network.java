@@ -2,6 +2,7 @@ package com.game.bomberfight.net;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.game.bomberfight.model.GameInfo;
@@ -35,6 +36,11 @@ public class Network {
 		kryo.register(PlayerInfo[].class);
 		
 		kryo.register(SignalBarrierDestroyed.class);
+		
+		kryo.register(Array.class);
+		kryo.register(Object[].class);
+		kryo.register(MapInfo.ItemSpawnPoint.class);
+		
 	}
 	
 	public static class RequireJoinGame {
@@ -112,17 +118,19 @@ public class Network {
 		public int id;
 	}
 	
+	public static enum ItemName {ANNULAR, POWER_UP, ADDBOMB, HEAL};
+	
 	public static class CrateDropList{
 		public static String name = "CRATE";
 		public static int dropProbability = 5;
 		public static class ItemInfo{
-			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			public static HashMap<ItemName, Integer> itemDropProbability = new HashMap<ItemName, Integer>();
 			
 			static{
-				itemDropProbability.put("ANNULAR", 10);
-				itemDropProbability.put("POWER_UP", 10);
-				itemDropProbability.put("ADDBOMB", 10);
-				itemDropProbability.put("HEAL", 5);
+				itemDropProbability.put(ItemName.ANNULAR, 10);
+				itemDropProbability.put(ItemName.POWER_UP, 10);
+				itemDropProbability.put(ItemName.ADDBOMB, 10);
+				itemDropProbability.put(ItemName.HEAL, 5);
 			}
 		}
 	}
@@ -131,13 +139,13 @@ public class Network {
 		public static String name = "BRICK";
 		public static int dropProbability = 4;
 		public static class ItemInfo{
-			public static HashMap<String, Integer> itemDropProbability = new HashMap<String, Integer>();
+			public static HashMap<ItemName, Integer> itemDropProbability = new HashMap<ItemName, Integer>();
 			
 			static{
-				itemDropProbability.put("ANNULAR", 10);
-				itemDropProbability.put("POWER_UP", 30);
-				itemDropProbability.put("ADDBOMB", 20);
-				itemDropProbability.put("HEAL", 5);
+				itemDropProbability.put(ItemName.ANNULAR, 10);
+				itemDropProbability.put(ItemName.POWER_UP, 30);
+				itemDropProbability.put(ItemName.ADDBOMB, 20);
+				itemDropProbability.put(ItemName.HEAL, 5);
 			}
 		}
 	}
