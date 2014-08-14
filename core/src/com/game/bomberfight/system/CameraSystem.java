@@ -60,6 +60,9 @@ public class CameraSystem {
 	public void shake(float dist2, float powerX, float powerY) {
 		shakeTimeCount = 0;
 		offset = (powerX + powerY) / dist2;
+		if(offset > 10){
+			offset = 10;
+		}
 		if (offset < 0.1f) {
 			offset = 0;
 		}

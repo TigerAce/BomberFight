@@ -28,6 +28,7 @@ import com.game.bomberfight.utility.UserData;
 
 public class Player extends GameObject implements Destructible {
 	
+	
 	protected PlayerGameAttributes attr;
 
 	protected Shape shape;
@@ -43,6 +44,7 @@ public class Player extends GameObject implements Destructible {
     
     public PointLight p = null;
     
+    public int lifeRegenTime = 1;
 
     /**
      * Constructor of Player
@@ -56,6 +58,7 @@ public class Player extends GameObject implements Destructible {
 		attr.setSpeed(speed);
 		attr.setMaxLife(life);
 		attr.setCurrLife(life);
+		attr.setLifeRegenPerSec(1);
 	}
 	
 	/**
@@ -71,6 +74,7 @@ public class Player extends GameObject implements Destructible {
 		attr.setSpeed(speed);
 		attr.setMaxLife(life);
 		attr.setCurrLife(life);
+		attr.setLifeRegenPerSec(1);
 		
 		this.width = width;
 		this.height = height;
@@ -134,6 +138,16 @@ public class Player extends GameObject implements Destructible {
     		System.out.println(box2dBody);
     		 dispose();
     	}else{
+    		//regenerate life per sec
+    		if(lifeRegenTime <= 0){
+    			if(attr.getCurrLife() < attr.getMaxLife()){
+    				attr.setCurrLife(attr.getCurrLife() + attr.getLifeRegenPerSec());
+    			}
+    			lifeRegenTime = 1;
+    		}
+    		
+    		lifeRegenTime -= delta;
+    		
     		//box2dBody.setLinearVelocity(movement);
     		forceToVelocity();
     		if (this.movement.x != 0 || this.movement.y != 0) {

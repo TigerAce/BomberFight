@@ -350,7 +350,7 @@ public class BomberFightServer {
 				}
 				
 			};
-			serverTimer.schedule(task, 60 * 1000, (long) itemSpawnPoint.refreshTime * 1000);
+			serverTimer.schedule(task, 300 * 1000, (long) itemSpawnPoint.refreshTime * 1000);
 			room.timerTasks.add(task);
 		}
 		

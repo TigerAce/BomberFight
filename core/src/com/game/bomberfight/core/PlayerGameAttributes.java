@@ -10,6 +10,7 @@ public class PlayerGameAttributes {
 	private float maxLife; //life of player
 	private float currLife;
 	private float speed; //speed of player
+	private float lifeRegenPerSec;
 
 	
 	/**
@@ -28,6 +29,7 @@ public class PlayerGameAttributes {
 	public PlayerGameAttributes(){
 		this.maxLife = 0;
 		this.currLife = 0;
+		this.lifeRegenPerSec = 0;
 		this.speed = 0;
 		this.numBombPerRound = 0;
 		this.roundInterval = 0;
@@ -38,10 +40,11 @@ public class PlayerGameAttributes {
 	}
 	
 	
-	public PlayerGameAttributes(float maxLife, float currLife, float speed, int numBombPerRound,
+	public PlayerGameAttributes(float lifeRegen, float maxLife, float currLife, float speed, int numBombPerRound,
 			float roundInterval, float powerX, float powerY,
 			Style explosionStyle) {
 		
+		this.setLifeRegenPerSec(lifeRegen);
 		this.setMaxLife(maxLife);
 		this.setCurrLife(currLife);
 		this.setSpeed(speed);
@@ -53,7 +56,7 @@ public class PlayerGameAttributes {
 	}
 	
 	public PlayerGameAttributes(PlayerGameAttributes attr){
-		this(attr.getMaxLife(),attr.getCurrLife(), attr.getSpeed(), attr.getNumBombPerRound(), attr.getRoundInterval(), attr.getPowerX(), attr.getPowerY(), attr.getCurrStyle());
+		this(attr.getLifeRegenPerSec(), attr.getMaxLife(),attr.getCurrLife(), attr.getSpeed(), attr.getNumBombPerRound(), attr.getRoundInterval(), attr.getPowerX(), attr.getPowerY(), attr.getCurrStyle());
 	}
 	
 	
@@ -64,6 +67,8 @@ public class PlayerGameAttributes {
 	
 	public void add(PlayerGameAttributes attr){
 		
+			this.setLifeRegenPerSec(this.getLifeRegenPerSec() + attr.getLifeRegenPerSec());
+			
 			this.setMaxLife(this.getMaxLife() + attr.getMaxLife());
 		
 			this.setCurrLife(this.getCurrLife() + attr.getCurrLife());
@@ -100,6 +105,8 @@ public class PlayerGameAttributes {
 	
 	public void minus(PlayerGameAttributes attr){
 	
+			this.setLifeRegenPerSec(this.getLifeRegenPerSec() - attr.getLifeRegenPerSec());
+		
 			this.setMaxLife(this.getMaxLife() - attr.getMaxLife());
 			
 			this.setCurrLife(this.getCurrLife() - attr.getCurrLife());
@@ -193,6 +200,16 @@ public class PlayerGameAttributes {
 
 	public float getCurrLife() {
 		return currLife;
+	}
+
+
+	public float getLifeRegenPerSec() {
+		return lifeRegenPerSec;
+	}
+
+
+	public void setLifeRegenPerSec(float lifeRegenPerSec) {
+		this.lifeRegenPerSec = lifeRegenPerSec;
 	}
 
 
