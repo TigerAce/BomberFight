@@ -5,7 +5,6 @@ import box2dLight.PointLight;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
@@ -40,7 +39,6 @@ public class Player extends GameObject implements Destructible {
     protected Animation animation = null;
     protected float animTime;
     
-    protected OrthographicCamera camera = null;
     protected Controller controller = null;
     
     public PointLight p = null;
@@ -136,12 +134,6 @@ public class Player extends GameObject implements Destructible {
     		System.out.println(box2dBody);
     		 dispose();
     	}else{
-    		
-    		if(GamePlay.gameInfo.networkMode.equals("WAN")){
-    			if(camera != null){
-    				camera.position.set(this.getBox2dBody().getPosition().x, this.getBox2dBody().getPosition().y,0);
-    			}
-    		}
     		//box2dBody.setLinearVelocity(movement);
     		forceToVelocity();
     		if (this.movement.x != 0 || this.movement.y != 0) {
@@ -332,14 +324,6 @@ public class Player extends GameObject implements Destructible {
 	public void setController(Controller playerController) {
 		this.controller = playerController;
 		this.controller.owner = this;
-	}
-
-	public OrthographicCamera getCamera() {
-		return camera;
-	}
-
-	public void setCamra(OrthographicCamera camera) {
-		this.camera = camera;
 	}
 
 

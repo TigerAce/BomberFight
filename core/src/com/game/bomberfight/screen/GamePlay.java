@@ -19,7 +19,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
@@ -62,6 +61,7 @@ import com.game.bomberfight.net.Network.UpdateDropItem;
 import com.game.bomberfight.net.Network.UpdateHealth;
 import com.game.bomberfight.net.Network.UpdateInput;
 import com.game.bomberfight.net.Network.UpdatePosition;
+import com.game.bomberfight.system.CameraFollowingSystem;
 import com.game.bomberfight.system.TileMapEffectSystem;
 import com.game.bomberfight.utility.Config;
 import com.game.bomberfight.utility.FpsDisplayer;
@@ -133,6 +133,8 @@ public class GamePlay implements Screen {
 	protected float positionUpdateTime = 1.f;
 	
 	protected Vector2 lastPosition = new Vector2();
+	
+	protected CameraFollowingSystem cameraFollowingSystem = null;
 	
 	@Override
 	public void render(float delta) {
@@ -254,6 +256,10 @@ public class GamePlay implements Screen {
 			Gdx.app.log("Efficiency test", "FpsDisplayer draw: " + (System.currentTimeMillis() - timeNow) + "ms");
 			timeNow = System.currentTimeMillis();
 			Gdx.app.log("Efficiency test", "\n\n");
+		}
+		
+		if (cameraFollowingSystem != null) {
+			cameraFollowingSystem.update(delta);
 		}
 		
 		updatePositionToOthers(delta);
@@ -619,7 +625,9 @@ public class GamePlay implements Screen {
 				BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
 				inputMultiplexer.addProcessor(bomberController);
 				bomber.setController(bomberController);
-				bomber.setCamra((OrthographicCamera) this.viewport.getCamera());
+				cameraFollowingSystem = new CameraFollowingSystem(viewport.getCamera(), bomber, 
+						tileMapManager.getMapWidth(), tileMapManager.getMapHeight(), 
+						viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
 			} else {
 				Map<Integer, Boolean> inputSource = new LinkedHashMap<Integer, Boolean>();
 				connToInputSourceMap.put(playerInfoList[i].conn, inputSource);
