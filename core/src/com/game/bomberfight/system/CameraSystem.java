@@ -19,6 +19,7 @@ public class CameraSystem {
 	private float viewPortHeight;
 	private float shakeTime = 1;
 	private float shakeTimeCount = 1;
+	private float offset = 0;
 
 	public CameraSystem(Camera camera, GameObject target, float mapWidth, float mapHeight, 
 			float viewPortWidth, float viewPortHeight) {
@@ -36,8 +37,8 @@ public class CameraSystem {
 		tempVector3.set(targetPos, 0);
 		
 		if (shakeTimeCount <= shakeTime) {
-			this.camera.position.x = this.camera.position.x + MathUtils.random(2.f) * (MathUtils.randomBoolean() ? 1.f : -1.f);
-			this.camera.position.y = this.camera.position.y + MathUtils.random(2.f) * (MathUtils.randomBoolean() ? 1.f : -1.f);
+			this.camera.position.x = this.camera.position.x + MathUtils.random(offset) * (MathUtils.randomBoolean() ? 1.f : -1.f);
+			this.camera.position.y = this.camera.position.y + MathUtils.random(offset) * (MathUtils.randomBoolean() ? 1.f : -1.f);
 			shakeTimeCount += delta;
 		} else {
 			this.camera.position.lerp(tempVector3, delta);
@@ -56,8 +57,12 @@ public class CameraSystem {
 		}
 	}
 	
-	public void shake() {
+	public void shake(float dist2, float powerX, float powerY) {
 		shakeTimeCount = 0;
+		offset = (powerX + powerY) / dist2;
+		if (offset < 0.1f) {
+			offset = 0;
+		}
 	}
 
 }
