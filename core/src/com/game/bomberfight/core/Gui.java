@@ -217,6 +217,20 @@ public class Gui {
 		.key(Keys.ESCAPE, false).show(uiStage);
 	}
 	
+	public void showDisconnectDialog() {
+		@SuppressWarnings("unused")
+		Dialog dialog = new Dialog("Warning!", uiSkin) {
+			protected void result (Object object) {
+				boolean b = (Boolean) object;
+				if (b) {
+					Gdx.input.setInputProcessor(null);
+					GamePlay.client.close();
+					((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+				}
+			}
+			}.text("Your connection to server has been disconnected!\nClick 'Yes' to return to main menu!").button("Yes", true).key(Keys.ENTER, true).show(uiStage);
+	}
+	
 	public Table createBuff(String name, Object userObject) {
 		Table table = new Table();
 		table.setName(name);

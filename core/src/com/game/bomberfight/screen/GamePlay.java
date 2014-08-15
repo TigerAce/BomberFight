@@ -669,6 +669,7 @@ public class GamePlay implements Screen {
 
 		public void disconnected (Connection connection) {
 			client.removeListener(this);
+			gui.showDisconnectDialog();
 		}
 	}
 	
