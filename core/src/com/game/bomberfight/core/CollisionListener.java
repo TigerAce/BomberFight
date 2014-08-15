@@ -27,6 +27,16 @@ public class CollisionListener implements ContactListener {
 			}else if(userDataB.object instanceof Picker && userDataA.object instanceof Item){
 				((Picker)userDataB.object).pickUp((Item)userDataA.object);
 			}
+			
+			if (userDataA.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataA.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
+			
+			if (userDataB.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataB.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
 		
 		}
 	}
@@ -38,14 +48,18 @@ public class CollisionListener implements ContactListener {
 		UserData userDataB = (UserData) contact.getFixtureB().getBody()
 				.getUserData();
 		
-		if (userDataA.object instanceof Bomb) {
-			Bomb bomb = (Bomb) userDataA.object;
-			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
-		}
+		if(userDataA != null && userDataB != null){
+			
+			if (userDataA.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataA.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
+			
+			if (userDataB.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataB.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
 		
-		if (userDataB.object instanceof Bomb) {
-			Bomb bomb = (Bomb) userDataB.object;
-			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
 		}
 	}
 

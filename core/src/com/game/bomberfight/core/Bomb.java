@@ -43,7 +43,7 @@ public class Bomb extends Explosive{
 		super(x, y, time, powerX, powerY, explosionStyle);
 		radius = 1.f;
 		this.timerSound = ((GamePlay) currentScreen).getAssetManager().get("audio/timer/timer1.mp3", Sound.class);
-		timerSound.play();
+		timerSound.play(0.5f);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class Bomb extends Explosive{
 		  * play explosion sound
 		  */
 		 Sound explosionSound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
-		 explosionSound.play(0.1f);
+		 explosionSound.play(0.05f);
 		 
 		 Player player = ((GamePlay) currentScreen).getConnToPlayerMap().get(GamePlay.gameInfo.playerInfo.conn);
 		 float dist2 = player.getBox2dBody().getPosition().dst2(box2dBody.getPosition());
