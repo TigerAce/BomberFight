@@ -83,7 +83,7 @@ public class Brick extends Barrier implements Destructible, Breakable, DropItem{
     			requireUpdateDropItem.id = this.getId();
     			requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
 				requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
-				GamePlay.client.sendUDP(requireUpdateDropItem);
+				GamePlay.client.sendTCP(requireUpdateDropItem);
     			
 		
 			} else {

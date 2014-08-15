@@ -192,7 +192,7 @@ public class Player extends GameObject implements Destructible {
 				//send health to other player
 				RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
 				requireUpdateHealthToOthers.health = attr.getCurrLife();
-				GamePlay.client.sendUDP(requireUpdateHealthToOthers);
+				GamePlay.client.sendTCP(requireUpdateHealthToOthers);
 					
 			}
 		}else{

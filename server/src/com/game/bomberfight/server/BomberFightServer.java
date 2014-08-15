@@ -269,7 +269,7 @@ public class BomberFightServer {
 			respondJoinGame.gameInfo = gameInfo;
 			respondJoinGame.result = "joined room #" + room.number;
 			System.out.println("connection"+gameInfo.playerInfo.conn+" joined room#"+room.number+"\n");
-			server.sendToUDP(gameInfo.playerInfo.conn, respondJoinGame);
+			server.sendToTCP(gameInfo.playerInfo.conn, respondJoinGame);
 			
 			if (room.playerInfoList.size == gameInfo.mapInfo.maxNumPlayer) {
 				System.out.println("room#"+room.number+" start game"+"\n");
@@ -294,7 +294,7 @@ public class BomberFightServer {
 			RespondJoinGame respondJoinGame = new RespondJoinGame();
 			respondJoinGame.gameInfo = gameInfo;
 			respondJoinGame.result = "created room #" + room.number;
-			server.sendToUDP(gameInfo.playerInfo.conn, respondJoinGame);
+			server.sendToTCP(gameInfo.playerInfo.conn, respondJoinGame);
 		}
 	}
 	
@@ -314,7 +314,7 @@ public class BomberFightServer {
 		for (PlayerInfo playerInfo : room.playerInfoList) {
 			StartGame GO = new StartGame();
 			GO.playerInfoList = room.playerInfoList.toArray(PlayerInfo.class);
-			server.sendToUDP(playerInfo.conn, GO);
+			server.sendToTCP(playerInfo.conn, GO);
 		}
 		
 		initialItemSpawnPoint(room);
@@ -323,14 +323,14 @@ public class BomberFightServer {
 	public void sendToAllInRoomExcept(Room room, int conn, Object object) {
 		for (PlayerInfo playerInfo : room.playerInfoList) {
 			if (playerInfo.conn != conn) {
-				server.sendToUDP(playerInfo.conn, object);
+				server.sendToTCP(playerInfo.conn, object);
 			}
 		}
 	}
 	
 	public void sendToAllInRoom(Room room, Object object) {
 		for (PlayerInfo playerInfo : room.playerInfoList) {
-			server.sendToUDP(playerInfo.conn, object);
+			server.sendToTCP(playerInfo.conn, object);
 		}
 	}
 
