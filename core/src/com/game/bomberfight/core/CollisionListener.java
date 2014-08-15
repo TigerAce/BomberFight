@@ -1,11 +1,14 @@
 package com.game.bomberfight.core;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.game.bomberfight.interfaces.Destructible;
 import com.game.bomberfight.interfaces.Picker;
+import com.game.bomberfight.screen.GamePlay;
 import com.game.bomberfight.utility.UserData;
 
 
@@ -67,22 +70,35 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-	
+
 		/**
 		 * particle will damage any object that is destructible
 		 */
-		UserData userDataA = (UserData) contact.getFixtureA().getBody().getUserData();
-		UserData userDataB = (UserData) contact.getFixtureB().getBody().getUserData();
-		
-		if(userDataA != null && userDataB != null){
-		
-			if(userDataA.object instanceof Particle && userDataB.object instanceof Destructible){
-				((Destructible)userDataB.object).damage(impulse);
-			}else if(userDataB.object instanceof Particle && userDataA.object instanceof Destructible){
-				((Destructible)userDataA.object).damage(impulse);
+		UserData userDataA = (UserData) contact.getFixtureA().getBody()
+				.getUserData();
+		UserData userDataB = (UserData) contact.getFixtureB().getBody()
+				.getUserData();
+
+		if (userDataA != null && userDataB != null) {
+
+			if (userDataA.object instanceof Particle
+					&& userDataB.object instanceof Destructible) {
+				((Destructible) userDataB.object).damage(impulse);
+			} else if (userDataB.object instanceof Particle
+					&& userDataA.object instanceof Destructible) {
+				((Destructible) userDataA.object).damage(impulse);
 			}
 			
+			if (userDataA.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataA.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
 			
+			if (userDataB.object instanceof Bomb) {
+				Bomb bomb = (Bomb) userDataB.object;
+				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			}
+
 		}
 	}
 

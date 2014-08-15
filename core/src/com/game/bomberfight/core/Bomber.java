@@ -236,6 +236,8 @@ public class Bomber extends Player implements Picker{
 			
 			bomb.create();
 			
+			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+			
 			this.setBombPlacementCounter(this
 					.getBombPlacementCounter() - 1);
 			if (this.getBombPlacementCounter() <= 0) {

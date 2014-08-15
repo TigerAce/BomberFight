@@ -96,12 +96,22 @@ public class Network {
 		public int bombIndex;
 		public float x;
 		public float y;
+		public float angle;
+		public float angularVelocity;
+		public float inertia;
+		public float linearVelocityX;
+		public float linearVelocityY;
 	}
 	
 	public static class UpdateBombPosition{
 		public int bombIndex;
 		public float x;
 		public float y;
+		public float angle;
+		public float angularVelocity;
+		public float inertia;
+		public float linearVelocityX;
+		public float linearVelocityY;
 		public int conn;
 	}
 	

@@ -265,7 +265,7 @@ public class GamePlay implements Screen {
 		}
 		
 		updatePositionToOthers(delta);
-		updateBombPositionToOthers(delta);
+		//updateBombPositionToOthers(delta);
 	}
 
 	@Override
@@ -353,7 +353,7 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("yijiasup.no-ip.org");//yijiasup.no-ip.org 128.199.207.133
+		connect("localhost");//yijiasup.no-ip.org 128.199.207.133
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
@@ -519,7 +519,9 @@ public class GamePlay implements Screen {
 				if(pos.x != updateBombPosition.x || pos.y != updateBombPosition.y){
 					if(!world.isLocked()){
 						pos.set(updateBombPosition.x, updateBombPosition.y);
-						bombBody.setTransform(pos, bombBody.getAngle());
+						bombBody.setTransform(pos, updateBombPosition.angle);
+						bombBody.setAngularVelocity(updateBombPosition.angularVelocity);
+						bombBody.setLinearVelocity(updateBombPosition.linearVelocityX, updateBombPosition.linearVelocityY);
 					}
 				}
 			}
@@ -734,6 +736,44 @@ public class GamePlay implements Screen {
 				}
 				positionUpdateTime = 0.5f;
 				}
+			}
+		}
+	}
+	
+	public void updateBombPositionToOthers() {
+		Bomber bomber = (Bomber) connToPlayerMap.get(gameInfo.playerInfo.conn);
+		if (bomber != null) {
+			for (Bomb b : bomber.getActivatedBombList()) {
+				Vector2 position = b.getBox2dBody().getPosition();
+				RequireUpdateBombPositionToOthers requireUpdateBombPositionToOthers = new RequireUpdateBombPositionToOthers();
+				requireUpdateBombPositionToOthers.x = position.x;
+				requireUpdateBombPositionToOthers.y = position.y;
+				requireUpdateBombPositionToOthers.angle = b.getBox2dBody().getAngle();
+				requireUpdateBombPositionToOthers.angularVelocity = b.getBox2dBody().getAngularVelocity();
+				requireUpdateBombPositionToOthers.inertia = b.getBox2dBody().getInertia();
+				requireUpdateBombPositionToOthers.linearVelocityX = b.getBox2dBody().getLinearVelocity().x;
+				requireUpdateBombPositionToOthers.linearVelocityY = b.getBox2dBody().getLinearVelocity().y;
+				requireUpdateBombPositionToOthers.bombIndex = bomber.getActivatedBombList().indexOf(b);
+				client.sendUDP(requireUpdateBombPositionToOthers);
+			}
+		}
+	}
+	
+	public void updateBombPositionToOthers(Bomb bomb) {
+		Bomber bomber = (Bomber) connToPlayerMap.get(gameInfo.playerInfo.conn);
+		if (bomber != null) {
+			if (bomber.getActivatedBombList().contains(bomb)) {
+				Vector2 position = bomb.getBox2dBody().getPosition();
+				RequireUpdateBombPositionToOthers requireUpdateBombPositionToOthers = new RequireUpdateBombPositionToOthers();
+				requireUpdateBombPositionToOthers.x = position.x;
+				requireUpdateBombPositionToOthers.y = position.y;
+				requireUpdateBombPositionToOthers.angle = bomb.getBox2dBody().getAngle();
+				requireUpdateBombPositionToOthers.angularVelocity = bomb.getBox2dBody().getAngularVelocity();
+				requireUpdateBombPositionToOthers.inertia = bomb.getBox2dBody().getInertia();
+				requireUpdateBombPositionToOthers.linearVelocityX = bomb.getBox2dBody().getLinearVelocity().x;
+				requireUpdateBombPositionToOthers.linearVelocityY = bomb.getBox2dBody().getLinearVelocity().y;
+				requireUpdateBombPositionToOthers.bombIndex = bomber.getActivatedBombList().indexOf(bomb);
+				client.sendUDP(requireUpdateBombPositionToOthers);
 			}
 		}
 	}

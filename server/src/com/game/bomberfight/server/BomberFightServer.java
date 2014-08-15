@@ -97,6 +97,11 @@ public class BomberFightServer {
 					updateBombPosition.conn = c.getID();
 					updateBombPosition.x = requireUpdateBombPositionToOthers.x;
 					updateBombPosition.y = requireUpdateBombPositionToOthers.y;
+					updateBombPosition.angle = requireUpdateBombPositionToOthers.angle;
+					updateBombPosition.angularVelocity = requireUpdateBombPositionToOthers.angularVelocity;
+					updateBombPosition.inertia = requireUpdateBombPositionToOthers.inertia;
+					updateBombPosition.linearVelocityX = requireUpdateBombPositionToOthers.linearVelocityX;
+					updateBombPosition.linearVelocityY = requireUpdateBombPositionToOthers.linearVelocityY;
 					updateBombPosition.bombIndex = requireUpdateBombPositionToOthers.bombIndex;
 					sendToAllInRoomExcept(room, c.getID(), updateBombPosition);
 				}
