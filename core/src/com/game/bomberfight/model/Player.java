@@ -136,7 +136,6 @@ public class Player extends GameObject implements Destructible {
          * See this: http://www.iforce2d.net/b2dtut/constant-speed
          */
     	if(attr.getCurrLife() <= 0){
-    		System.out.println(box2dBody);
     		 dispose();
     	}else{
     		//regenerate life per sec
@@ -193,7 +192,7 @@ public class Player extends GameObject implements Destructible {
 				//send health to other player
 				RequireUpdateHealthToOthers requireUpdateHealthToOthers = new RequireUpdateHealthToOthers();
 				requireUpdateHealthToOthers.health = attr.getCurrLife();
-				GamePlay.client.sendTCP(requireUpdateHealthToOthers);
+				GamePlay.client.sendUDP(requireUpdateHealthToOthers);
 					
 			}
 		}else{

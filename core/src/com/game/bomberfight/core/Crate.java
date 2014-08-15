@@ -83,7 +83,7 @@ public class Crate extends Barrier implements Destructible, Breakable, DropItem{
     			requireUpdateDropItem.id = this.getId();
     			requireUpdateDropItem.x = this.getBox2dBody().getPosition().x;
 				requireUpdateDropItem.y = this.getBox2dBody().getPosition().y;
-				GamePlay.client.sendTCP(requireUpdateDropItem);
+				GamePlay.client.sendUDP(requireUpdateDropItem);
     			
 		
 			} else {

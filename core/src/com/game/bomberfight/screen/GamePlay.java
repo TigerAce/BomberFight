@@ -353,7 +353,7 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("localhost");//yijiasup.no-ip.org 128.199.207.133
+		connect("yijiasup.no-ip.org");//yijiasup.no-ip.org 128.199.207.133
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
@@ -658,7 +658,7 @@ public class GamePlay implements Screen {
 			RequireJoinGame requireJoinGame = new RequireJoinGame();
 			requireJoinGame.gameInfo = GamePlay.gameInfo;
 			requireJoinGame.gameInfo.playerInfo.conn = connection.getID();
-			client.sendTCP(requireJoinGame);
+			client.sendUDP(requireJoinGame);
 		}
 
 		public void received (Connection connection, Object object) {
@@ -709,7 +709,7 @@ public class GamePlay implements Screen {
 						RequireUpdatePositionToOthers requireUpdatePositionToOthers = new RequireUpdatePositionToOthers();
 						requireUpdatePositionToOthers.x = position.x;
 						requireUpdatePositionToOthers.y = position.y;
-						client.sendTCP(requireUpdatePositionToOthers);
+						client.sendUDP(requireUpdatePositionToOthers);
 						lastPosition.set(position);
 					}
 					positionUpdateTime = 1.f;
@@ -730,7 +730,7 @@ public class GamePlay implements Screen {
 					requireUpdateBombPositionToOthers.x = position.x;
 					requireUpdateBombPositionToOthers.y = position.y;
 					requireUpdateBombPositionToOthers.bombIndex = bomber.getActivatedBombList().indexOf(b);
-					client.sendTCP(requireUpdateBombPositionToOthers);
+					client.sendUDP(requireUpdateBombPositionToOthers);
 				}
 				positionUpdateTime = 0.5f;
 				}
