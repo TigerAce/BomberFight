@@ -98,7 +98,6 @@ public class Network {
 		public float y;
 		public float angle;
 		public float angularVelocity;
-		public float inertia;
 		public float linearVelocityX;
 		public float linearVelocityY;
 	}
@@ -109,7 +108,6 @@ public class Network {
 		public float y;
 		public float angle;
 		public float angularVelocity;
-		public float inertia;
 		public float linearVelocityX;
 		public float linearVelocityY;
 		public int conn;
