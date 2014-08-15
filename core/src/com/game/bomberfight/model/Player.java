@@ -98,6 +98,7 @@ public class Player extends GameObject implements Destructible {
         playerDef.fixedRotation = true;
         
 
+ 
         //shape = new PolygonShape();
         shape = new CircleShape();
         if (width <= 0 && height <= 0) {

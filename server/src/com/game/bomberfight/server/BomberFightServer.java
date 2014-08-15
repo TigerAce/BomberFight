@@ -295,8 +295,10 @@ public class BomberFightServer {
 	
 	public Room findRoomBy(MapInfo mapInfo, RoomState state) {
 		for (Room room : roomList) {
-			if (room.gameInfo.mapInfo.equals(mapInfo) && room.state == state) {
-				return room;
+			if(room != null){
+				if (room.gameInfo.mapInfo.equals(mapInfo) && room.state == state) {
+					return room;
+				}
 			}
 		}
 		return null;

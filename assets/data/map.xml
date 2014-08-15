@@ -39,4 +39,10 @@
 		<preview>img/ui/mud_grass.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
+	<map>
+		<name>Warehouse2</name>
+		<tmx>img/tmx/ground8.tmx</tmx>
+		<preview>img/ui/mud_grass.png</preview>
+		<maxNumPlayer>2</maxNumPlayer>
+	</map>
 </mapList>
