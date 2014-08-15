@@ -33,7 +33,20 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
+		UserData userDataA = (UserData) contact.getFixtureA().getBody()
+				.getUserData();
+		UserData userDataB = (UserData) contact.getFixtureB().getBody()
+				.getUserData();
 		
+		if (userDataA.object instanceof Bomb) {
+			Bomb bomb = (Bomb) userDataA.object;
+			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+		}
+		
+		if (userDataB.object instanceof Bomb) {
+			Bomb bomb = (Bomb) userDataB.object;
+			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
+		}
 	}
 
 	@Override
@@ -87,16 +100,6 @@ public class CollisionListener implements ContactListener {
 			} else if (userDataB.object instanceof Particle
 					&& userDataA.object instanceof Destructible) {
 				((Destructible) userDataA.object).damage(impulse);
-			}
-			
-			if (userDataA.object instanceof Bomb) {
-				Bomb bomb = (Bomb) userDataA.object;
-				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
-			}
-			
-			if (userDataB.object instanceof Bomb) {
-				Bomb bomb = (Bomb) userDataB.object;
-				((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updateBombPositionToOthers(bomb);
 			}
 
 		}
