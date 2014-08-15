@@ -762,5 +762,12 @@ public class GamePlay implements Screen {
 		}
 	
 	}
+
+	/**
+	 * @return the playerList
+	 */
+	public Array<Player> getPlayerList() {
+		return playerList;
+	}
 }
 

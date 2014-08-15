@@ -4,6 +4,8 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.game.bomberfight.model.GameObject;
+import com.game.bomberfight.model.Player;
 import com.game.bomberfight.screen.GamePlay;
 
 /**
@@ -53,6 +55,17 @@ public class GamePlayScreenKeyboard implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    	if (!gamePlay.getConnToPlayerMap().isEmpty()) {
+    		if (gamePlay.getConnToPlayerMap().get(GamePlay.gameInfo.playerInfo.conn).getState() == GameObject.RECYCLE) {
+    			for (Player player : gamePlay.getPlayerList()) {
+    				if (player.getState() != GameObject.RECYCLE) {
+    					if (gamePlay.getCameraSystem().getTarget() != player) {
+    						gamePlay.getCameraSystem().setTarget(player);
+    					}
+    				}
+    			}
+    		}
+		}
         return false;
     }
 

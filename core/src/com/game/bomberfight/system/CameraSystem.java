@@ -71,4 +71,18 @@ public class CameraSystem {
 		}
 	}
 
+	/**
+	 * @return the target
+	 */
+	public GameObject getTarget() {
+		return target;
+	}
+
+	/**
+	 * @param target the target to set
+	 */
+	public void setTarget(GameObject target) {
+		this.target = target;
+	}
+
 }
