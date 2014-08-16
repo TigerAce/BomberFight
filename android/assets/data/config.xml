@@ -2,5 +2,5 @@
 
 <config>
     <viewportWidth type="Float">100</viewportWidth>
-    <viewportHeight type="Float">70</viewportHeight>
+    <viewportHeight type="Float">72</viewportHeight>
 </config>

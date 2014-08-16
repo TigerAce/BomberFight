@@ -353,7 +353,7 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("localhost");//yijiasup.no-ip.org 128.199.207.133
+		connect("54.79.64.252");//yijiasup.no-ip.org 128.199.207.133
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
@@ -716,6 +716,21 @@ public class GamePlay implements Screen {
 						lastPosition.set(position);
 					}
 					positionUpdateTime = 1.f;
+				}
+			}
+		}
+	}
+	
+	public void updatePositionToOthers () {
+		if (!connToPlayerMap.isEmpty()) {
+			if(connToPlayerMap.get(gameInfo.playerInfo.conn) != null){
+				Vector2 position = connToPlayerMap.get(gameInfo.playerInfo.conn).getBox2dBody().getPosition();
+				if (lastPosition.x != position.x || lastPosition.y != position.y) {
+					RequireUpdatePositionToOthers requireUpdatePositionToOthers = new RequireUpdatePositionToOthers();
+					requireUpdatePositionToOthers.x = position.x;
+					requireUpdatePositionToOthers.y = position.y;
+					client.sendTCP(requireUpdatePositionToOthers);
+					lastPosition.set(position);
 				}
 			}
 		}

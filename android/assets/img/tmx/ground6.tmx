@@ -972,6 +972,15 @@
    </properties>
    <polyline points="0,0 -32,32"/>
   </object>
+  <object name="Player" type="Player" x="386" y="256" width="32" height="32">
+   <properties>
+    <property name="controller" value="upleftdownrightctrl"/>
+    <property name="hitpoint" value="100"/>
+    <property name="numBombPerRound" value="1"/>
+    <property name="roundInterval" value="3"/>
+    <property name="speed" value="10"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="object_layer_2" width="25" height="18"/>
  <objectgroup name="object_layer_3" width="25" height="18"/>

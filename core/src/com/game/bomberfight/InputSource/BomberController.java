@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.game.bomberfight.core.Bomber;
 import com.game.bomberfight.model.Controller;
@@ -91,6 +93,7 @@ public class BomberController extends Controller implements InputProcessor {
 			RequireUpdateInputToOthers requireUpdateInputToOthers = new RequireUpdateInputToOthers();
 			requireUpdateInputToOthers.keyCode = keycode;
 			requireUpdateInputToOthers.keyState = true;
+			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updatePositionToOthers();
 			GamePlay.client.sendTCP(requireUpdateInputToOthers);
 		}
 		keyMap.put(keycode, true);
@@ -103,6 +106,7 @@ public class BomberController extends Controller implements InputProcessor {
 			RequireUpdateInputToOthers requireUpdateInputToOthers = new RequireUpdateInputToOthers();
 			requireUpdateInputToOthers.keyCode = keycode;
 			requireUpdateInputToOthers.keyState = false;
+			((GamePlay)(((Game) Gdx.app.getApplicationListener()).getScreen())).updatePositionToOthers();
 			GamePlay.client.sendTCP(requireUpdateInputToOthers);
 		}
 		keyMap.put(keycode, false);
