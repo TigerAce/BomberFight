@@ -30,6 +30,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -137,6 +139,8 @@ public class GamePlay implements Screen {
 	protected Vector2 lastPosition = new Vector2();
 	
 	protected CameraSystem cameraSystem = null;
+	
+	protected Array<String> serverList = new Array<String>();
 	
 	@Override
 	public void render(float delta) {
@@ -353,7 +357,9 @@ public class GamePlay implements Screen {
 		createPlayer();
 		tileMapEffectSystem = new TileMapEffectSystem(tileMapManager, playerList);
 		
-		connect("54.79.64.252");//yijiasup.no-ip.org 128.199.207.133
+		if (GamePlay.gameInfo.networkMode.equalsIgnoreCase("WAN")) {
+			connect("data/server.xml");//yijiasup.no-ip.org 128.199.207.133
+		}
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
 	}
@@ -474,11 +480,13 @@ public class GamePlay implements Screen {
 		if (object instanceof RespondJoinGame) {
 			RespondJoinGame respondJoinGame = (RespondJoinGame) object;
 			GamePlay.gameInfo = respondJoinGame.gameInfo;
+			gui.showWaitingDialog(true);
 			Gdx.app.log("received RespondJoinGame", respondJoinGame.result);
 			Gdx.app.log("received RespondJoinGame GameInfo", "room number "+respondJoinGame.gameInfo.playerInfo.roomNumber+"spawn point "+respondJoinGame.gameInfo.playerInfo.spawnPoint);
 		}
 		
 		if (object instanceof StartGame) {
+			gui.showWaitingDialog(false);
 			StartGame startGame = (StartGame) object;
 			setupInputSource(startGame.playerInfoList);
 		}
@@ -635,6 +643,7 @@ public class GamePlay implements Screen {
 	public void setupInputSource(PlayerInfo[] playerInfoList) {
 		for (int i = 0; i < playerList.size; i++) {
 			Bomber bomber = (Bomber) playerList.get(i);
+			bomber.setName(playerInfoList[i].name);
 			
 			connToPlayerMap.put(playerInfoList[i].conn, bomber);
 			
@@ -680,11 +689,16 @@ public class GamePlay implements Screen {
 		
 		client.start();
 		
-		try {
-			client.connect(5000, host, Network.portTCP, Network.portUDP);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		loadServerList(host);
+		
+		for (int i = 0; i < serverList.size; i++) {
+			try {
+				client.connect(5000, serverList.get(i), Network.portTCP, Network.portUDP);
+				break;
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
 		}
 	}
 
@@ -804,6 +818,20 @@ public class GamePlay implements Screen {
 	 */
 	public Array<Player> getPlayerList() {
 		return playerList;
+	}
+	
+	public void loadServerList(String filename) {
+		XmlReader reader = new XmlReader();
+		Element root = null;
+		try {
+			root = reader.parse(Gdx.files.internal(filename));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < root.getChildCount(); i++) {
+			String address = root.getChild(i).getText();
+			serverList.add(address);
+		}
 	}
 }
 

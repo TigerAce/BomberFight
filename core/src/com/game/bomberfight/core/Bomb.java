@@ -58,9 +58,11 @@ public class Bomb extends Explosive{
 		 Sound explosionSound = ((GamePlay) currentScreen).getAssetManager().get("audio/explosion/explosion1.mp3", Sound.class);
 		 explosionSound.play(0.05f);
 		 
-		 Player player = ((GamePlay) currentScreen).getConnToPlayerMap().get(GamePlay.gameInfo.playerInfo.conn);
-		 float dist2 = player.getBox2dBody().getPosition().dst2(box2dBody.getPosition());
-		 ((GamePlay) currentScreen).getCameraSystem().shake(dist2, powerX, powerY);
+		 if (GamePlay.gameInfo.networkMode.equalsIgnoreCase("WAN")) {
+			 Player player = ((GamePlay) currentScreen).getConnToPlayerMap().get(GamePlay.gameInfo.playerInfo.conn);
+			 float dist2 = player.getBox2dBody().getPosition().dst2(box2dBody.getPosition());
+			 ((GamePlay) currentScreen).getCameraSystem().shake(dist2, powerX, powerY);
+		}
 		 
 		 /**
 		  * create explosion

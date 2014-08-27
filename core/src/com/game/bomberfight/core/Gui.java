@@ -31,6 +31,7 @@ public class Gui {
 	private Skin uiSkin;
 	private Table stateTable;
 	private Viewport gamePlayViewport;
+	private Dialog waitingDialog = null;
 
 	public Gui() {
 		// TODO Auto-generated constructor stub
@@ -300,6 +301,21 @@ public class Gui {
 		table1.add(label1).expand().center().padBottom(5);
 		
 		return table;
+	}
+	
+	public void showWaitingDialog(boolean isShow) {
+		if (isShow) {
+			if (waitingDialog == null) {
+				waitingDialog = new Dialog("Waiting!", uiSkin) {
+					}.text("Waiting for other players...(Use W,A,S,D,SPACE or touchpad to control your character)").button("Yes", true).key(Keys.ENTER, true).show(uiStage);
+			} else {
+				waitingDialog.show(uiStage);
+			}
+		} else {
+			if (waitingDialog != null) {
+				waitingDialog.hide();
+			}
+		}
 	}
 
 }
