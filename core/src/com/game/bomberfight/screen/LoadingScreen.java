@@ -79,6 +79,7 @@ public class LoadingScreen implements Screen {
 		assetManager.load("img/texture/item6.jpg", Texture.class, textureParameter);
 		
 		assetManager.load("data/Aharoni.fnt", BitmapFont.class);
+		assetManager.load("data/default.fnt", BitmapFont.class);
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);

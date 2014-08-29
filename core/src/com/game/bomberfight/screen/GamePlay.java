@@ -623,7 +623,8 @@ public class GamePlay implements Screen {
 			bomber.p = pl;
 			
 			if (gameInfo.networkMode.equals("WAN")) {
-				gui.setHUD(bomber);
+				//gui.setHUD(bomber);
+				gui.setFixedStatusBar(bomber);
 			} else {
 				if (i == 0) {
 					gui.setFixedStatusBar(bomber);
@@ -631,7 +632,8 @@ public class GamePlay implements Screen {
 					inputMultiplexer.addProcessor(bomberController);
 					bomber.setController(bomberController);
 				} else {
-					gui.setHUD(bomber);
+					//gui.setHUD(bomber);
+					gui.setFixedStatusBar(bomber);
 					BomberController bomberController = new BomberController(new int[]{Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT, Input.Keys.CONTROL_RIGHT});
 					inputMultiplexer.addProcessor(bomberController);
 					bomber.setController(bomberController);

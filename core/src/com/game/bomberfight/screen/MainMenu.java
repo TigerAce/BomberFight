@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -92,6 +93,7 @@ public class MainMenu implements Screen {
 	@Override
 	public void show() {
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+		skin.add("container_background", new NinePatch(new Texture(Gdx.files.internal("img/texture/ContainerBackground.9.png")), 11, 11, 11, 11));
 		
 		table = new Table();
 		table.setFillParent(true);
@@ -139,6 +141,7 @@ public class MainMenu implements Screen {
 		table.debug();
 		
 		Label label = new Label("Map Preview:", skin);
+		label.getStyle().background = skin.getDrawable("container_background");
 		label.setName("label");
 		table.add(label).left().top().expand();
 		
@@ -164,6 +167,7 @@ public class MainMenu implements Screen {
 		table.debug();
 		
 		Label label = new Label("Map:", skin);
+		label.getStyle().background = skin.getDrawable("container_background");
 		label.setName("label");
 		table.add(label).left().top();
 		
@@ -177,6 +181,7 @@ public class MainMenu implements Screen {
 		GamePlay.gameInfo.mapInfo = mapInfoList.get(0);
 		
 		ScrollPane scrollPane = new ScrollPane(list, skin);
+		scrollPane.getStyle().background = skin.getDrawable("container_background");
 		scrollPane.setName("scrollpane");
 		scrollPane.setFlickScroll(true);
 		table.add(scrollPane).left().expand().fill();
@@ -224,16 +229,19 @@ public class MainMenu implements Screen {
 	public Table createNetworkMode() {
 		Table table = new Table();
 		table.setName("network mode");
+		table.defaults().maxHeight(30);
 		table.debug();
 		
 		Label label = new Label("Network:", skin);
+		label.getStyle().background = skin.getDrawable("container_background");
 		label.setName("label");
 		table.add(label).left().bottom().padRight(5).width(100);
 		
 		SelectBox<Object> selectBox = new SelectBox<Object>(skin);
+		selectBox.getStyle().background = skin.getDrawable("container_background");
 		selectBox.setItems(networkEntries);
 		selectBox.setSelected("Localhost");
-		table.add(selectBox).expandX().fillX();
+		table.add(selectBox).expandX().fillX().bottom();
 		
 		selectBox.addListener(new ChangeListener() {
 			@Override
@@ -251,16 +259,19 @@ public class MainMenu implements Screen {
 	public Table createGameMode() {
 		Table table = new Table();
 		table.setName("game mode");
+		table.defaults().maxHeight(30);
 		table.debug();
 		
-		Label label = new Label("Game Mode:", skin);
+		Label label = new Label("Mode:", skin);
+		label.getStyle().background = skin.getDrawable("container_background");
 		label.setName("label");
 		table.add(label).left().bottom().padRight(5).width(100);
 		
 		SelectBox<Object> selectBox = new SelectBox<Object>(skin);
+		selectBox.getStyle().background = skin.getDrawable("container_background");
 		selectBox.setItems(gameModeEntries);
 		selectBox.setSelected("Normal");
-		table.add(selectBox).expandX().fillX();
+		table.add(selectBox).expandX().fillX().bottom();
 		
 		selectBox.addListener(new ChangeListener() {
 			@Override
@@ -281,6 +292,7 @@ public class MainMenu implements Screen {
 		table.debug();
 		
 		TextButton textButton = new TextButton("Start", skin);
+		textButton.getStyle().up = skin.getDrawable("container_background");
 		table.add(textButton);
 		
 		textButton.addListener(new ChangeListener() {
@@ -310,14 +322,17 @@ public class MainMenu implements Screen {
 	public Table createNickName() {
 		Table table = new Table();
 		table.setName("nickname");
+		table.defaults().maxHeight(30);
 		table.debug();
 		
 		Label label = new Label("Nickname:", skin);
+		label.getStyle().background = skin.getDrawable("container_background");
 		label.setName("label");
 		table.add(label).left().bottom().padRight(5).width(100);
 		
 		TextField textField = new TextField("Kill La Kill", skin);
-		table.add(textField).expandX().fillX();
+		textField.getStyle().background = skin.getDrawable("container_background");
+		table.add(textField).expandX().fillX().bottom();
 		
 		textField.addListener(new InputListener(){
 			public boolean keyTyped (InputEvent event, char character) {
