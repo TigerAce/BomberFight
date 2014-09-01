@@ -45,4 +45,10 @@
 		<preview>img/ui/mud_grass.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
+	<map>
+		<name>Warehouse (4 players)</name>
+		<tmx>img/tmx/map8.tmx</tmx>
+		<preview>img/ui/mud_grass.png</preview>
+		<maxNumPlayer>4</maxNumPlayer>
+	</map>
 </mapList>

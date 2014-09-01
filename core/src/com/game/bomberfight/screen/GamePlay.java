@@ -245,7 +245,7 @@ public class GamePlay implements Screen {
 
 		// debug render
 		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-			debugRenderer.render(this.world, viewport.getCamera().combined);
+			//debugRenderer.render(this.world, viewport.getCamera().combined);
 		}
 		
 		if (isEfficiencyTest) {
