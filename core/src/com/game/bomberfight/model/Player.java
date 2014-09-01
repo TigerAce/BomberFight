@@ -219,7 +219,7 @@ public class Player extends GameObject implements Destructible {
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        animation = new Animation(0.25f, walkFrames);
+        animation = new Animation(0.15f, walkFrames);
         animation.setPlayMode(PlayMode.LOOP);
         animTime = 0f;
 	}

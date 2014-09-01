@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -42,6 +43,7 @@ public class Gui {
 		inputMultiplexer.addProcessor(uiStage);
 		uiSkin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		uiSkin.add("container_background", new NinePatch(new Texture(Gdx.files.internal("data/pattern.png")), 1, 1, 1, 1));
+		uiSkin.add("scrollBG", new NinePatch(new Texture(Gdx.files.internal("data/progressBG.png")), 1, 1, 1, 1));
 		
 		stateTable = new Table();
 		stateTable.setFillParent(true);
@@ -188,12 +190,12 @@ public class Gui {
 		if (hpbar != null) {
 			Slider slider = hpbar.findActor("slider");
 			Player player = (Player) hpbar.getUserObject();
-			slider.setRange(0, player.getAttr().getMaxLife());
-			slider.setStepSize(player.getAttr().getMaxLife()/100);
-			slider.setValue(player.getAttr().getCurrLife());
 			
-			TiledNinePatch tiledNinePatch = (TiledNinePatch) slider.getStyle().disabledKnobBefore;
-			tiledNinePatch.setNinePatchWidth(tiledNinePatch.getNinePatchWidth() - player.getAttr().getMaxLife() / 5.f);
+			if (slider.getMaxValue() != player.getAttr().getMaxLife()) {
+				TiledNinePatch tiledNinePatch = (TiledNinePatch) slider.getStyle().disabledKnobBefore;
+				//tiledNinePatch.setNinePatchWidth(tiledNinePatch.getNinePatchWidth() - 100.f / player.getAttr().getMaxLife());
+				tiledNinePatch.setNinePatchWidth(slider.getWidth() / (player.getAttr().getMaxLife() / 50.f));
+			}
 			
 			slider.setRange(0, player.getAttr().getMaxLife());
 			slider.setStepSize(player.getAttr().getMaxLife()/100);
@@ -295,7 +297,7 @@ public class Gui {
 		}
 		image.setName("image");
 		
-		table.add(image).minSize(15, 15).maxSize(15, 15).padLeft(5).padRight(5);
+		table.add(image).minSize(15, 15).maxSize(15, 15).padRight(5);
 		
 		table.row();
 		
@@ -326,9 +328,14 @@ public class Gui {
 		Player player = (Player) userObject;
 		float hp = player.getAttr().getMaxLife();
 		
-		Slider slider = new Slider(0, 1, 0.1f, false, uiSkin, "hp-horizontal");
+		SliderStyle sliderStyle = new SliderStyle();
+		sliderStyle.background = uiSkin.getDrawable("scrollBG");
 		
-		TiledNinePatch tiledNinePatch = new TiledNinePatch(uiSkin.getPatch("container_background"), 10, 10);
+		Slider slider = new Slider(0, 1, 0.1f, false, sliderStyle);
+		//Slider slider = new Slider(0, 1, 0.1f, false, uiSkin, "hp-horizontal");
+		
+		TiledNinePatch tiledNinePatch = new TiledNinePatch(uiSkin.getPatch("container_background"), 
+				80 / (player.getAttr().getMaxLife() / 50.f), 10);
 		slider.getStyle().disabledKnobBefore = tiledNinePatch;
 		
 		slider.setRange(0, hp);

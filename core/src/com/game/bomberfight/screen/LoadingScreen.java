@@ -69,6 +69,7 @@ public class LoadingScreen implements Screen {
 		assetManager.load("img/texture/crate4.jpg", Texture.class, textureParameter);
 		assetManager.load("img/texture/brick3.jpg", Texture.class, textureParameter);
 		assetManager.load("img/animation/soldier1.png", Texture.class, textureParameter);
+		assetManager.load("img/animation/player-move.png", Texture.class, textureParameter);
 		assetManager.load("particle/flame.p", ParticleEffect.class);
 		assetManager.load("img/texture/bomb.png", Texture.class, textureParameter);
 		assetManager.load("img/texture/item1.png", Texture.class, textureParameter);

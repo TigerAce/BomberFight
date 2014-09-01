@@ -256,7 +256,7 @@ public class GamePlay implements Screen {
 		gui.update();
 		gui.draw();
 		
-		FpsDisplayer.getInstance().draw(batch, 0, 0);
+		//FpsDisplayer.getInstance().draw(batch, 0, 0);
 		
 		if (isEfficiencyTest) {
 			Gdx.app.log("Efficiency test", "FpsDisplayer draw: " + (System.currentTimeMillis() - timeNow) + "ms");
@@ -611,7 +611,7 @@ public class GamePlay implements Screen {
 			PlayerSpawnPoint spawnPoint = tileMapManager.getPlayerSpawnPointList().get(i);
 			Bomber bomber = new Bomber(spawnPoint.x, spawnPoint.y, spawnPoint.width, spawnPoint.height, 
 					spawnPoint.speed, spawnPoint.hitPoint, spawnPoint.numBombPerRound, spawnPoint.roundInterval);
-			bomber.setAnimation(assetManager.get("img/animation/soldier1.png",  Texture.class), 3, 1);
+			bomber.setAnimation(assetManager.get("img/animation/player-move.png",  Texture.class), 8, 1);
 			bomber.create();
 		
 			playerList.add(bomber);
