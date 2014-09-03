@@ -4,51 +4,51 @@
 	<map>
 		<name>Metal Classic (2 players)</name>
 		<tmx>img/tmx/map1.tmx</tmx>
-		<preview>img/ui/metal_classic.png</preview>
+		<preview>img/ui/map1.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
 
 	<map>
 		<name>No Hide (2 players)</name>
 		<tmx>img/tmx/map2.tmx</tmx>
-		<preview>img/ui/no_hide.png</preview>
+		<preview>img/ui/map2.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
 
 	<map>
 		<name>Mud&Grass (2 players)</name>
 		<tmx>img/tmx/map3.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map3.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
 	<map>
 		<name>Mud&Grass (4 players)</name>
 		<tmx>img/tmx/map4.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map4.png</preview>
 		<maxNumPlayer>4</maxNumPlayer>
 	</map>
 	<map>
 		<name>Mud&Grass (3 players)</name>
 		<tmx>img/tmx/map5.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map5.png</preview>
 		<maxNumPlayer>3</maxNumPlayer>
 	</map>
 	<map>
 		<name>Highway (2 players)</name>
 		<tmx>img/tmx/map6.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map6.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
 	<map>
 		<name>Warehouse (2 players)</name>
 		<tmx>img/tmx/map7.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map7.png</preview>
 		<maxNumPlayer>2</maxNumPlayer>
 	</map>
 	<map>
 		<name>Warehouse (4 players)</name>
 		<tmx>img/tmx/map8.tmx</tmx>
-		<preview>img/ui/mud_grass.png</preview>
+		<preview>img/ui/map8.png</preview>
 		<maxNumPlayer>4</maxNumPlayer>
 	</map>
 </mapList>

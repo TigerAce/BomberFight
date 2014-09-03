@@ -42,15 +42,11 @@ public class MainMenu implements Screen {
 	
 	private Object[] networkEntries = { 
 			"Localhost", 
-			"LAN", 
 			"WAN"
 			};
 	
 	private Object[] gameModeEntries = { 
-			"Normal", 
-			"RPG", 
-			"MMORPG", 
-			"Superman"
+			"Normal"
 			};
 
 	private Skin skin;
@@ -147,7 +143,7 @@ public class MainMenu implements Screen {
 		
 		table.row();
 		
-		Image image = new Image(new Texture(Gdx.files.internal("img/ui/metal_classic.png")));
+		Image image = new Image(new Texture(Gdx.files.internal("img/ui/map1.png")));
 		image.setName("image");
 		
 		Container<Image> container = new Container<Image>();

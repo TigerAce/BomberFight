@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -84,6 +85,7 @@ public class LoadingScreen implements Screen {
 		// load audio
 		assetManager.load("audio/explosion/explosion1.mp3", Sound.class);
 		assetManager.load("audio/timer/timer1.mp3", Sound.class);
+		assetManager.load("audio/music/Banjo.mp3", Music.class);
 		
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		assetManager.load(GamePlay.gameInfo.mapInfo.tmx, TiledMap.class);

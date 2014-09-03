@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import box2dLight.Light;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Application;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -141,6 +140,8 @@ public class GamePlay implements Screen {
 	protected CameraSystem cameraSystem = null;
 	
 	protected Array<String> serverList = new Array<String>();
+	
+	protected Music backGroundMusic = null;
 	
 	@Override
 	public void render(float delta) {
@@ -362,6 +363,9 @@ public class GamePlay implements Screen {
 		}
 		
 		Particle.bombEffectPool = new ParticleEffectPool(getAssetManager().get("particle/flame.p", ParticleEffect.class), 100, 1000);
+		
+		backGroundMusic = assetManager.get("audio/music/Banjo.mp3", Music.class);
+		backGroundMusic.setLooping(true);
 	}
 
 	@Override
@@ -391,6 +395,7 @@ public class GamePlay implements Screen {
 		tileMapManager.dispose();
 		
 		gui.dispose();
+		backGroundMusic.dispose();
 	}
 
 	public World getWorld() {
@@ -615,12 +620,12 @@ public class GamePlay implements Screen {
 			bomber.create();
 		
 			playerList.add(bomber);
-			// Attach a point light to player
-			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
-					0.5f, 1f), 50, 0, 0);
-			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
-			
-			bomber.p = pl;
+//			// Attach a point light to player
+//			PointLight pl = new PointLight(getRayHandler(), 1000, new Color(0.1f, 0.5f,
+//					0.5f, 1f), 50, 0, 0);
+//			pl.attachToBody(bomber.getBox2dBody(), 0, 0);
+//			
+//			bomber.p = pl;
 			
 			if (gameInfo.networkMode.equals("WAN")) {
 				//gui.setHUD(bomber);
@@ -631,6 +636,7 @@ public class GamePlay implements Screen {
 					BomberController bomberController = new BomberController(new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D, Input.Keys.SPACE});
 					inputMultiplexer.addProcessor(bomberController);
 					bomber.setController(bomberController);
+					gui.setTouchPadUserObject(bomber);
 				} else {
 					//gui.setHUD(bomber);
 					gui.setFixedStatusBar(bomber);
@@ -639,6 +645,9 @@ public class GamePlay implements Screen {
 					bomber.setController(bomberController);
 				}
 			}
+		}
+		if (gameInfo.networkMode.equalsIgnoreCase("Single")){
+			backGroundMusic.play();
 		}
 	}
 	
@@ -656,6 +665,7 @@ public class GamePlay implements Screen {
 				cameraSystem = new CameraSystem(viewport.getCamera(), bomber, 
 						tileMapManager.getMapWidth(), tileMapManager.getMapHeight(), 
 						viewport.getMinWorldWidth(), viewport.getMinWorldHeight());
+				gui.setTouchPadUserObject(bomber);
 			} else {
 				Map<Integer, Boolean> inputSource = new LinkedHashMap<Integer, Boolean>();
 				connToInputSourceMap.put(playerInfoList[i].conn, inputSource);
@@ -664,6 +674,7 @@ public class GamePlay implements Screen {
 				bomber.setController(remoteController);
 			}
 		}
+		backGroundMusic.play();
 	}
 	
 	public class ClientListener extends Listener {

@@ -27,7 +27,8 @@ public class BomberFight extends Game {
         /**
          * Set log level
          */
-        Gdx.app.setLogLevel(Application.LOG_NONE);
+        //Gdx.app.setLogLevel(Application.LOG_NONE);
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
         /**
          * A splash screen will be loaded when game starts

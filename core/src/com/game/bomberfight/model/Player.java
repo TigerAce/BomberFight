@@ -339,6 +339,5 @@ public class Player extends GameObject implements Destructible {
 		this.controller = playerController;
 		this.controller.owner = this;
 	}
-
-
+	
 }
